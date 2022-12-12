@@ -5,7 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -28,10 +28,13 @@ public class LegalRepresentative{
     private String dni;
     @Column(name = "password", nullable = false)
     private String password;
+    //TODO: add created_at and updated_at correctly
     @CreatedDate
-    private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
     @LastModifiedDate
-    private Date updatedAt;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime updatedAt;
 
     @Override
     public String toString() {
