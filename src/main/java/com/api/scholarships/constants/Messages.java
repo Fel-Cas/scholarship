@@ -13,4 +13,9 @@ public class Messages {
   public static final String MESSAGE_DNI_SIZE = "DNI must be between 10 and 15 characters";
   public static final String MESSAGE_PASSWORD_REQUIRED = "Password is required";
   public static final String MESSAGE_PASSWORD_SIZE = "Password must be between 8 and 50 characters";
+
+  //Legal Representative Service
+  public static final String MESSAGE_LEGAL_REPRESENTATIVE_BAD_REQUEST_CREATE_WITH_WRONG_DNI="Already exists a legal representative with this DNI";
+  public static final String MESSAGE_LEGAL_REPRESENTATIVE_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL="Already exists a legal representative with this email";
+
 }
