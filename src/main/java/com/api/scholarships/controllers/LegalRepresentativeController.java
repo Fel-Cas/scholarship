@@ -53,4 +53,10 @@ public class LegalRepresentativeController {
   public ResponseEntity<LegalRepresentativeDTOResponse> update(@PathVariable Long id, @Valid @RequestBody LegalRepresentativeUpdateDTO legalRepresentativeDTO){
     return ResponseEntity.ok(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentativeService.updateLegalRepresentative(id, legalRepresentativeDTO)));
   }
+
+  @DeleteMapping(Endpoints.ID)
+  public ResponseEntity<Void> delete(@PathVariable Long id){
+    legalRepresentativeService.deleteLegalRepresentative(id);
+    return ResponseEntity.noContent().build();
+  }
 }

@@ -71,7 +71,8 @@ public class LegalRepresentativeServiceImp implements LegalRepresentativeService
 
   @Override
   public void deleteLegalRepresentative(Long id) {
-
+    LegalRepresentative legalRepresentativeFound = getLegalRepresentativeById(id);
+    legalRepresentativeRepository.delete(legalRepresentativeFound);
   }
 
   protected void updateLegalRepresentativeData(LegalRepresentative legalRepresentativeFound, LegalRepresentativeUpdateDTO legalRepresentative) {
