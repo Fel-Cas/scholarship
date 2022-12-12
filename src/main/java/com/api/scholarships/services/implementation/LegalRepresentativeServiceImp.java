@@ -3,6 +3,7 @@ package com.api.scholarships.services.implementation;
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.LegalRepresentativeDTO;
 import com.api.scholarships.dtos.LegalRepresentativeResponse;
+import com.api.scholarships.dtos.LegalRepresentativeUpdateDTO;
 import com.api.scholarships.entities.LegalRepresentative;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
@@ -60,12 +61,23 @@ public class LegalRepresentativeServiceImp implements LegalRepresentativeService
   }
 
   @Override
-  public LegalRepresentative updateLegalRepresentative(Long id, LegalRepresentativeDTO legalRepresentative) {
-    return null;
+  public LegalRepresentative updateLegalRepresentative(Long id, LegalRepresentativeUpdateDTO legalRepresentative) {
+    LegalRepresentative legalRepresentativeFound = getLegalRepresentativeById(id);
+    if(legalRepresentativeRepository.existsByEmailAndIdNot(legalRepresentative.getEmail(),id)) throw new BadRequestException(Messages.MESSAGE_LEGAL_REPRESENTATIVE_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL);
+    if(legalRepresentativeRepository.existsByDniAndIdNot(legalRepresentative.getDni(),id)) throw new BadRequestException(Messages.MESSAGE_LEGAL_REPRESENTATIVE_BAD_REQUEST_CREATE_WITH_WRONG_DNI);
+    updateLegalRepresentativeData(legalRepresentativeFound, legalRepresentative);
+    return legalRepresentativeRepository.save(legalRepresentativeFound);
   }
 
   @Override
   public void deleteLegalRepresentative(Long id) {
 
+  }
+
+  protected void updateLegalRepresentativeData(LegalRepresentative legalRepresentativeFound, LegalRepresentativeUpdateDTO legalRepresentative) {
+    legalRepresentativeFound.setDni(legalRepresentative.getDni());
+    legalRepresentativeFound.setName(legalRepresentative.getName());
+    legalRepresentativeFound.setSurname(legalRepresentative.getSurname());
+    legalRepresentativeFound.setEmail(legalRepresentative.getEmail());
   }
 }

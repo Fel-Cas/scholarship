@@ -5,6 +5,7 @@ import com.api.scholarships.constants.PaginationRequest;
 import com.api.scholarships.dtos.LegalRepresentativeDTO;
 import com.api.scholarships.dtos.LegalRepresentativeDTOResponse;
 import com.api.scholarships.dtos.LegalRepresentativeResponse;
+import com.api.scholarships.dtos.LegalRepresentativeUpdateDTO;
 import com.api.scholarships.entities.LegalRepresentative;
 import com.api.scholarships.mappers.LegalRepresentativeMapper;
 import com.api.scholarships.services.interfaces.LegalRepresentativeService;
@@ -46,5 +47,10 @@ public class LegalRepresentativeController {
   @GetMapping(Endpoints.LEGAL_REPRESENTATIVE_DNI)
   public ResponseEntity<LegalRepresentativeDTOResponse> findByDNI(@PathVariable String dni){
     return ResponseEntity.ok(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentativeService.getLegalRepresentativeByDNI(dni)));
+  }
+
+  @PutMapping(Endpoints.ID)
+  public ResponseEntity<LegalRepresentativeDTOResponse> update(@PathVariable Long id, @Valid @RequestBody LegalRepresentativeUpdateDTO legalRepresentativeDTO){
+    return ResponseEntity.ok(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentativeService.updateLegalRepresentative(id, legalRepresentativeDTO)));
   }
 }
