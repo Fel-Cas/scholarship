@@ -38,4 +38,8 @@ public class LegalRepresentativeController {
     return ResponseEntity.ok(legalRepresentativeService.getAllLegalRepresentatives(page, size, sort, order));
   }
 
+  @GetMapping(Endpoints.ID)
+  public ResponseEntity<LegalRepresentativeDTOResponse> findById(@PathVariable Long id){
+    return ResponseEntity.ok(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentativeService.getLegalRepresentativeById(id)));
+  }
 }

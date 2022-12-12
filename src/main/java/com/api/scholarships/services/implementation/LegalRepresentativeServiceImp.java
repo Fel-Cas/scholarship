@@ -5,6 +5,7 @@ import com.api.scholarships.dtos.LegalRepresentativeDTO;
 import com.api.scholarships.dtos.LegalRepresentativeResponse;
 import com.api.scholarships.entities.LegalRepresentative;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.LegalRepresentativeMapper;
 import com.api.scholarships.repositories.LegalRepresentativeRepository;
 import com.api.scholarships.services.interfaces.LegalRepresentativeService;
@@ -45,8 +46,10 @@ public class LegalRepresentativeServiceImp implements LegalRepresentativeService
   }
 
   @Override
-  public LegalRepresentativeResponse getLegalRepresentativeById(Long id) {
-    return null;
+  public LegalRepresentative getLegalRepresentativeById(Long id) {
+    LegalRepresentative legalRepresentative = legalRepresentativeRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException(Messages.MESSAGE_LEGAL_REPRESENTATIVE_NOT_FOUND.formatted(id)));
+    return legalRepresentative;
   }
 
   @Override
