@@ -9,6 +9,9 @@ import com.api.scholarships.mappers.LegalRepresentativeMapper;
 import com.api.scholarships.repositories.LegalRepresentativeRepository;
 import com.api.scholarships.services.interfaces.LegalRepresentativeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,8 +30,18 @@ public class LegalRepresentativeServiceImp implements LegalRepresentativeService
   }
 
   @Override
-  public LegalRepresentativeResponse getAllLegalRepresentatives(int page, int size) {
-    return null;
+  public LegalRepresentativeResponse getAllLegalRepresentatives(int page, int size, String sort, String order) {
+    Sort sortDirection = order.equalsIgnoreCase(Sort.Direction.ASC.name())? Sort.by(sort).ascending() : Sort.by(sort).descending();
+    Page<LegalRepresentative> legalRepresentatives = legalRepresentativeRepository.findAll(PageRequest.of(page, size, sortDirection));
+    return LegalRepresentativeResponse
+        .builder()
+        .content(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentatives.getContent()))
+        .numberPage(legalRepresentatives.getNumber())
+        .sizePage(legalRepresentatives.getSize())
+        .totalElements(legalRepresentatives.getTotalElements())
+        .totalPages(legalRepresentatives.getTotalPages())
+        .lastOne(legalRepresentatives.isLast())
+        .build();
   }
 
   @Override
