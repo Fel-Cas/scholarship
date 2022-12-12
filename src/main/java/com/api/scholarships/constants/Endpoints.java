@@ -6,4 +6,5 @@ public class Endpoints {
 
   //LegalRepresentative
   public static final String LEGAL_REPRESENTATIVE = "/api/v1/scholarships/legal-representative";
+  public static final String LEGAL_REPRESENTATIVE_DNI ="/dni/{dni}";
 }
