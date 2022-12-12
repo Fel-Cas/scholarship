@@ -8,7 +8,7 @@ public interface LegalRepresentativeService {
   public LegalRepresentative save(LegalRepresentativeDTO legalRepresentative);
   public LegalRepresentativeResponse getAllLegalRepresentatives(int page, int size,String sort, String order);
   public LegalRepresentative getLegalRepresentativeById(Long id);
-  public LegalRepresentative getLegalRepresentativeByEmail(String email);
+  public LegalRepresentative getLegalRepresentativeByDNI(String dni);
   public LegalRepresentative updateLegalRepresentative(Long id, LegalRepresentativeDTO legalRepresentative);
   public void deleteLegalRepresentative(Long id);
 }
