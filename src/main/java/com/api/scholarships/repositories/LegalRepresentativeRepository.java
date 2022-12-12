@@ -11,5 +11,7 @@ public interface LegalRepresentativeRepository extends JpaRepository<LegalRepres
   boolean existsByEmail(String email);
   boolean existsByDni(String dni);
   Optional<LegalRepresentative> findByDni(String dni);
+  boolean existsByEmailAndIdNot(String email, Long id);
+  boolean existsByDniAndIdNot(String dni, Long id);
 
 }
