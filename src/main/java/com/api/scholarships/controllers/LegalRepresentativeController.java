@@ -42,4 +42,9 @@ public class LegalRepresentativeController {
   public ResponseEntity<LegalRepresentativeDTOResponse> findById(@PathVariable Long id){
     return ResponseEntity.ok(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentativeService.getLegalRepresentativeById(id)));
   }
+
+  @GetMapping(Endpoints.LEGAL_REPRESENTATIVE_DNI)
+  public ResponseEntity<LegalRepresentativeDTOResponse> findByDNI(@PathVariable String dni){
+    return ResponseEntity.ok(legalRepresentativeMapper.legalRepresentativeToLegalRepresentativeDTOResponse(legalRepresentativeService.getLegalRepresentativeByDNI(dni)));
+  }
 }

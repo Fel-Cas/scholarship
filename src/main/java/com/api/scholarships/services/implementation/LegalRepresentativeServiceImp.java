@@ -53,8 +53,10 @@ public class LegalRepresentativeServiceImp implements LegalRepresentativeService
   }
 
   @Override
-  public LegalRepresentative getLegalRepresentativeByEmail(String email) {
-    return null;
+  public LegalRepresentative getLegalRepresentativeByDNI(String dni) {
+    LegalRepresentative legalRepresentativeFound= legalRepresentativeRepository.findByDni(dni)
+        .orElseThrow(() -> new NotFoundException(Messages.MESSAGE_LEGAL_REPRESENTATIVE_NOT_FOUND_BY_DNI.formatted(dni)));
+    return legalRepresentativeFound;
   }
 
   @Override
