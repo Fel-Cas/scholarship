@@ -2,6 +2,8 @@ package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.UserDTO;
+import com.api.scholarships.dtos.UserDTOResponse;
+import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.UserMapper;
@@ -14,10 +16,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
+import java.util.List;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -101,5 +108,39 @@ class UserServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.save(userDTO));
     //then
     assertEquals(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI, exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test UserService,Test to find all users")
+  void testFindAllUsers() {
+    //given
+    UserDTOResponse userDTOResponse= UserDTOResponse.builder()
+        .id(1L)
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("1001233147")
+        .email("andres.cmonsalve@gmail.com")
+        .updatedAt(Instant.now().toString())
+        .createdAt(Instant.now().toString())
+        .build();
+
+
+    Page<User> users=new PageImpl<>(List.of(user));
+    given(userRepository.findAll(any(Pageable.class))).willReturn(users);
+    given(userMapper.userToUserDTOResponse(List.of(user))).willReturn(List.of(userDTOResponse));
+
+    //when
+    UserResponse usersFound = userService.getAll(0, 10, "id", "ASC");
+
+    //then
+    assertAll(
+        () -> assertNotNull(usersFound),
+        () -> assertThat(usersFound.getContent().size()).isGreaterThan(0),
+        ()->assertEquals(0,usersFound.getNumberPage()),
+        ()->assertEquals(1,usersFound.getSizePage()),
+        ()->assertEquals(1,usersFound.getTotalPages()),
+        ()->assertEquals(1,usersFound.getTotalElements()),
+        ()->assertTrue(usersFound.isLastOne())
+    );
   }
 }
