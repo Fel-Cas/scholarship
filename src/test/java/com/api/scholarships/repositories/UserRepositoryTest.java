@@ -35,7 +35,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test save legal representative")
+  @DisplayName("Test UserRepository,Test save a new user")
   void testSaveLegalRepresentative(){
     //given
     //when
@@ -48,7 +48,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test find legal representative by id")
+  @DisplayName("Test UserRepository,Test find a user by id")
   void testFindOneLegalRepresentative(){
     //given
     User userSaved = userRepository.save(user);
@@ -63,7 +63,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by email")
+  @DisplayName("Test UserRepository,Test to determinate if exists a user by email")
   void testExistsByEmail(){
     //given
     User userSaved = userRepository.save(user);
@@ -76,7 +76,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by dni")
+  @DisplayName("Test UserRepository,Test to determinate if exists a user by dni")
   void testExistsByDni(){
     //given
     User userSaved = userRepository.save(user);
@@ -89,7 +89,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test to find a legal representative by dni")
+  @DisplayName("Test UserRepository,Test to find a user by dni")
   void testFindByDni(){
     //given
     user.setDni("12345678901234");
@@ -105,7 +105,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by email and id not")
+  @DisplayName("Test UserRepository,Test to determinate if exists a user by email and id not")
   void testExistsByEmailAndIdNot(){
     //given
     userRepository.save(
@@ -129,7 +129,7 @@ class UserRepositoryTest {
     assertFalse(hasNotUser);
   }
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by dni and id not")
+  @DisplayName("Test UserRepository,Test to determinate if exists a user by dni and id not")
   void testExistsByDniAndIdNot(){
     //given
     userRepository.save(
@@ -153,7 +153,7 @@ class UserRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test LegalRepresentativeRepository,Test to delete a legal representative")
+  @DisplayName("Test UserRepository,Test to delete a user")
   void testDeleteLegalRepresentative(){
     //given
     User userSaved = userRepository.save(user);
