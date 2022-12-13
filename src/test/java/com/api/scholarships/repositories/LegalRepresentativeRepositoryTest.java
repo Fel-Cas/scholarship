@@ -150,4 +150,16 @@ class LegalRepresentativeRepositoryTest {
     assertTrue(hasLegalRepresentative);
     assertFalse(hasNotLegalRepresentative);
   }
+
+  @Test
+  @DisplayName("Test LegalRepresentativeRepository,Test to delete a legal representative")
+  void testDeleteLegalRepresentative(){
+    //given
+    LegalRepresentative legalRepresentativeSaved=legalRepresentativeRepository.save(legalRepresentative);
+    //when
+    legalRepresentativeRepository.delete(legalRepresentativeSaved);
+    //then
+    Optional<LegalRepresentative> legalRepresentativeFound = legalRepresentativeRepository.findById(legalRepresentativeSaved.getId());
+    assertFalse(legalRepresentativeFound.isPresent());
+  }
 }
