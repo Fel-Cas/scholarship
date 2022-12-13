@@ -49,7 +49,7 @@ class UserServiceTest {
         .id(1L)
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
-        .dni("1001233147")
+        .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .password("123456")
         .updatedAt(Instant.now())
@@ -64,7 +64,7 @@ class UserServiceTest {
     UserDTO userDTO = UserDTO.builder()
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
-        .dni("1001233147")
+        .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .password("123456")
         .build();
@@ -95,7 +95,7 @@ class UserServiceTest {
     UserDTO userDTO = UserDTO.builder()
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
-        .dni("1001233147")
+        .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .password("123456")
         .build();
@@ -114,7 +114,7 @@ class UserServiceTest {
     UserDTO userDTO = UserDTO.builder()
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
-        .dni("1001233147")
+        .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .password("123456")
         .build();
@@ -135,7 +135,7 @@ class UserServiceTest {
         .id(1L)
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
-        .dni("1001233147")
+        .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .updatedAt(Instant.now().toString())
         .createdAt(Instant.now().toString())
@@ -183,5 +183,18 @@ class UserServiceTest {
     NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getById(1L));
     //then
     assertEquals(Messages.MESSAGE_USER_NOT_FOUND.formatted(1L), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to find user by dni")
+  void testFindUserByDni() {
+    //given
+    given(userRepository.findByDni(anyString())).willReturn(Optional.of(user));
+    //when
+    User userFound=userService.getByDNI(user.getDni());
+    //then
+    assertNotNull(userFound);
+    assertThat(userFound.getId()).isGreaterThan(0);
+    assertEquals(userFound.getId(),user.getId());
   }
 }
