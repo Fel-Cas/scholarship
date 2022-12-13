@@ -23,11 +23,11 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -158,5 +158,18 @@ class UserServiceTest {
         ()->assertEquals(1,usersFound.getTotalElements()),
         ()->assertTrue(usersFound.isLastOne())
     );
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to find a user by id")
+  void testFindUserById() {
+    //given
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    //when
+    User userFound=userService.getById(1L);
+    //then
+    assertNotNull(userFound);
+    assertThat(userFound.getId()).isGreaterThan(0);
+    assertEquals(userFound.getId(),user.getId());
   }
 }
