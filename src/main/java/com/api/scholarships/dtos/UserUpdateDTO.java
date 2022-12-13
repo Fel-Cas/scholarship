@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @Data
 @Builder
-public class LegalRepresentativeUpdateDTO {
+public class UserUpdateDTO {
   @NotNull(message = Messages.MESSAGE_NAME_REQUIRED)
   @Size(min = 2, max = 50, message = Messages.MESSAGE_NAME_SIZE)
   String name;

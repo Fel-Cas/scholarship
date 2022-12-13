@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @Builder
 @Data
-public class LegalRepresentativeDTOResponse {
+public class UserDTOResponse {
     @JsonProperty("id")
     Long id;
     @JsonProperty("name")

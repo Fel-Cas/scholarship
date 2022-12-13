@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @Data
 @Builder
-public class LegalRepresentativeResponse{
-  private List<LegalRepresentativeDTOResponse> content;
+public class UserResponse {
+  private List<UserDTOResponse> content;
   private int numberPage;
   private int sizePage;
   private Long totalElements;

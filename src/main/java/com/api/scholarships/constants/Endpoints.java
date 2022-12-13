@@ -5,6 +5,6 @@ public class Endpoints {
   public static final String ID = "/{id}";
 
   //LegalRepresentative
-  public static final String LEGAL_REPRESENTATIVE = "/api/v1/scholarships/legal-representative";
-  public static final String LEGAL_REPRESENTATIVE_DNI ="/dni/{dni}";
+  public static final String USERS = "/api/v1/scholarships/users";
+  public static final String USERS_DNI ="/dni/{dni}";
 }
