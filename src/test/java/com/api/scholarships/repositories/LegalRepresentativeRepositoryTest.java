@@ -102,4 +102,29 @@ class LegalRepresentativeRepositoryTest {
     assertEquals(legalRepresentativeSaved.getSurname(),legalRepresentativeFound.get().getSurname());
     assertNotNull(legalRepresentativeFound.get());
   }
+
+  @Test
+  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by email and id not")
+  void testExistsByEmailAndIdNot(){
+    //given
+    legalRepresentativeRepository.save(
+        LegalRepresentative
+            .builder()
+            .dni("12345678901234")
+            .name("Andrés Felipe")
+            .surname("Castro Monsalve")
+            .password("123456")
+            .email("andrs@email.com")
+            .build()
+    );
+    legalRepresentative.setEmail("juan@email.com");
+    LegalRepresentative legalRepresentativeSaved=legalRepresentativeRepository.save(legalRepresentative);
+    //when
+    boolean hasLegalRepresentative = legalRepresentativeRepository.existsByEmailAndIdNot("andrs@email.com",legalRepresentativeSaved.getId());
+    boolean hasNotLegalRepresentative = legalRepresentativeRepository.existsByEmailAndIdNot(legalRepresentativeSaved.getEmail(),legalRepresentativeSaved.getId());
+    //then
+    System.out.println(hasLegalRepresentative);
+    assertTrue(hasLegalRepresentative);
+    assertFalse(hasNotLegalRepresentative);
+  }
 }
