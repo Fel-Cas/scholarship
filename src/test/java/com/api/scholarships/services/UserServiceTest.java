@@ -197,4 +197,15 @@ class UserServiceTest {
     assertThat(userFound.getId()).isGreaterThan(0);
     assertEquals(userFound.getId(),user.getId());
   }
+
+  @Test
+  @DisplayName("Test UserService, test to find user by dni and verify error when user not found")
+  void testFindUserByDniAndVerifyErrorWhenUserNotFound() {
+    //given
+    given(userRepository.findByDni(anyString())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getByDNI(user.getDni()));
+    //then
+    assertEquals(Messages.MESSAGE_USER_NOT_FOUND_BY_DNI.formatted(user.getDni()), exception.getMessage());
+  }
 }
