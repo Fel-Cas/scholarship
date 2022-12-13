@@ -6,6 +6,7 @@ import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
 import com.api.scholarships.services.implementation.UserServiceImp;
@@ -171,5 +172,16 @@ class UserServiceTest {
     assertNotNull(userFound);
     assertThat(userFound.getId()).isGreaterThan(0);
     assertEquals(userFound.getId(),user.getId());
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to find a user by id and verify error when user not found")
+  void testFindUserByIdAndVerifyErrorWhenUserNotFound() {
+    //given
+    given(userRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getById(1L));
+    //then
+    assertEquals(Messages.MESSAGE_USER_NOT_FOUND.formatted(1L), exception.getMessage());
   }
 }
