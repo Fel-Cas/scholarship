@@ -73,4 +73,17 @@ class LegalRepresentativeRepositoryTest {
     assertTrue(hasLegalRepresentative);
     assertFalse(hasNotLegalRepresentative);
   }
+
+  @Test
+  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by dni")
+  void testExistsByDni(){
+    //given
+    LegalRepresentative legalRepresentativeSaved=legalRepresentativeRepository.save(legalRepresentative);
+    //when
+    boolean hasLegalRepresentative = legalRepresentativeRepository.existsByDni(legalRepresentativeSaved.getDni());
+    boolean hasNotLegalRepresentative = legalRepresentativeRepository.existsByDni(" ");
+    //then
+    assertTrue(hasLegalRepresentative);
+    assertFalse(hasNotLegalRepresentative);
+  }
 }
