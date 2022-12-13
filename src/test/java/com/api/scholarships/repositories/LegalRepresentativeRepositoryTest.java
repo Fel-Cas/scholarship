@@ -86,4 +86,20 @@ class LegalRepresentativeRepositoryTest {
     assertTrue(hasLegalRepresentative);
     assertFalse(hasNotLegalRepresentative);
   }
+
+  @Test
+  @DisplayName("Test LegalRepresentativeRepository,Test to find a legal representative by dni")
+  void testFindByDni(){
+    //given
+    legalRepresentative.setDni("12345678901234");
+    LegalRepresentative legalRepresentativeSaved=legalRepresentativeRepository.save(legalRepresentative);
+    //when
+    Optional<LegalRepresentative> legalRepresentativeFound = legalRepresentativeRepository.findByDni(legalRepresentativeSaved.getDni());
+    //then
+    assertTrue(legalRepresentativeFound.isPresent());
+    assertEquals(legalRepresentativeSaved.getId(),legalRepresentativeFound.get().getId());
+    assertEquals(legalRepresentativeSaved.getName(),legalRepresentativeFound.get().getName());
+    assertEquals(legalRepresentativeSaved.getSurname(),legalRepresentativeFound.get().getSurname());
+    assertNotNull(legalRepresentativeFound.get());
+  }
 }
