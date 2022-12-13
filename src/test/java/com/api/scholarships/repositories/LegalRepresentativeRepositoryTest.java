@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,5 +44,20 @@ class LegalRepresentativeRepositoryTest {
     assertThat(legalRepresentativeSaved.getId()).isGreaterThan(0);
     assertNotNull(legalRepresentativeSaved.getCreatedAt());
     assertNotNull(legalRepresentativeSaved.getUpdatedAt());
+  }
+
+  @Test
+  @DisplayName("Test LegalRepresentativeRepository,Test find legal representative by id")
+  void testFindOneLegalRepresentative(){
+    //given
+    LegalRepresentative legalRepresentativeSaved = legalRepresentativeRepository.save(legalRepresentative);
+    //when
+    Optional<LegalRepresentative> legalRepresentativeFound = legalRepresentativeRepository.findById(legalRepresentativeSaved.getId());
+    //then
+    assertTrue(legalRepresentativeFound.isPresent());
+    assertEquals(legalRepresentativeSaved.getId(),legalRepresentativeFound.get().getId());
+    assertEquals(legalRepresentativeSaved.getName(),legalRepresentativeFound.get().getName());
+    assertEquals(legalRepresentativeSaved.getSurname(),legalRepresentativeFound.get().getSurname());
+    assertNotNull(legalRepresentativeFound.get());
   }
 }
