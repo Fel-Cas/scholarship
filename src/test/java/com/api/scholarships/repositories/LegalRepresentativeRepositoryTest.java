@@ -127,4 +127,27 @@ class LegalRepresentativeRepositoryTest {
     assertTrue(hasLegalRepresentative);
     assertFalse(hasNotLegalRepresentative);
   }
+  @Test
+  @DisplayName("Test LegalRepresentativeRepository,Test to determinate if exists a legal representative by dni and id not")
+  void testExistsByDniAndIdNot(){
+    //given
+    legalRepresentativeRepository.save(
+        LegalRepresentative
+            .builder()
+            .dni("123456")
+            .name("Andrés Felipe")
+            .surname("Castro Monsalve")
+            .password("123456")
+            .email("andrs@email.com")
+            .build()
+    );
+    legalRepresentative.setDni("1234567");
+    LegalRepresentative legalRepresentativeSaved=legalRepresentativeRepository.save(legalRepresentative);
+    //when
+    boolean hasLegalRepresentative=legalRepresentativeRepository.existsByDniAndIdNot("123456",legalRepresentativeSaved.getId());
+    boolean hasNotLegalRepresentative=legalRepresentativeRepository.existsByDniAndIdNot(legalRepresentativeSaved.getDni(),legalRepresentativeSaved.getId());
+    //then
+    assertTrue(hasLegalRepresentative);
+    assertFalse(hasNotLegalRepresentative);
+  }
 }
