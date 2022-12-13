@@ -90,4 +90,16 @@ class UserServiceTest {
     //then
     assertEquals(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL, exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test UserService,Test to verify error when trying to save a user with a dni  already registered")
+  void testSaveUserWithAlreadyRegisteredDni() {
+    //given
+    given(userRepository.existsByEmail(anyString())).willReturn(false);
+    given(userRepository.existsByDni(anyString())).willReturn(true);
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.save(userDTO));
+    //then
+    assertEquals(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI, exception.getMessage());
+  }
 }
