@@ -41,7 +41,6 @@ class UserServiceTest {
   @InjectMocks
   private UserServiceImp userService;
   private User user;
-  private UserDTO userDTO;
 
   @BeforeEach
   void init() {
@@ -55,19 +54,20 @@ class UserServiceTest {
         .updatedAt(Instant.now())
         .createdAt(Instant.now())
         .build();
-    userDTO = UserDTO.builder()
-        .name("Andrés Felipe")
-        .surname("Castro Monsalve")
-        .dni("1001233147")
-        .email("andres.cmonsalve@gmail.com")
-        .password("123456")
-        .build();
   }
 
   @Test
   @DisplayName("Test UserService,Test to save a new user")
   void testSaveUser() {
     //given
+    UserDTO userDTO = UserDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("1001233147")
+        .email("andres.cmonsalve@gmail.com")
+        .password("123456")
+        .build();
+
     given(userRepository.existsByEmail(anyString())).willReturn(false);
     given(userRepository.existsByDni(anyString())).willReturn(false);
     given(userRepository.save(any(User.class))).willReturn(user);
@@ -91,6 +91,14 @@ class UserServiceTest {
   @DisplayName("Test UserService,Test to verify error when trying to save a user with an  already registered email")
   void testSaveUserWithAlreadyRegisteredEmail() {
     //given
+    UserDTO userDTO = UserDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("1001233147")
+        .email("andres.cmonsalve@gmail.com")
+        .password("123456")
+        .build();
+
     given(userRepository.existsByEmail(anyString())).willReturn(true);
     //when
     BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.save(userDTO));
@@ -102,6 +110,14 @@ class UserServiceTest {
   @DisplayName("Test UserService,Test to verify error when trying to save a user with a dni  already registered")
   void testSaveUserWithAlreadyRegisteredDni() {
     //given
+    UserDTO userDTO = UserDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("1001233147")
+        .email("andres.cmonsalve@gmail.com")
+        .password("123456")
+        .build();
+
     given(userRepository.existsByEmail(anyString())).willReturn(false);
     given(userRepository.existsByDni(anyString())).willReturn(true);
     //when
