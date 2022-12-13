@@ -1,7 +1,9 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.entities.User;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
 import com.api.scholarships.services.implementation.UserServiceImp;
@@ -76,5 +78,16 @@ class UserServiceTest {
         ()-> assertNotNull(userSaved.getCreatedAt()),
         ()-> assertNotNull(userSaved.getUpdatedAt())
     );
+  }
+
+  @Test
+  @DisplayName("Test UserService,Test to verify error when trying to save a user with an  already registered email")
+  void testSaveUserWithAlreadyRegisteredEmail() {
+    //given
+    given(userRepository.existsByEmail(anyString())).willReturn(true);
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.save(userDTO));
+    //then
+    assertEquals(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL, exception.getMessage());
   }
 }
