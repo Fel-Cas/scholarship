@@ -14,7 +14,7 @@ import lombok.*;
 @Getter
 @Setter
 @Data
-public class LegalRepresentativeDTO {
+public class UserDTO {
     @NotNull(message = Messages.MESSAGE_NAME_REQUIRED)
     @Size(min = 2, max = 50, message = Messages.MESSAGE_NAME_SIZE)
     String name;
