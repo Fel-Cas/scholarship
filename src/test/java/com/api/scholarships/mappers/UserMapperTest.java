@@ -1,5 +1,6 @@
 package com.api.scholarships.mappers;
 
+import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.entities.User;
 import org.junit.jupiter.api.DisplayName;
@@ -44,4 +45,26 @@ class UserMapperTest {
 
   }
 
+  @Test
+  @DisplayName("Test userDTOToUser")
+  void userDTOToUser() {
+    //given
+    UserDTO userDTO = UserDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("12345678912")
+        .email("andres.cmonsalve@gmail.com")
+        .password("12345678")
+        .build();
+    //when
+    User user = userMapper.userDTOToUser(userDTO);
+    //then
+    assertAll(
+        () -> assertEquals(userDTO.getName(), user.getName()),
+        () -> assertEquals(userDTO.getSurname(), user.getSurname()),
+        () -> assertEquals(userDTO.getDni(), user.getDni()),
+        () -> assertEquals(userDTO.getEmail(), user.getEmail()),
+        () -> assertEquals(userDTO.getPassword(), user.getPassword())
+    );
+  }
 }
