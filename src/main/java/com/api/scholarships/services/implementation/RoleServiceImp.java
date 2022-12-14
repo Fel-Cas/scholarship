@@ -26,7 +26,11 @@ public class RoleServiceImp implements RoleService {
 
     @Override
     public Role findById(Long id) {
-        return null;
+        Optional<Role> roleFound=roleRepository.findById(id);
+        if(roleFound.isEmpty()){
+            throw new NotFoundException(Messages.MESSAGE_ROLE_NOT_FOUND.formatted(id));
+        }
+        return roleFound.get();
     }
 
     @Override
