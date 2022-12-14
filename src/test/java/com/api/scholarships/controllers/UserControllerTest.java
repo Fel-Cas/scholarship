@@ -125,4 +125,24 @@ class UserControllerTest {
         .andExpect(jsonPath("$.lastOne").value(userResponse.isLastOne()));
   }
 
+  @Test
+  @DisplayName("Test UserController, test to find an user by id")
+  void findById() throws Exception {
+    //given
+    given(userService.getById(any(Long.class))).willReturn(user);
+    given(userMapper.userToUserDTOResponse(any(User.class))).willReturn(userDTOResponse);
+    //when
+    ResultActions response = mockMvc.perform(get(url + "/{id}", 1L));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(user.getId()))
+        .andExpect(jsonPath("$.name").value(user.getName()))
+        .andExpect(jsonPath("$.surname").value(user.getSurname()))
+        .andExpect(jsonPath("$.dni").value(user.getDni()))
+        .andExpect(jsonPath("$.email").value(user.getEmail()))
+        .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
+        .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
+  }
+
 }
