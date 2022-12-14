@@ -4,6 +4,7 @@ import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.dtos.UserResponse;
+import com.api.scholarships.dtos.UserUpdateDTO;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
@@ -210,6 +211,36 @@ class UserServiceTest {
     NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getByDNI(user.getDni()));
     //then
     assertEquals(Messages.MESSAGE_USER_NOT_FOUND_BY_DNI.formatted(user.getDni()), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to update user")
+  void testUpdateUser() {
+    //given
+    UserUpdateDTO userUpdateDTO = UserUpdateDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("123456789")
+        .email("andres.cmonsalve@gmail.com")
+        .build();
+
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    given(userRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(false);
+    given(userRepository.existsByDniAndIdNot(anyString(),anyLong())).willReturn(false);
+    given(userRepository.save(any(User.class))).willReturn(user);
+
+    //when
+    User userUpdated=userService.update(1L,userUpdateDTO);
+    //then
+    assertAll(
+        ()-> assertNotNull(userUpdated),
+        ()-> assertEquals(userUpdated.getId(),user.getId()),
+        ()-> assertEquals(userUpdated.getName(),userUpdateDTO.getName()),
+        ()-> assertEquals(userUpdated.getSurname(),userUpdateDTO.getSurname()),
+        ()-> assertEquals(userUpdated.getDni(),userUpdateDTO.getDni()),
+        ()-> assertEquals(userUpdated.getEmail(),userUpdateDTO.getEmail())
+    );
+
   }
 
   @Test
