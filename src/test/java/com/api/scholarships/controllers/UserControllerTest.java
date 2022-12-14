@@ -2,6 +2,7 @@ package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
+import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.services.interfaces.UserService;
@@ -17,10 +18,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -94,5 +98,31 @@ class UserControllerTest {
         .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
   }
 
+  @Test
+  @DisplayName("Test UserController, test to find all users")
+  void findAll() throws Exception {
+    //given
+    UserResponse userResponse = UserResponse.builder()
+        .content(List.of(userDTOResponse))
+        .numberPage(0)
+        .totalPages(1)
+        .totalElements(1L)
+        .sizePage(10)
+        .lastOne(true)
+        .build();
+
+    given(userService.getAll(any(Integer.class), any(Integer.class),anyString(),anyString())).willReturn(userResponse);
+    //when
+    ResultActions response = mockMvc.perform(get(url));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.content.size()").value(userResponse.getContent().size()))
+        .andExpect(jsonPath("$.numberPage").value(userResponse.getNumberPage()))
+        .andExpect(jsonPath("$.totalPages").value(userResponse.getTotalPages()))
+        .andExpect(jsonPath("$.totalElements").value(userResponse.getTotalElements()))
+        .andExpect(jsonPath("$.sizePage").value(userResponse.getSizePage()))
+        .andExpect(jsonPath("$.lastOne").value(userResponse.isLastOne()));
+  }
 
 }
