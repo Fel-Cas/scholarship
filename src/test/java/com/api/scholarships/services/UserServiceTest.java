@@ -262,6 +262,26 @@ class UserServiceTest {
     assertEquals(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL, exception.getMessage());
   }
 
+  @Test
+  @DisplayName("Test UserService, Test to verify error when trying to update a user with a dni  already registered")
+  void testUpdateUserAndVerifyErrorWhenTryingToUpdateAUserWithADniAlreadyRegistered() {
+    //given
+    UserUpdateDTO userUpdateDTO = UserUpdateDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("123456789")
+        .email("andres.cmonsalve@gmail.com")
+        .build();
+
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    given(userRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(false);
+    given(userRepository.existsByDniAndIdNot(anyString(),anyLong())).willReturn(true);
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.update(1L,userUpdateDTO));
+    //then
+    assertEquals(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI, exception.getMessage());
+
+  }
 
   @Test
   @DisplayName("Test UserService, test to delete a user")
