@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -192,5 +193,17 @@ class UserControllerTest {
         .andExpect(jsonPath("$.email").value(user.getEmail()))
         .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
         .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
+  }
+
+  @Test
+  @DisplayName("Test UserController, test to delete an user")
+  void deleteUser() throws Exception {
+    //given
+    doNothing().when(userService).delete(any(Long.class));
+    //when
+    ResultActions response = mockMvc.perform(delete(url + "/{id}", 1L));
+    //then
+    response.andExpect(status().isNoContent())
+        .andDo(print());
   }
 }
