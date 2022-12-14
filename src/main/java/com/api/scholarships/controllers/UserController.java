@@ -11,6 +11,7 @@ import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.services.interfaces.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +27,7 @@ public class UserController {
   @PostMapping()
   public ResponseEntity<UserDTOResponse> save(@Valid @RequestBody UserDTO userDTO){
     User user = userService.save(userDTO);
-    return ResponseEntity.ok(userMapper.userToUserDTOResponse(user));
+    return new ResponseEntity(userMapper.userToUserDTOResponse(user), HttpStatus.CREATED);
   }
 
   @GetMapping()
