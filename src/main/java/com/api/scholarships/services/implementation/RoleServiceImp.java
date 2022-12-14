@@ -17,7 +17,7 @@ public class RoleServiceImp implements RoleService {
     private RoleRepository roleRepository;
     @Override
     public Role findByName(String name) {
-        Optional<Role> roleFound = roleRepository.findByName(name.toUpperCase());
+        Optional<Role> roleFound = roleRepository.findByNameRole(name.toUpperCase());
         if(roleFound.isEmpty()){
             throw new NotFoundException(Messages.MESSAGE_ROLE_NOT_FOUND.formatted(name.toUpperCase()));
         }
