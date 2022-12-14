@@ -3,6 +3,7 @@ package com.api.scholarships.controllers;
 import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.dtos.UserResponse;
+import com.api.scholarships.dtos.UserUpdateDTO;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.services.interfaces.UserService;
@@ -24,8 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -153,6 +153,35 @@ class UserControllerTest {
     given(userMapper.userToUserDTOResponse(any(User.class))).willReturn(userDTOResponse);
     //when
     ResultActions response = mockMvc.perform(get(url + "/dni/{dni}", userDTOResponse.getDni()));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(user.getId()))
+        .andExpect(jsonPath("$.name").value(user.getName()))
+        .andExpect(jsonPath("$.surname").value(user.getSurname()))
+        .andExpect(jsonPath("$.dni").value(user.getDni()))
+        .andExpect(jsonPath("$.email").value(user.getEmail()))
+        .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
+        .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
+  }
+
+  @Test
+  @DisplayName("Test UserController, test to update an user")
+  void update() throws Exception {
+    //given
+    UserUpdateDTO userUpdateDTO = UserUpdateDTO.builder()
+        .name("Andrés Felipe")
+        .surname("Castro Monsalve")
+        .dni("12345678912")
+        .email("andres.cmonsalve@gmail.com")
+        .build();
+
+    given(userService.update(any(Long.class), any(UserUpdateDTO.class))).willReturn(user);
+    given(userMapper.userToUserDTOResponse(any(User.class))).willReturn(userDTOResponse);
+    //when
+    ResultActions response = mockMvc.perform(put(url + "/{id}", 1L)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(userUpdateDTO)));
     //then
     response.andExpect(status().isOk())
         .andDo(print())
