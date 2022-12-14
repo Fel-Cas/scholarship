@@ -30,6 +30,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -207,5 +210,17 @@ class UserServiceTest {
     NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getByDNI(user.getDni()));
     //then
     assertEquals(Messages.MESSAGE_USER_NOT_FOUND_BY_DNI.formatted(user.getDni()), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to delete a user")
+  void testDelete(){
+    //given
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    willDoNothing().given(userRepository).delete(any(User.class));
+    //when
+    userService.delete(1L);
+    //then
+    verify(userRepository,times(1)).delete(any(User.class));
   }
 }
