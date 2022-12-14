@@ -20,6 +20,11 @@ public class Role {
   private Long id;
   @Column(name = "name_role")
   private String nameRole;
+  @OneToMany(fetch = FetchType.LAZY,cascade ={CascadeType.MERGE,CascadeType.PERSIST})
+  @JoinColumn(name = "role_id")
+  @JsonIgnore
+  private List<User> roles;
+
   @Override
   public String toString() {
     return "Role{" +
