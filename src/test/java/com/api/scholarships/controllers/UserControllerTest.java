@@ -4,6 +4,7 @@ import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.dtos.UserUpdateDTO;
+import com.api.scholarships.entities.Role;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.services.interfaces.UserService;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest
+@WebMvcTest(UserController.class)
 class UserControllerTest {
   @MockBean
   private UserService userService;
@@ -41,18 +42,25 @@ class UserControllerTest {
   private MockMvc mockMvc;
   private String url = "/api/v1/scholarships/users";
   private User user;
+  private Role role;
   private UserDTOResponse userDTOResponse;
   @Autowired
   private ObjectMapper objectMapper;
 
   @BeforeEach
   void init() {
+    role = Role.builder()
+        .id(1L)
+        .nameRole("ROLE_USER")
+        .build();
+
     user = User.builder()
         .id(1L)
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
         .dni("12345678912")
         .email("andres.cmonsalve@gmail.com")
+        .role(role)
         .password("12345678")
         .updatedAt(Instant.parse("2021-05-01T00:00:00Z"))
         .createdAt(Instant.parse("2021-05-01T00:00:00Z"))
@@ -64,6 +72,7 @@ class UserControllerTest {
         .surname("Castro Monsalve")
         .dni("12345678912")
         .email("andres.cmonsalve@gmail.com")
+        .role(role)
         .updatedAt("2021-05-01T00:00:00Z")
         .createdAt("2021-05-01T00:00:00Z")
         .build();
@@ -79,6 +88,7 @@ class UserControllerTest {
         .dni("12345678912")
         .email("andres.cmonsalve@gmail.com")
         .password("12345678")
+        .role(role.getNameRole())
         .build();
 
     given(userService.save(any(UserDTO.class))).willReturn(user);
@@ -95,6 +105,7 @@ class UserControllerTest {
         .andExpect(jsonPath("$.surname").value(user.getSurname()))
         .andExpect(jsonPath("$.dni").value(user.getDni()))
         .andExpect(jsonPath("$.email").value(user.getEmail()))
+        .andExpect(jsonPath("$.role.nameRole").value(user.getRole().getNameRole()))
         .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
         .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
   }
@@ -142,6 +153,7 @@ class UserControllerTest {
         .andExpect(jsonPath("$.surname").value(user.getSurname()))
         .andExpect(jsonPath("$.dni").value(user.getDni()))
         .andExpect(jsonPath("$.email").value(user.getEmail()))
+        .andExpect(jsonPath("$.role.nameRole").value(user.getRole().getNameRole()))
         .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
         .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
   }
@@ -162,6 +174,7 @@ class UserControllerTest {
         .andExpect(jsonPath("$.surname").value(user.getSurname()))
         .andExpect(jsonPath("$.dni").value(user.getDni()))
         .andExpect(jsonPath("$.email").value(user.getEmail()))
+        .andExpect(jsonPath("$.role.nameRole").value(user.getRole().getNameRole()))
         .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
         .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
   }
@@ -191,6 +204,7 @@ class UserControllerTest {
         .andExpect(jsonPath("$.surname").value(user.getSurname()))
         .andExpect(jsonPath("$.dni").value(user.getDni()))
         .andExpect(jsonPath("$.email").value(user.getEmail()))
+        .andExpect(jsonPath("$.role.nameRole").value(user.getRole().getNameRole()))
         .andExpect(jsonPath("$.createdAt").value(user.getCreatedAt().toString()))
         .andExpect(jsonPath("$.updatedAt").value(user.getUpdatedAt().toString()));
   }
