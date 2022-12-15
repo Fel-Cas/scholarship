@@ -10,5 +10,4 @@ public interface CloudService {
 
   public Map upload(MultipartFile multipartFile) throws IOException;
   public Map delete(String id);
-  public File convert(MultipartFile multipartFile);
 }
