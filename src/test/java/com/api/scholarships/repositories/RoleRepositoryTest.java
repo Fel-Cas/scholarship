@@ -64,4 +64,17 @@ class RoleRepositoryTest {
     assertEquals(roleSaved.getNameRole(),roleFound.get().getNameRole());
 
   }
+
+  @Test
+  @DisplayName("Test RoleRepository,Test find role by name")
+  void testFindRoleByName(){
+    //given
+    Role roleSaved=roleRepository.save(role);
+    //when
+    Optional<Role> roleFound = roleRepository.findByNameRole(roleSaved.getNameRole());
+    //then
+    assertThat(roleFound.isPresent()).isTrue();
+    assertEquals(roleSaved.getId(),roleFound.get().getId());
+    assertEquals(roleSaved.getNameRole(),roleFound.get().getNameRole());
+  }
 }
