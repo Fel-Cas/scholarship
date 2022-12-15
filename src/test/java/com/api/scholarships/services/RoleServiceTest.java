@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
@@ -65,5 +64,18 @@ class RoleServiceTest {
     NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> roleService.findByName(role.getNameRole()));
     //then
     assertEquals(Messages.MESSAGE_ROLE_NOT_FOUND_BY_NAME.formatted(role.getNameRole()), notFoundException.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test RoleService, test to find a role by id")
+  void findById() {
+    //given
+    given(roleRepository.findById(anyLong())).willReturn(Optional.of(role));
+    //when
+    Role roleFound = roleService.findById(role.getId());
+    //then
+    assertNotNull(roleFound);
+    assertEquals(role.getNameRole(), roleFound.getNameRole());
+    assertEquals(role.getId(), roleFound.getId());
   }
 }
