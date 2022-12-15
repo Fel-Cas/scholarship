@@ -1,5 +1,6 @@
 package com.api.scholarships.dtos;
 
+import com.api.scholarships.entities.Role;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -11,28 +12,32 @@ import lombok.*;
 @Data
 public class UserDTOResponse {
     @JsonProperty("id")
-    Long id;
+    private Long id;
     @JsonProperty("name")
-    String name;
+    private String name;
     @JsonProperty("surname")
-    String surname;
+    private String surname;
     @JsonProperty("email")
-    String email;
+    private String email;
     @JsonProperty("dni")
-    String dni;
+    private String dni;
+    @JsonProperty("role")
+    private Role role;
     @JsonProperty("createdAt")
-    String createdAt;
+    private String createdAt;
     @JsonProperty("updatedAt")
-    String updatedAt;
+    private String updatedAt;
+
 
     @Override
     public String toString() {
-        return "LegalRepresentativeDTOResponse{" +
+        return "UserDTOResponse{" +
             "id=" + id +
             ", name='" + name + '\'' +
             ", surname='" + surname + '\'' +
             ", email='" + email + '\'' +
             ", dni='" + dni + '\'' +
+            ", role=" + role.toString() +
             ", createdAt='" + createdAt + '\'' +
             ", updatedAt='" + updatedAt + '\'' +
             '}';
