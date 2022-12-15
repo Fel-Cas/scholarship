@@ -1,7 +1,7 @@
 package com.api.scholarships.constants;
 
 public class Messages {
-  //legalRepresentative
+  //User
   public static final String MESSAGE_NAME_REQUIRED = "Name is required";
   public static final String MESSAGE_NAME_SIZE = "Name must be between 2 and 50 characters";
   public static final String MESSAGE_SURNAME_REQUIRED = "Surname is required";
@@ -13,6 +13,8 @@ public class Messages {
   public static final String MESSAGE_DNI_SIZE = "DNI must be between 10 and 15 characters";
   public static final String MESSAGE_PASSWORD_REQUIRED = "Password is required";
   public static final String MESSAGE_PASSWORD_SIZE = "Password must be between 8 and 50 characters";
+  public static final String MESSAGE_ROLE_REQUIRED = "Role is required";
+  public static final String MESSAGE_ROLE_SIZE = "Role must be between 4 and 50 characters";
 
   //User Service
   public static final String MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI ="Already exists a legal representative with this DNI";
