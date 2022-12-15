@@ -10,6 +10,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -38,6 +39,9 @@ public class User {
     private Instant createdAt;
     @UpdateTimestamp
     private Instant updatedAt;
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    private Role role;
 
     @Override
     public String toString() {

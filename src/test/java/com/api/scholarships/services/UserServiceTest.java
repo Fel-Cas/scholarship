@@ -5,12 +5,14 @@ import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.dtos.UserUpdateDTO;
+import com.api.scholarships.entities.Role;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
 import com.api.scholarships.services.implementation.UserServiceImp;
+import com.api.scholarships.services.interfaces.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,13 +44,22 @@ class UserServiceTest {
   @Mock
   private UserRepository userRepository;
   @Mock
+  private RoleService roleService;
+  @Mock
   private UserMapper userMapper;
   @InjectMocks
   private UserServiceImp userService;
   private User user;
+  private Role role;
 
   @BeforeEach
   void init() {
+
+    role= Role.builder()
+        .id(1L)
+        .nameRole("ROLE_USER")
+        .build();
+
     user = User.builder()
         .id(1L)
         .name("Andrés Felipe")
@@ -56,6 +67,7 @@ class UserServiceTest {
         .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .password("123456")
+        .role(role)
         .updatedAt(Instant.now())
         .createdAt(Instant.now())
         .build();
@@ -71,12 +83,13 @@ class UserServiceTest {
         .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
         .password("123456")
+        .role(role.getNameRole())
         .build();
 
+    given(roleService.findByName(anyString())).willReturn(role);
     given(userRepository.existsByEmail(anyString())).willReturn(false);
     given(userRepository.existsByDni(anyString())).willReturn(false);
     given(userRepository.save(any(User.class))).willReturn(user);
-    given(userMapper.userDTOToUser(any(UserDTO.class))).willReturn(user);
     //when
     User userSaved = userService.save(userDTO);
     //then
@@ -88,7 +101,8 @@ class UserServiceTest {
         () -> assertEquals(userSaved.getEmail(), userDTO.getEmail()),
         () -> assertEquals(userSaved.getPassword(), userDTO.getPassword()),
         ()-> assertNotNull(userSaved.getCreatedAt()),
-        ()-> assertNotNull(userSaved.getUpdatedAt())
+        ()-> assertNotNull(userSaved.getUpdatedAt()),
+        ()-> assertNotNull(userSaved.getRole())
     );
   }
 
@@ -101,6 +115,7 @@ class UserServiceTest {
         .surname("Castro Monsalve")
         .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
+        .role(role.getNameRole())
         .password("123456")
         .build();
 
@@ -120,6 +135,7 @@ class UserServiceTest {
         .surname("Castro Monsalve")
         .dni("123456789")
         .email("andres.cmonsalve@gmail.com")
+        .role(role.getNameRole())
         .password("123456")
         .build();
 
@@ -140,6 +156,7 @@ class UserServiceTest {
         .name("Andrés Felipe")
         .surname("Castro Monsalve")
         .dni("123456789")
+        .role(role)
         .email("andres.cmonsalve@gmail.com")
         .updatedAt(Instant.now().toString())
         .createdAt(Instant.now().toString())
@@ -176,6 +193,7 @@ class UserServiceTest {
     assertNotNull(userFound);
     assertThat(userFound.getId()).isGreaterThan(0);
     assertEquals(userFound.getId(),user.getId());
+    assertNotNull(userFound.getRole());
   }
 
   @Test
@@ -200,6 +218,7 @@ class UserServiceTest {
     assertNotNull(userFound);
     assertThat(userFound.getId()).isGreaterThan(0);
     assertEquals(userFound.getId(),user.getId());
+   assertNotNull(userFound.getRole());
   }
 
   @Test
@@ -238,7 +257,8 @@ class UserServiceTest {
         ()-> assertEquals(userUpdated.getName(),userUpdateDTO.getName()),
         ()-> assertEquals(userUpdated.getSurname(),userUpdateDTO.getSurname()),
         ()-> assertEquals(userUpdated.getDni(),userUpdateDTO.getDni()),
-        ()-> assertEquals(userUpdated.getEmail(),userUpdateDTO.getEmail())
+        ()-> assertEquals(userUpdated.getEmail(),userUpdateDTO.getEmail()),
+        ()-> assertNotNull(userUpdated.getRole())
     );
 
   }

@@ -47,29 +47,6 @@ class UserMapperTest {
   }
 
   @Test
-  @DisplayName("Test userDTOToUser")
-  void userDTOToUser() {
-    //given
-    UserDTO userDTO = UserDTO.builder()
-        .name("Andrés Felipe")
-        .surname("Castro Monsalve")
-        .dni("12345678912")
-        .email("andres.cmonsalve@gmail.com")
-        .password("12345678")
-        .build();
-    //when
-    User user = userMapper.userDTOToUser(userDTO);
-    //then
-    assertAll(
-        () -> assertEquals(userDTO.getName(), user.getName()),
-        () -> assertEquals(userDTO.getSurname(), user.getSurname()),
-        () -> assertEquals(userDTO.getDni(), user.getDni()),
-        () -> assertEquals(userDTO.getEmail(), user.getEmail()),
-        () -> assertEquals(userDTO.getPassword(), user.getPassword())
-    );
-  }
-
-  @Test
   @DisplayName("Test list of users to list of userDTOResponse")
   void userToUserDTOResponseList() {
     //given

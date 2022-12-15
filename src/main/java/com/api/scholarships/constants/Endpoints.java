@@ -4,7 +4,10 @@ public class Endpoints {
   // Id
   public static final String ID = "/{id}";
 
-  //LegalRepresentative
+  //User
   public static final String USERS = "/api/v1/scholarships/users";
   public static final String USERS_DNI ="/dni/{dni}";
+
+  //Role
+  public static final String ROLES = "/api/v1/scholarships/roles";
 }

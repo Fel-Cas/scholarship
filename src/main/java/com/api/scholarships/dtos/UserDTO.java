@@ -17,29 +17,33 @@ import lombok.*;
 public class UserDTO {
     @NotNull(message = Messages.MESSAGE_NAME_REQUIRED)
     @Size(min = 2, max = 50, message = Messages.MESSAGE_NAME_SIZE)
-    String name;
+    private String name;
     @NotNull(message = Messages.MESSAGE_SURNAME_REQUIRED)
     @Size(min = 2, max = 50, message = Messages.MESSAGE_SURNAME_SIZE)
-    String surname;
+    private String surname;
     @NotNull(message = Messages.MESSAGE_EMAIL_REQUIRED)
     @Email(message = Messages.MESSAGE_EMAIL_VALID)
     @Size(min = 11, max = 50, message = Messages.MESSAGE_EMAIL_SIZE)
-    String email;
+    private String email;
     @NotNull(message = Messages.MESSAGE_DNI_REQUIRED)
     @Size(min = 10, max = 15, message = Messages.MESSAGE_DNI_SIZE)
-    String dni;
+    private String dni;
     @NotNull(message = Messages.MESSAGE_PASSWORD_REQUIRED)
     @Size(min = 8, max = 50, message = Messages.MESSAGE_PASSWORD_SIZE)
-    String password;
+    private String password;
+    @NotNull(message = Messages.MESSAGE_ROLE_REQUIRED)
+    @Size(min=4, max=50, message = Messages.MESSAGE_ROLE_SIZE)
+    private String role;
 
     @Override
     public String toString() {
-        return "LegalRepresentativeDTO{" +
+        return "UserDTO{" +
             "name='" + name + '\'' +
             ", surname='" + surname + '\'' +
             ", email='" + email + '\'' +
             ", dni='" + dni + '\'' +
             ", password='" + password + '\'' +
+            ", role='" + role + '\'' +
             '}';
     }
 }

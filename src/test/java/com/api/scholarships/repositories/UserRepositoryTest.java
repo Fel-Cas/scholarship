@@ -1,5 +1,6 @@
 package com.api.scholarships.repositories;
 
+import com.api.scholarships.entities.Role;
 import com.api.scholarships.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -19,10 +20,18 @@ class UserRepositoryTest {
 
   @Autowired
   private UserRepository userRepository;
+  @Autowired
+  private RoleRepository roleRepository;
   private User user;
+  private Role role;
 
   @BeforeEach
   void init(){
+    role = Role.builder()
+        .id(1L)
+        .nameRole("ROLE_USER")
+        .build();
+
     user = User.builder()
       .name("Andrés Felipe")
       .surname("Castro Monsalve")
@@ -32,11 +41,15 @@ class UserRepositoryTest {
       .createdAt(Instant.now())
       .updatedAt(Instant.now())
       .build();
+
+    this.roleRepository.save(role);
+    Optional<Role> roleFound = this.roleRepository.findByNameRole(role.getNameRole());
+    user.setRole(roleFound.get());
   }
 
   @Test
   @DisplayName("Test UserRepository,Test save a new user")
-  void testSaveLegalRepresentative(){
+  void testSaveUser(){
     //given
     //when
     User userSaved = userRepository.save(user);
@@ -45,11 +58,12 @@ class UserRepositoryTest {
     assertThat(userSaved.getId()).isGreaterThan(0);
     assertNotNull(userSaved.getCreatedAt());
     assertNotNull(userSaved.getUpdatedAt());
+    assertNotNull(userSaved.getRole());
   }
 
   @Test
   @DisplayName("Test UserRepository,Test find a user by id")
-  void testFindOneLegalRepresentative(){
+  void testFindOneUser(){
     //given
     User userSaved = userRepository.save(user);
     //when
@@ -60,6 +74,20 @@ class UserRepositoryTest {
     assertEquals(userSaved.getName(),userFound.get().getName());
     assertEquals(userSaved.getSurname(),userFound.get().getSurname());
     assertNotNull(userFound.get());
+    assertNotNull(userFound.get().getRole());
+  }
+
+  @Test
+  @DisplayName("Test UserRepository,Test find all users")
+  void testFindAllUsers(){
+    //given
+    User userSaved = userRepository.save(user);
+    //when
+    List<User> usersFound = userRepository.findAll();
+    //then
+    assertNotNull(usersFound);
+    assertThat(usersFound).isNotEmpty();
+    assertThat(usersFound.size()).isGreaterThan(0);
   }
 
   @Test
@@ -124,7 +152,6 @@ class UserRepositoryTest {
     boolean hasUser = userRepository.existsByEmailAndIdNot("andrs@email.com", userSaved.getId());
     boolean hasNotUser = userRepository.existsByEmailAndIdNot(userSaved.getEmail(), userSaved.getId());
     //then
-    System.out.println(hasUser);
     assertTrue(hasUser);
     assertFalse(hasNotUser);
   }
@@ -154,7 +181,7 @@ class UserRepositoryTest {
 
   @Test
   @DisplayName("Test UserRepository,Test to delete a user")
-  void testDeleteLegalRepresentative(){
+  void testDeleteUser(){
     //given
     User userSaved = userRepository.save(user);
     //when

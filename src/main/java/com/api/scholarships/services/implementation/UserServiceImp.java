@@ -4,11 +4,13 @@ import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.dtos.UserUpdateDTO;
+import com.api.scholarships.entities.Role;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
+import com.api.scholarships.services.interfaces.RoleService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,12 +25,22 @@ public class UserServiceImp implements UserService {
   private UserRepository userRepository;
   @Autowired
   private UserMapper userMapper;
+  @Autowired
+  private RoleService roleService;
 
   @Override
   public User save(UserDTO userDTO) {
     if(userRepository.existsByEmail(userDTO.getEmail())) throw new BadRequestException(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL);
     if(userRepository.existsByDni(userDTO.getDni())) throw new BadRequestException(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI);
-    return userRepository.save(userMapper.userDTOToUser(userDTO));
+    Role roleFound=roleService.findByName(userDTO.getRole());
+    return userRepository.save(User.builder()
+            .name(userDTO.getName())
+            .surname(userDTO.getSurname())
+            .email(userDTO.getEmail())
+            .dni(userDTO.getDni())
+            .password(userDTO.getPassword())
+            .role(roleFound)
+            .build());
   }
 
   @Override
