@@ -1,6 +1,8 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.entities.Role;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.RoleMapper;
 import com.api.scholarships.repositories.RoleRepository;
 import com.api.scholarships.services.implementation.RoleServiceImp;
@@ -17,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
@@ -51,5 +54,16 @@ class RoleServiceTest {
     assertNotNull(roleFound);
     assertEquals(role.getNameRole(), roleFound.getNameRole());
     assertEquals(role.getId(), roleFound.getId());
+  }
+
+  @Test
+  @DisplayName("Test RoleService, test to find a role by name and verify if the role is not found")
+  void failFindByName() {
+    //given
+    given(roleRepository.findByNameRole(anyString())).willReturn(Optional.empty());
+    //when
+    NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> roleService.findByName(role.getNameRole()));
+    //then
+    assertEquals(Messages.MESSAGE_ROLE_NOT_FOUND_BY_NAME.formatted(role.getNameRole()), notFoundException.getMessage());
   }
 }
