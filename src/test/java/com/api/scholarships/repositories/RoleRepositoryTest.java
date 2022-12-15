@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -47,6 +48,20 @@ class RoleRepositoryTest {
     List<Role>rolesFound = roleRepository.findAll();
     //then
     assertThat(roleRepository.findAll()).isNotEmpty();
-    assertThat(rolesFound.size()).isGreaterThan(1);
+    assertThat(rolesFound.size()).isGreaterThan(0);
+  }
+
+  @Test
+  @DisplayName("Test RoleRepository,Test find role by id")
+  void testFindRoleById(){
+    //given
+    Role roleSaved=roleRepository.save(role);
+    //when
+    Optional<Role> roleFound = roleRepository.findById(roleSaved.getId());
+    //then
+    assertThat(roleFound.isPresent()).isTrue();
+    assertEquals(roleSaved.getId(),roleFound.get().getId());
+    assertEquals(roleSaved.getNameRole(),roleFound.get().getNameRole());
+
   }
 }
