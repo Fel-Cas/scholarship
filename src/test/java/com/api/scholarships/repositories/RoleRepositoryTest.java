@@ -77,4 +77,15 @@ class RoleRepositoryTest {
     assertEquals(roleSaved.getId(),roleFound.get().getId());
     assertEquals(roleSaved.getNameRole(),roleFound.get().getNameRole());
   }
+
+  @Test
+  @DisplayName("Test RoleRepository,Test delete a role ")
+  void testDeleteRole(){
+    //given
+    Role roleSaved=roleRepository.save(role);
+    //when
+    roleRepository.delete(roleSaved);
+    //then
+    assertThat(roleRepository.findById(roleSaved.getId()).isPresent()).isFalse();
+  }
 }
