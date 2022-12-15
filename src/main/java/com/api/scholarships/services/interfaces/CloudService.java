@@ -9,5 +9,5 @@ import java.util.Map;
 public interface CloudService {
 
   public Map upload(MultipartFile multipartFile) throws IOException;
-  public Map delete(String id);
+  public Map delete(String id) throws IOException;
 }

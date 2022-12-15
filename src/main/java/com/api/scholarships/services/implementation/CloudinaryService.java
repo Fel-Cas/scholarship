@@ -33,8 +33,9 @@ public class CloudinaryService implements CloudService {
     }
 
     @Override
-    public Map delete(String id) {
-        return null;
+    public Map delete(String id) throws IOException {
+        Map result= cloudinary.uploader().destroy(id, ObjectUtils.emptyMap());
+        return result;
     }
 
 
