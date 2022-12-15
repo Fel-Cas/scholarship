@@ -1,4 +1,4 @@
-package com.api.scholarships.services;
+package com.api.scholarships.services.implementation;
 
 import com.api.scholarships.services.interfaces.CloudService;
 import org.springframework.web.multipart.MultipartFile;
