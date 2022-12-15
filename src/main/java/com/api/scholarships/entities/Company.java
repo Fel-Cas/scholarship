@@ -3,6 +3,8 @@ package com.api.scholarships.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "companies")
 @AllArgsConstructor
@@ -26,4 +28,8 @@ public class Company {
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "image_id",referencedColumnName = "id")
   private Image image;
+  @OneToMany(fetch = FetchType.EAGER,cascade ={CascadeType.MERGE,CascadeType.PERSIST})
+  @JoinColumn(name = "company_id")
+  private List<User> users;
+
 }
