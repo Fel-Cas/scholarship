@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -74,6 +75,19 @@ class UserRepositoryTest {
     assertEquals(userSaved.getSurname(),userFound.get().getSurname());
     assertNotNull(userFound.get());
     assertNotNull(userFound.get().getRole());
+  }
+
+  @Test
+  @DisplayName("Test UserRepository,Test find all users")
+  void testFindAllUsers(){
+    //given
+    User userSaved = userRepository.save(user);
+    //when
+    List<User> usersFound = userRepository.findAll();
+    //then
+    assertNotNull(usersFound);
+    assertThat(usersFound).isNotEmpty();
+    assertThat(usersFound.size()).isGreaterThan(0);
   }
 
   @Test
