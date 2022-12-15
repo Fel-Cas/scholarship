@@ -78,4 +78,15 @@ class RoleServiceTest {
     assertEquals(role.getNameRole(), roleFound.getNameRole());
     assertEquals(role.getId(), roleFound.getId());
   }
+
+  @Test
+  @DisplayName("Test RoleService, test to find a role by id and verify if the role is not found")
+  void failFindById() {
+    //given
+    given(roleRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException notFoundException = assertThrows(NotFoundException.class, () -> roleService.findById(role.getId()));
+    //then
+    assertEquals(Messages.MESSAGE_ROLE_NOT_FOUND.formatted(role.getId()), notFoundException.getMessage());
+  }
 }
