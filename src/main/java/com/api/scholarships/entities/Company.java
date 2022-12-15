@@ -23,4 +23,7 @@ public class Company {
   private String phone;
   @Column(name = "email")
   private String email;
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "image_id",referencedColumnName = "id")
+  private Image image;
 }

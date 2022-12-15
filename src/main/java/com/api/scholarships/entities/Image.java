@@ -21,6 +21,8 @@ public class Image {
   private String name;
   @Column(name = "image_id")
   private String imageId;
+  @OneToOne(mappedBy = "image")
+  private Company company;
 
   @Override
   public String toString() {
