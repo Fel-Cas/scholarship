@@ -4,6 +4,7 @@ import com.api.scholarships.services.interfaces.CloudService;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Service
 public class CloudinaryService implements CloudService {
     private final Cloudinary cloudinary;
     private final Dotenv dotenv=Dotenv.load();
