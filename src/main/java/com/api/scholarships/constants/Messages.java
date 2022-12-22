@@ -26,4 +26,7 @@ public class Messages {
   public static final String MESSAGE_ROLE_NOT_FOUND ="Not exists a role with this id %s";
   public static final String MESSAGE_ROLE_NOT_FOUND_BY_NAME ="Not exists a role with this name %s";
 
+  //Image Service
+  public static final String MESSAGE_IMAGE_NOT_FOUND ="Not exists a image with this id %s";
+
 }
