@@ -1,5 +1,6 @@
 package com.api.scholarships.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +22,8 @@ public class Image {
   private String name;
   @Column(name = "image_id")
   private String imageId;
-  @OneToOne(mappedBy = "image")
+  @OneToOne(mappedBy = "image",fetch = FetchType.LAZY)
+  @JsonIgnore
   private Company company;
 
   @Override
