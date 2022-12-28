@@ -2,6 +2,7 @@ package com.api.scholarships.services.implementation;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.entities.Image;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.repositories.ImageRepository;
 import com.api.scholarships.services.interfaces.CloudService;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
@@ -24,6 +27,7 @@ public class ImageServiceImp implements ImageService {
 
   @Override
   public Image save(MultipartFile image) throws IOException {
+    validateImage(image);
     Map result = this.cloudinaryService.upload(image);
     return imageRepository.save(
         Image.builder()
@@ -40,5 +44,12 @@ public class ImageServiceImp implements ImageService {
       throw new NotFoundException(Messages.MESSAGE_IMAGE_NOT_FOUND.formatted(id));
     }
     imageRepository.delete(imageFound.get());
+  }
+
+  protected void validateImage(MultipartFile image) throws IOException {
+    BufferedImage bufferedImage = ImageIO.read(image.getInputStream());
+    if(bufferedImage == null){
+      throw new BadRequestException(Messages.MESSAGE_IMAGE_NOT_VALID);
+    }
   }
 }
