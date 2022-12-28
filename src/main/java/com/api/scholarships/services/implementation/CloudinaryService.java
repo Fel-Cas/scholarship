@@ -22,7 +22,7 @@ public class CloudinaryService implements CloudService {
         Map<String,String> valuesCloudinary=new HashMap<>();
         valuesCloudinary.put("cloud_name",dotenv.get("CLOUD_NAME"));
         valuesCloudinary.put("api_key",dotenv.get("API_KEY"));
-        valuesCloudinary.put("api_sercret",dotenv.get("API_SECRET"));
+        valuesCloudinary.put("api_secret",dotenv.get("API_SECRET"));
         cloudinary = new Cloudinary(valuesCloudinary);
     }
 
