@@ -29,4 +29,13 @@ public class Messages {
   //Image Service
   public static final String MESSAGE_IMAGE_NOT_FOUND ="Not exists a image with this id %s";
 
+  //Company
+  public static final String MESSAGE_ADDRESS_REQUIRED = "Address is required";
+  public static final String MESSAGE_ADDRESS_SIZE = "Address must be between 8 and 50 characters";
+  public static final String MESSAGE_PHONE_REQUIRED = "Phone is required";
+  public static final String MESSAGE_PHONE_SIZE = "Phone must be between 7 and 15 characters";
+  public static final String MESSAGE_IMAGE_REQUIRED = "Image is required";
+  public static final String MESSAGE_USERS_REQUIRED = "Users is required";
+  public static final String MESSAGE_USERS_SIZE = "Lists of user must have at least one user";
+
 }
