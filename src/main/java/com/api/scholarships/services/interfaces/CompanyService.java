@@ -5,8 +5,10 @@ import com.api.scholarships.dtos.CompanyResponse;
 import com.api.scholarships.dtos.CompanyUpdateDTO;
 import com.api.scholarships.entities.Company;
 
+import java.io.IOException;
+
 public interface CompanyService {
-  public Company create(CompanyDTO companyDTO);
+  public Company create(CompanyDTO companyDTO) throws IOException;
   public Company getOne(Long id);
   public CompanyResponse getAll(int page, int size, String sort, String order);
   public Company update(Long id, CompanyUpdateDTO companyDTO);
