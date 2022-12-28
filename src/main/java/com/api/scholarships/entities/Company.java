@@ -2,7 +2,10 @@ package com.api.scholarships.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -31,5 +34,9 @@ public class Company {
   @OneToMany(fetch = FetchType.EAGER,cascade ={CascadeType.MERGE,CascadeType.PERSIST})
   @JoinColumn(name = "company_id")
   private List<User> users;
+  @CreationTimestamp
+  private Instant createdAt;
+  @UpdateTimestamp
+  private Instant updatedAt;
 
 }
