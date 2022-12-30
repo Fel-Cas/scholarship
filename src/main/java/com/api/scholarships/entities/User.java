@@ -34,6 +34,7 @@ public class User {
     @Column(name = "dni", nullable = false)
     private String dni;
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
     //TODO: add created_at and updated_at correctly
     @CreationTimestamp
