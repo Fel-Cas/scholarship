@@ -52,4 +52,10 @@ public class CompanyController {
     Company companyUpdated=companyService.update(id, companyDTO);
     return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyUpdated));
   }
+
+  @DeleteMapping(Endpoints.ID)
+  public ResponseEntity<?> delete(@PathVariable Long id){
+    companyService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }

@@ -84,7 +84,8 @@ public class CompanyServiceImp implements CompanyService {
 
   @Override
   public void delete(Long id) {
-
+    Company companyFound=getOne(id);
+    companyRepository.delete(companyFound);
   }
 
   @Override
