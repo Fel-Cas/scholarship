@@ -141,6 +141,12 @@ public class CompanyServiceImp implements CompanyService {
   }
 
   protected List<User> loadUsers(List<Long> usersId){
-    return usersId.stream().map(userService::getById).toList();
+    return usersId.stream().map(userId->{
+      User userFound=userService.getById(userId);
+      if(companyRepository.existsByUsers(userFound)){
+        throw new BadRequestException(Messages.MESSAGE_COMPANY_ADD_USER.formatted(userId));
+      }
+      return userFound;
+    }).toList();
   }
 }
