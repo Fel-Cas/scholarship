@@ -7,6 +7,7 @@ import com.api.scholarships.dtos.CompanyDTOResponse;
 import com.api.scholarships.dtos.CompanyResponse;
 import com.api.scholarships.dtos.CompanyUpdateDTO;
 import com.api.scholarships.entities.Company;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.services.interfaces.CompanyService;
 import jakarta.validation.Valid;
@@ -59,9 +60,23 @@ public class CompanyController {
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/users/{idCompany}/{idUser}")
-  public ResponseEntity<?> addUser(@PathVariable("idCompany") Long idCompany, @PathVariable("idUser") Long idUser){
-    companyService.addUser(idCompany, idUser);
-    return ResponseEntity.noContent().build();
+  @PutMapping(Endpoints.COMPANIES_USERS)
+  public ResponseEntity<CompanyDTOResponse> manageUsersCompany(
+      @PathVariable("idCompany") Long idCompany,
+      @PathVariable("idUser") Long idUser,
+      @RequestParam(value = "action") String action
+  ){
+    Company companyUpdated=null;
+    switch (action.toUpperCase()){
+      case "ADD":
+        companyUpdated=companyService.addUser(idCompany, idUser);
+        break;
+      case "REMOVE":
+        companyUpdated=companyService.removeUser(idCompany, idUser);
+        break;
+      default:
+        throw new BadRequestException("That action is not valid");
+    }
+    return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyUpdated));
   }
 }
