@@ -43,4 +43,5 @@ public class Messages {
   public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE="Already exists a company with this phone %s";
   public static final String MESSAGE_COMPANY_NOT_FOUND="Not exists a company with this id %s";
   public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
+  public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
 }
