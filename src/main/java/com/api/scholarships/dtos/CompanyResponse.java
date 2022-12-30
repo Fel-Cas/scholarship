@@ -1,7 +1,14 @@
 package com.api.scholarships.dtos;
 
-import java.util.List;
+import lombok.*;
 
+import java.util.List;
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Data
+@Builder
 public class CompanyResponse {
   private List<CompanyDTOResponse> content;
   private int numberPage;
