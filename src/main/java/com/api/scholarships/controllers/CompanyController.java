@@ -5,6 +5,7 @@ import com.api.scholarships.constants.PaginationRequest;
 import com.api.scholarships.dtos.CompanyDTO;
 import com.api.scholarships.dtos.CompanyDTOResponse;
 import com.api.scholarships.dtos.CompanyResponse;
+import com.api.scholarships.dtos.CompanyUpdateDTO;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.services.interfaces.CompanyService;
@@ -44,5 +45,11 @@ public class CompanyController {
       @RequestParam(value = "order",defaultValue = PaginationRequest.DEFAULT_SORT_DIR,required = false) String order
   ){
     return ResponseEntity.ok(companyService.getAll(page, size, sort, order));
+  }
+
+  @PutMapping(Endpoints.ID)
+  public ResponseEntity<CompanyDTOResponse> update(@PathVariable Long id, @RequestBody @Valid CompanyUpdateDTO companyDTO) throws IOException {
+    Company companyUpdated=companyService.update(id, companyDTO);
+    return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyUpdated));
   }
 }

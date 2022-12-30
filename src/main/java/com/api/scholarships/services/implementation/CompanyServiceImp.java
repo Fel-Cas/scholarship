@@ -10,7 +10,6 @@ import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
-import com.api.scholarships.services.interfaces.CloudService;
 import com.api.scholarships.services.interfaces.CompanyService;
 import com.api.scholarships.services.interfaces.ImageService;
 import com.api.scholarships.services.interfaces.UserService;
@@ -21,9 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -79,7 +76,10 @@ public class CompanyServiceImp implements CompanyService {
 
   @Override
   public Company update(Long id, CompanyUpdateDTO companyDTO) {
-    return null;
+    Company companyFound=getOne(id);
+    validateUniqueInformationUpdateCompany(companyDTO,id);
+    updateCompanyData(companyFound,companyDTO);
+    return companyRepository.save(companyFound);
   }
 
   @Override
@@ -112,6 +112,25 @@ public class CompanyServiceImp implements CompanyService {
     if(companyRepository.existsByPhone(companyDTO.getPhone())){
       throw new BadRequestException(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE.formatted(companyDTO.getPhone()));
     }
+  }
+
+  protected void validateUniqueInformationUpdateCompany(CompanyUpdateDTO companyDTO,Long id){
+    if(companyRepository.existsByNameAndIdNot(companyDTO.getName(),id)){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME.formatted(companyDTO.getName()));
+    }
+    if (companyRepository.existsByEmailAndIdNot(companyDTO.getEmail(),id)){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL.formatted(companyDTO.getEmail()));
+    }
+    if(companyRepository.existsByPhoneAndIdNot(companyDTO.getPhone(),id)){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE.formatted(companyDTO.getPhone()));
+    }
+  }
+
+  protected void updateCompanyData(Company companyFound,CompanyUpdateDTO companyDTO){
+    companyFound.setName(companyDTO.getName().toUpperCase());
+    companyFound.setAddress(companyDTO.getAddress().toUpperCase());
+    companyFound.setEmail(companyDTO.getEmail());
+    companyFound.setPhone(companyDTO.getPhone());
   }
 
   protected List<User> loadUsers(List<Long> usersId){
