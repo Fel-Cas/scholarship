@@ -1,8 +1,10 @@
 package com.api.scholarships.controllers;
 
 import com.api.scholarships.constants.Endpoints;
+import com.api.scholarships.constants.PaginationRequest;
 import com.api.scholarships.dtos.CompanyDTO;
 import com.api.scholarships.dtos.CompanyDTOResponse;
+import com.api.scholarships.dtos.CompanyResponse;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.services.interfaces.CompanyService;
@@ -32,5 +34,15 @@ public class CompanyController {
   @GetMapping(Endpoints.ID)
   public ResponseEntity<CompanyDTOResponse> getOne(@PathVariable Long id){
     return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyService.getOne(id)));
+  }
+
+  @GetMapping()
+  public ResponseEntity<CompanyResponse> getAll(
+      @RequestParam(value ="numberPage" ,defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int page,
+      @RequestParam(value ="pagesize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE,required = false) int size,
+      @RequestParam(value ="sort" ,defaultValue =PaginationRequest.DEFAULT_SORT_BY,required = false) String sort,
+      @RequestParam(value = "order",defaultValue = PaginationRequest.DEFAULT_SORT_DIR,required = false) String order
+  ){
+    return ResponseEntity.ok(companyService.getAll(page, size, sort, order));
   }
 }

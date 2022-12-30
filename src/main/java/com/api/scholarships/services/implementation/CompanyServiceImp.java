@@ -15,6 +15,9 @@ import com.api.scholarships.services.interfaces.CompanyService;
 import com.api.scholarships.services.interfaces.ImageService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -62,7 +65,16 @@ public class CompanyServiceImp implements CompanyService {
 
   @Override
   public CompanyResponse getAll(int page, int size, String sort, String order) {
-    return null;
+    Sort sortDirection = order.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+    Page<Company> companiesFound=companyRepository.findAll(PageRequest.of(page, size, sortDirection));
+    return CompanyResponse.builder()
+        .content(companyMapper.companyToCompanyDTOResponse(companiesFound.getContent()))
+        .totalPages(companiesFound.getTotalPages())
+        .totalElements(companiesFound.getTotalElements())
+        .lastOne(companiesFound.isLast())
+        .numberPage(companiesFound.getNumber())
+        .sizePage(companiesFound.getSize())
+        .build();
   }
 
   @Override
