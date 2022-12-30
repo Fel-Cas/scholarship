@@ -58,4 +58,10 @@ public class CompanyController {
     companyService.delete(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PutMapping("/users/{idCompany}/{idUser}")
+  public ResponseEntity<?> addUser(@PathVariable("idCompany") Long idCompany, @PathVariable("idUser") Long idUser){
+    companyService.addUser(idCompany, idUser);
+    return ResponseEntity.noContent().build();
+  }
 }

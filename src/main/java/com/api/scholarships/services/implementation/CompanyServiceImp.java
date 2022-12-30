@@ -90,7 +90,13 @@ public class CompanyServiceImp implements CompanyService {
 
   @Override
   public void addUser(Long id, Long userId) {
-
+    Company companyFound=getOne(id);
+    User userFound=userService.getById(userId);
+    if(companyRepository.existsByUsers(userFound)){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_ADD_USER.formatted(userId));
+    }
+    companyFound.getUsers().add(userFound);
+    companyRepository.save(companyFound);
   }
 
   @Override
