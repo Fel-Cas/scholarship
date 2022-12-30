@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -30,5 +27,10 @@ public class CompanyController {
   public ResponseEntity<CompanyDTOResponse> create(@ModelAttribute @Valid CompanyDTO companyDTO) throws IOException {
     Company companySaved=companyService.create(companyDTO);
     return new ResponseEntity<>(companyMapper.companyToCompanyDTOResponse(companySaved), HttpStatus.CREATED);
+  }
+
+  @GetMapping(Endpoints.ID)
+  public ResponseEntity<CompanyDTOResponse> getOne(@PathVariable Long id){
+    return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyService.getOne(id)));
   }
 }

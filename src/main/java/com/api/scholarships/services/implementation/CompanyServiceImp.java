@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class CompanyServiceImp implements CompanyService {
@@ -52,7 +53,11 @@ public class CompanyServiceImp implements CompanyService {
 
   @Override
   public Company getOne(Long id) {
-    return null;
+    Optional<Company> companyFound=companyRepository.findById(id);
+    if(companyFound.isEmpty()){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_NOT_FOUND.formatted(id));
+    }
+    return companyFound.get();
   }
 
   @Override
