@@ -41,4 +41,5 @@ public class Messages {
   public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME="Already exists a company with this name %s";
   public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL="Already exists a company with this email %s";
   public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE="Already exists a company with this phone %s";
+  public static final String MESSAGE_COMPANY_NOT_FOUND="Not exists a company with this id %s";
 }
