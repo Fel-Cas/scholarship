@@ -19,7 +19,7 @@ public class CompanyUpdateDTO {
   @Size(min = 8, max = 50, message = Messages.MESSAGE_ADDRESS_SIZE)
   private String address;
   @NotEmpty(message = Messages.MESSAGE_PHONE_REQUIRED)
-  @Size(min = 8, max = 15, message = Messages.MESSAGE_PHONE_SIZE)
+  @Size(min = 7, max = 15, message = Messages.MESSAGE_PHONE_SIZE)
   private String phone;
   @NotEmpty(message = Messages.MESSAGE_EMAIL_REQUIRED)
   @Size(min = 11, max = 50, message = Messages.MESSAGE_EMAIL_SIZE)
