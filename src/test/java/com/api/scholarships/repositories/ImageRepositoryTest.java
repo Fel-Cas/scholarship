@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -39,6 +41,17 @@ class ImageRepositoryTest {
     assertEquals(imageSaved.getName(),image.getName());
     assertEquals(imageSaved.getImageId(),image.getImageId());
     assertEquals(imageSaved.getUrl(),image.getUrl());
+  }
+
+  @Test
+  void findAll(){
+    //given
+    imageRepository.save(image);
+    //when
+    List<Image> imagesFound = imageRepository.findAll();
+    //then
+    assertNotNull(imagesFound);
+    assertThat(imagesFound.size()).isGreaterThan(0);
   }
 
 }
