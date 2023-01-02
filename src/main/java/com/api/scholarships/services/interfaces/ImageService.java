@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface ImageService {
   public Image save(MultipartFile image) throws IOException;
-  public void delete(Long id);
+  public void delete(Long id) throws IOException;
 }
