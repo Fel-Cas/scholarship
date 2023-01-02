@@ -26,4 +26,22 @@ public class Messages {
   public static final String MESSAGE_ROLE_NOT_FOUND ="Not exists a role with this id %s";
   public static final String MESSAGE_ROLE_NOT_FOUND_BY_NAME ="Not exists a role with this name %s";
 
+  //Image Service
+  public static final String MESSAGE_IMAGE_NOT_FOUND ="Not exists a image with this id %s";
+  public static final String MESSAGE_IMAGE_NOT_VALID ="Image is not valid";
+
+  //Company
+  public static final String MESSAGE_ADDRESS_REQUIRED = "Address is required";
+  public static final String MESSAGE_ADDRESS_SIZE = "Address must be between 8 and 50 characters";
+  public static final String MESSAGE_PHONE_REQUIRED = "Phone is required";
+  public static final String MESSAGE_PHONE_SIZE = "Phone must be between 7 and 15 characters";
+  public static final String MESSAGE_IMAGE_REQUIRED = "Image is required";
+  public static final String MESSAGE_USERS_REQUIRED = "Users is required";
+  public static final String MESSAGE_USERS_SIZE = "Lists of user must have at least one user";
+  public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME="Already exists a company with this name %s";
+  public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL="Already exists a company with this email %s";
+  public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE="Already exists a company with this phone %s";
+  public static final String MESSAGE_COMPANY_NOT_FOUND="Not exists a company with this id %s";
+  public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
+  public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
 }

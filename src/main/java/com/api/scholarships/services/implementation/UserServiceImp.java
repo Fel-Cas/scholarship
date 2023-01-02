@@ -77,7 +77,7 @@ public class UserServiceImp implements UserService {
     User userFound = getById(id);
     if(userRepository.existsByEmailAndIdNot(userUpdateDTO.getEmail(),id)) throw new BadRequestException(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL);
     if(userRepository.existsByDniAndIdNot(userUpdateDTO.getDni(),id)) throw new BadRequestException(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI);
-    updateLegalRepresentativeData(userFound, userUpdateDTO);
+    updateUserData(userFound, userUpdateDTO);
     return userRepository.save(userFound);
   }
 
@@ -87,7 +87,7 @@ public class UserServiceImp implements UserService {
     userRepository.delete(userFound);
   }
 
-  protected void updateLegalRepresentativeData(User userFound, UserUpdateDTO userUpdateDTO) {
+  protected void updateUserData(User userFound, UserUpdateDTO userUpdateDTO) {
     userFound.setDni(userUpdateDTO.getDni());
     userFound.setName(userUpdateDTO.getName());
     userFound.setSurname(userUpdateDTO.getSurname());

@@ -1,5 +1,6 @@
 package com.api.scholarships.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,6 +34,7 @@ public class User {
     @Column(name = "dni", nullable = false)
     private String dni;
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
     //TODO: add created_at and updated_at correctly
     @CreationTimestamp
@@ -42,6 +44,10 @@ public class User {
     @ManyToOne()
     @JoinColumn(name = "role_id")
     private Role role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    @JsonIgnore
+    private Company company;
 
     @Override
     public String toString() {

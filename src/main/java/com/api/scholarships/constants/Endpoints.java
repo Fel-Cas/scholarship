@@ -10,4 +10,9 @@ public class Endpoints {
 
   //Role
   public static final String ROLES = "/api/v1/scholarships/roles";
+
+  //Company
+  public static final String COMPANIES = "/api/v1/scholarships/companies";
+  public static final String COMPANIES_USERS = "/users/{idCompany}/{idUser}";
+  public static final String COMPANIES_IMAGES = "/images/{idCompany}";
 }
