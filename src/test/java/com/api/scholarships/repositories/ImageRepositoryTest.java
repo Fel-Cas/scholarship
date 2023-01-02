@@ -54,4 +54,20 @@ class ImageRepositoryTest {
     assertThat(imagesFound.size()).isGreaterThan(0);
   }
 
+  @Test
+  void findById(){
+    //given
+    Image imageSaved = imageRepository.save(image);
+    //when
+    Image imageFound = imageRepository.findById(imageSaved.getId()).get();
+    //then
+    assertAll(
+        ()->assertNotNull(imageFound),
+        ()->assertEquals(imageFound.getId(),imageSaved.getId()),
+        ()->assertEquals(imageFound.getName(),imageSaved.getName()),
+        ()->assertEquals(imageFound.getImageId(),imageSaved.getImageId()),
+        ()->assertEquals(imageFound.getUrl(),imageSaved.getUrl())
+    );
+  }
+
 }
