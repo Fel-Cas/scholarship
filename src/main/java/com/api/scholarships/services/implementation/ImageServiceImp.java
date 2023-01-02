@@ -38,11 +38,12 @@ public class ImageServiceImp implements ImageService {
   }
 
   @Override
-  public void delete(Long id) {
+  public void delete(Long id) throws IOException {
     Optional<Image> imageFound = imageRepository.findById(id);
     if(imageFound.isEmpty()){
       throw new NotFoundException(Messages.MESSAGE_IMAGE_NOT_FOUND.formatted(id));
     }
+    this.cloudinaryService.delete(imageFound.get().getImageId());
     imageRepository.delete(imageFound.get());
   }
 
