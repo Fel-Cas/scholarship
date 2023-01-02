@@ -2,6 +2,7 @@ package com.api.scholarships.repositories;
 
 import com.api.scholarships.entities.Image;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -31,6 +32,7 @@ class ImageRepositoryTest {
   }
 
   @Test
+  @DisplayName("Test ImageRepository,Test save a new image")
   void create(){
     //given
     //when
@@ -44,6 +46,7 @@ class ImageRepositoryTest {
   }
 
   @Test
+  @DisplayName("Test ImageRepository,Test find all images")
   void findAll(){
     //given
     imageRepository.save(image);
@@ -55,6 +58,7 @@ class ImageRepositoryTest {
   }
 
   @Test
+  @DisplayName("Test ImageRepository,Test find image by id")
   void findById(){
     //given
     Image imageSaved = imageRepository.save(image);
