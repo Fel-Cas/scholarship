@@ -74,4 +74,14 @@ class ImageRepositoryTest {
     );
   }
 
+  @Test
+  @DisplayName("Test ImageRepository,Test to delete an image")
+  void delete(){
+    //given
+    Image imageSaved = imageRepository.save(image);
+    //when
+    imageRepository.delete(imageSaved);
+    //then
+    assertThat(imageRepository.findById(imageSaved.getId())).isEmpty();
+  }
 }
