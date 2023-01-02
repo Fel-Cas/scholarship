@@ -20,10 +20,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -75,5 +79,17 @@ class ImageServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> imageService.save(imageFile));
     //then
     assertEquals(Messages.MESSAGE_IMAGE_NOT_VALID, exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test ImageService, test to delete an image")
+  void delete() throws IOException {
+    //given
+    given(imageRepository.findById(anyLong())).willReturn(Optional.of(image));
+    given(cloudService.delete(image.getImageId())).willReturn(Map.of("result","ok"));
+    //when
+    imageService.delete(image.getId());
+    //then
+    verify(imageRepository,times(1)).delete(image);
   }
 }
