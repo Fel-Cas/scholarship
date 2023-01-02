@@ -3,6 +3,7 @@ package com.api.scholarships.services;
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.repositories.ImageRepository;
 import com.api.scholarships.services.implementation.ImageServiceImp;
 import com.api.scholarships.services.interfaces.CloudService;
@@ -91,5 +92,16 @@ class ImageServiceTest {
     imageService.delete(image.getId());
     //then
     verify(imageRepository,times(1)).delete(image);
+  }
+
+  @Test
+  @DisplayName("Test ImageService, test to verify exception when deleting an image")
+  void failDelete() throws IOException {
+    //given
+    given(imageRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> imageService.delete(anyLong()));
+    //then
+    assertEquals(Messages.MESSAGE_IMAGE_NOT_FOUND.formatted(0L), exception.getMessage());
   }
 }
