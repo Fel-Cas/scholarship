@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -111,8 +112,12 @@ public class CompanyServiceImp implements CompanyService {
   }
 
   @Override
-  public void changeImage(Long id, Long imageId) {
-
+  public void changeImage(Long id, MultipartFile image) throws IOException {
+    Company companyFound=getOne(id);
+    imageService.delete(companyFound.getImage().getId());
+    Image imageCreated=imageService.save(image);
+    companyFound.setImage(imageCreated);
+    companyRepository.save(companyFound);
   }
 
   protected void validateUniqueInformationCreateCompany(CompanyDTO companyDTO){

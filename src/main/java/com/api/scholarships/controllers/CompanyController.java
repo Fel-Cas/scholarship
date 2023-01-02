@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -79,4 +80,11 @@ public class CompanyController {
     }
     return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyUpdated));
   }
+
+  @PutMapping(Endpoints.COMPANIES_IMAGES)
+  public ResponseEntity<?> changeImage(@PathVariable("idCompany") Long id, @RequestParam("image") MultipartFile image) throws IOException {
+    companyService.changeImage(id, image);
+    return ResponseEntity.noContent().build();
+  }
+
 }
