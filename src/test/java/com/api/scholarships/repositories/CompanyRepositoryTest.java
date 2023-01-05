@@ -234,4 +234,16 @@ class CompanyRepositoryTest {
         () -> assertNotNull(companies.get(0).getImage())
     );
   }
+
+  @Test
+  @DisplayName("Test CompanyRepository, Test to delete a company")
+  void testDelete() {
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    companyRepository.delete(companySaved);
+    Optional<Company> companyFound = companyRepository.findById(companySaved.getId());
+    //then
+    assertFalse(companyFound.isPresent());
+  }
 }
