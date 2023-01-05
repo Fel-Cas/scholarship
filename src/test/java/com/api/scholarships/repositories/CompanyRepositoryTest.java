@@ -184,4 +184,17 @@ class CompanyRepositoryTest {
     assertTrue(exists);
     assertFalse(notExists);
   }
+
+  @Test
+  @DisplayName("Test CompanyRepository, Test to check if there is a company saved with a phone but not with a specific id")
+  void testExistsByPhoneAndIdNot() {
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    boolean notExists = companyRepository.existsByPhoneAndIdNot(companySaved.getPhone(), companySaved.getId());
+    boolean exists = companyRepository.existsByPhoneAndIdNot(companySaved.getPhone(), anyLong());
+    //then
+    assertTrue(exists);
+    assertFalse(notExists);
+  }
 }
