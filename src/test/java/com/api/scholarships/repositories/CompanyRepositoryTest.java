@@ -210,4 +210,28 @@ class CompanyRepositoryTest {
     assertTrue(exists);
     assertFalse(notExists);
   }
+
+  @Test
+  @DisplayName("Test CompanyRepository, Test to find all companies")
+  void testFindAll() {
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    List<Company> companies = companyRepository.findAll();
+    //then
+    assertAll(
+        () -> assertNotNull(companies),
+        () -> assertThat(companies.size()).isGreaterThan(0),
+        () -> assertEquals(companySaved.getId(), companies.get(0).getId()),
+        () -> assertEquals(companySaved.getName(), companies.get(0).getName()),
+        () -> assertEquals(companySaved.getAddress(), companies.get(0).getAddress()),
+        () -> assertEquals(companySaved.getPhone(), companies.get(0).getPhone()),
+        () -> assertEquals(companySaved.getEmail(), companies.get(0).getEmail()),
+        () -> assertEquals(companySaved.getCreatedAt(), companies.get(0).getCreatedAt()),
+        () -> assertEquals(companySaved.getUpdatedAt(), companies.get(0).getUpdatedAt()),
+        () -> assertNotNull(companies.get(0).getUsers()),
+        () -> assertThat(companies.get(0).getUsers().size()).isGreaterThan(0),
+        () -> assertNotNull(companies.get(0).getImage())
+    );
+  }
 }
