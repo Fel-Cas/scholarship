@@ -3,12 +3,18 @@ package com.api.scholarships.repositories;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.entities.User;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.Instant;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 class CompanyRepositoryTest {
@@ -22,4 +28,57 @@ class CompanyRepositoryTest {
   private Company company;
   private User user;
   private Image image;
+
+  @BeforeEach
+  void init() {
+    user = User.builder()
+        .name("Juanito")
+        .surname("Perez")
+        .password("123456")
+        .dni("1001233147")
+        .email("email@emial.com")
+        .createdAt(Instant.now())
+        .updatedAt(Instant.now())
+        .build();
+
+    image = Image.builder()
+        .id(1L)
+        .name("image")
+        .imageId("imageId")
+        .url("url")
+        .build();
+
+    User userSaved = this.userRepository.save(user);
+    Image imageSaved = this.imageRepository.save(image);
+
+
+    company = Company.builder()
+        .name("Company S.A")
+        .address("Medellin,Antioquia")
+        .phone("123456789")
+        .email("email@emailcom")
+        .id(1L)
+        .users(List.of(userSaved))
+        .image(imageSaved)
+        .createdAt(Instant.now())
+        .updatedAt(Instant.now())
+        .build();
+
+  }
+
+  @Test
+  @DisplayName("Test CompanyRepository,Test save a new company")
+  void testSaveCompany(){
+    //given
+    //when
+    Company companySaved = companyRepository.save(company);
+    //then
+    assertNotNull(companySaved);
+    assertThat(companySaved.getId()).isGreaterThan(0);
+    assertNotNull(companySaved.getCreatedAt());
+    assertNotNull(companySaved.getUpdatedAt());
+    assertNotNull(companySaved.getUsers());
+    assertThat(companySaved.getUsers().size()).isGreaterThan(0);
+    assertNotNull(companySaved.getImage());
+  }
 }
