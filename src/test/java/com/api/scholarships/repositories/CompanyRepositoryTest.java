@@ -38,7 +38,7 @@ class CompanyRepositoryTest {
         .name("Juanito")
         .surname("Perez")
         .password("123456")
-        .dni("1001233147")
+        .dni("5865486758697")
         .email("email@emial.com")
         .createdAt(Instant.now())
         .updatedAt(Instant.now())
@@ -71,7 +71,7 @@ class CompanyRepositoryTest {
 
   @Test
   @DisplayName("Test CompanyRepository,Test save a new company")
-  void testSaveCompany(){
+  void testSaveCompany() {
     //given
     //when
     Company companySaved = companyRepository.save(company);
@@ -87,30 +87,30 @@ class CompanyRepositoryTest {
 
   @Test
   @DisplayName("Test CompanyRepository,Test find a company by id")
-  void testFindCompanyById(){
+  void testFindCompanyById() {
     //given
     Company companySaved = companyRepository.save(company);
     //when
     Optional<Company> companyFound = companyRepository.findById(companySaved.getId());
     //then
     assertAll(
-        ()->assertTrue(companyFound.isPresent()),
-        ()->assertEquals(companySaved.getId(),companyFound.get().getId()),
-        ()->assertEquals(companySaved.getName(),companyFound.get().getName()),
-        ()->assertEquals(companySaved.getAddress(),companyFound.get().getAddress()),
-        ()->assertEquals(companySaved.getPhone(),companyFound.get().getPhone()),
-        ()->assertEquals(companySaved.getEmail(),companyFound.get().getEmail()),
-        ()->assertEquals(companySaved.getCreatedAt(),companyFound.get().getCreatedAt()),
-        ()->assertEquals(companySaved.getUpdatedAt(),companyFound.get().getUpdatedAt()),
-        ()->assertNotNull(companyFound.get().getUsers()),
-        ()->assertThat(companyFound.get().getUsers().size()).isGreaterThan(0),
-        ()->assertNotNull(companyFound.get().getImage())
+        () -> assertTrue(companyFound.isPresent()),
+        () -> assertEquals(companySaved.getId(), companyFound.get().getId()),
+        () -> assertEquals(companySaved.getName(), companyFound.get().getName()),
+        () -> assertEquals(companySaved.getAddress(), companyFound.get().getAddress()),
+        () -> assertEquals(companySaved.getPhone(), companyFound.get().getPhone()),
+        () -> assertEquals(companySaved.getEmail(), companyFound.get().getEmail()),
+        () -> assertEquals(companySaved.getCreatedAt(), companyFound.get().getCreatedAt()),
+        () -> assertEquals(companySaved.getUpdatedAt(), companyFound.get().getUpdatedAt()),
+        () -> assertNotNull(companyFound.get().getUsers()),
+        () -> assertThat(companyFound.get().getUsers().size()).isGreaterThan(0),
+        () -> assertNotNull(companyFound.get().getImage())
     );
   }
 
   @Test
   @DisplayName("Test CompanyRepository,Test to check if a company exists by name")
-  void testExistsByName(){
+  void testExistsByName() {
     //given
     Company companySaved = companyRepository.save(company);
     //when
@@ -123,7 +123,7 @@ class CompanyRepositoryTest {
 
   @Test
   @DisplayName("Test CompanyRepository,Test to check if a company exists by email")
-  void testExistsByEmail(){
+  void testExistsByEmail() {
     //given
     Company companySaved = companyRepository.save(company);
     //when
@@ -136,12 +136,36 @@ class CompanyRepositoryTest {
 
   @Test
   @DisplayName("Test CompanyRepository,Test to check if a company exists by phone")
-  void testExistsByPhone(){
+  void testExistsByPhone() {
     //given
     Company companySaved = companyRepository.save(company);
     //when
     boolean exists = companyRepository.existsByPhone(companySaved.getPhone());
     boolean notExists = companyRepository.existsByPhone(anyString());
+    //then
+    assertTrue(exists);
+    assertFalse(notExists);
+  }
+
+  @Test
+  @DisplayName("Test CompanyRepository,Test to check if a company exists by user")
+  void testExistsByUser() {
+    //given
+    Company companySaved = companyRepository.save(company);
+    User userSaved=this.userRepository.save(
+        User.builder()
+            .name("Guillermo")
+            .surname("Perez")
+            .password("123456")
+            .dni("34567888885")
+            .email("p@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
+    //when
+    boolean exists = companyRepository.existsByUsers(companySaved.getUsers().get(0));
+    boolean notExists = companyRepository.existsByUsers(userSaved);
     //then
     assertTrue(exists);
     assertFalse(notExists);
