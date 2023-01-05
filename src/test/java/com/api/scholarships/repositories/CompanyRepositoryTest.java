@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @DataJpaTest
@@ -166,6 +167,19 @@ class CompanyRepositoryTest {
     //when
     boolean exists = companyRepository.existsByUsers(companySaved.getUsers().get(0));
     boolean notExists = companyRepository.existsByUsers(userSaved);
+    //then
+    assertTrue(exists);
+    assertFalse(notExists);
+  }
+
+  @Test
+  @DisplayName("Test CompanyRepository, Test to check if there is a company saved with an emial but not with a specific id")
+  void testExistsByEmailAndIdNot() {
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    boolean notExists = companyRepository.existsByEmailAndIdNot(companySaved.getEmail(), companySaved.getId());
+    boolean exists = companyRepository.existsByEmailAndIdNot(companySaved.getEmail(), anyLong());
     //then
     assertTrue(exists);
     assertFalse(notExists);
