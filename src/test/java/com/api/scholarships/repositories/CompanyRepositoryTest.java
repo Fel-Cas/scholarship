@@ -16,6 +16,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+
 @DataJpaTest
 @ActiveProfiles("test")
 class CompanyRepositoryTest {
@@ -104,5 +106,18 @@ class CompanyRepositoryTest {
         ()->assertThat(companyFound.get().getUsers().size()).isGreaterThan(0),
         ()->assertNotNull(companyFound.get().getImage())
     );
+  }
+
+  @Test
+  @DisplayName("Test CompanyRepository,Test to check if a company exists by name")
+  void testExistsByName(){
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    boolean exists = companyRepository.existsByName(companySaved.getName());
+    boolean notExists = companyRepository.existsByName(anyString());
+    //then
+    assertTrue(exists);
+    assertFalse(notExists);
   }
 }
