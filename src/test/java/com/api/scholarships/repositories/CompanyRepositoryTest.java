@@ -133,4 +133,17 @@ class CompanyRepositoryTest {
     assertTrue(exists);
     assertFalse(notExists);
   }
+
+  @Test
+  @DisplayName("Test CompanyRepository,Test to check if a company exists by phone")
+  void testExistsByPhone(){
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    boolean exists = companyRepository.existsByPhone(companySaved.getPhone());
+    boolean notExists = companyRepository.existsByPhone(anyString());
+    //then
+    assertTrue(exists);
+    assertFalse(notExists);
+  }
 }
