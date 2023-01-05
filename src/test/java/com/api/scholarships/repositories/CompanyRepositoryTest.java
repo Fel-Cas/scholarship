@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -80,5 +81,28 @@ class CompanyRepositoryTest {
     assertNotNull(companySaved.getUsers());
     assertThat(companySaved.getUsers().size()).isGreaterThan(0);
     assertNotNull(companySaved.getImage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyRepository,Test find a company by id")
+  void testFindCompanyById(){
+    //given
+    Company companySaved = companyRepository.save(company);
+    //when
+    Optional<Company> companyFound = companyRepository.findById(companySaved.getId());
+    //then
+    assertAll(
+        ()->assertTrue(companyFound.isPresent()),
+        ()->assertEquals(companySaved.getId(),companyFound.get().getId()),
+        ()->assertEquals(companySaved.getName(),companyFound.get().getName()),
+        ()->assertEquals(companySaved.getAddress(),companyFound.get().getAddress()),
+        ()->assertEquals(companySaved.getPhone(),companyFound.get().getPhone()),
+        ()->assertEquals(companySaved.getEmail(),companyFound.get().getEmail()),
+        ()->assertEquals(companySaved.getCreatedAt(),companyFound.get().getCreatedAt()),
+        ()->assertEquals(companySaved.getUpdatedAt(),companyFound.get().getUpdatedAt()),
+        ()->assertNotNull(companyFound.get().getUsers()),
+        ()->assertThat(companyFound.get().getUsers().size()).isGreaterThan(0),
+        ()->assertNotNull(companyFound.get().getImage())
+    );
   }
 }
