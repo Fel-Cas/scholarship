@@ -141,9 +141,30 @@ class CompanyServiceTest {
         .build();
 
     given(companyRepository.existsByEmail(anyString())).willReturn(true);
+    given(companyRepository.existsByName(anyString())).willReturn(false);
     //when
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.create(companyDTO));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL.formatted(companyDTO.getEmail()), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test gets an error when trying to save a new company with an name already registered")
+  void saveWithExistingName() throws IOException {
+    //given
+    CompanyDTO companyDTO = CompanyDTO.builder()
+        .name("Company S.A")
+        .address("Medellin,Antioquia")
+        .phone("123456789")
+        .email("email@emailcom")
+        .users(List.of(1L))
+        .image(new MockMultipartFile("imageFile", "test.png", "image/png", "some image".getBytes()))
+        .build();
+
+    given(companyRepository.existsByName(anyString())).willReturn(true);
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.create(companyDTO));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME.formatted(companyDTO.getName()), exception.getMessage());
   }
 }
