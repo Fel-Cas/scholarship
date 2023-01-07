@@ -189,4 +189,41 @@ class CompanyServiceTest {
     //then
     assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE.formatted(companyDTO.getPhone()), exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CompanyService,  test to get an error when trying to save a new company with an user already is registered with other company")
+  void saveWithExistingUser() throws IOException {
+    //given
+    CompanyDTO companyDTO = CompanyDTO.builder()
+        .name("Company S.A")
+        .address("Medellin,Antioquia")
+        .phone("123456789")
+        .email("email@emailcom")
+        .users(List.of(1L))
+        .image(new MockMultipartFile("imageFile", "test.png", "image/png", "some image".getBytes()))
+        .build();
+
+    given(companyRepository.existsByEmail(anyString())).willReturn(false);
+    given(companyRepository.existsByName(anyString())).willReturn(false);
+    given(companyRepository.existsByPhone(anyString())).willReturn(false);
+
+    given(userService.getById(anyLong())).willReturn(
+        User.builder()
+            .name("Juanito")
+            .surname("Perez")
+            .password("123456")
+            .dni("5865486758697")
+            .email("email@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
+
+    given(companyRepository.existsByUsers(any(User.class))).willReturn(true);
+
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.create(companyDTO));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_ADD_USER.formatted(companyDTO.getUsers().get(0)), exception.getMessage());
+  }
 }
