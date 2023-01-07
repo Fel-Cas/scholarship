@@ -358,7 +358,7 @@ class CompanyServiceTest {
 
   @Test
   @DisplayName("Test CompanyService, test to get an error when trying to update a company with a name that already exists")
-  void updateNameAlreadyExists(){
+  void updateWithExistingName(){
     //given
     given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
     given(companyRepository.existsByNameAndIdNot(anyString(),anyLong())).willReturn(true);
@@ -374,5 +374,25 @@ class CompanyServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.update(1L, companyUpdateDTO));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME.formatted(companyUpdateDTO.getName()), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to update a company with an email that already exists")
+  void updateWithExistingEmail(){
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(companyRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(true);
+    given(companyRepository.existsByNameAndIdNot(anyString(),anyLong())).willReturn(false);
+
+    CompanyUpdateDTO companyUpdateDTO = CompanyUpdateDTO.builder()
+        .name("Company S.A.S.")
+        .address("Bogota,Antioquia")
+        .phone("13444545555")
+        .email("email@emailcom")
+        .build();
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.update(1L, companyUpdateDTO));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL.formatted(companyUpdateDTO.getEmail()), exception.getMessage());
   }
 }
