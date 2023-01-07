@@ -395,4 +395,25 @@ class CompanyServiceTest {
     //then
     assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL.formatted(companyUpdateDTO.getEmail()), exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to update a company with a phone that already exists")
+  void updateWithExistingPhone(){
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(companyRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(false);
+    given(companyRepository.existsByNameAndIdNot(anyString(),anyLong())).willReturn(false);
+    given(companyRepository.existsByPhoneAndIdNot(anyString(),anyLong())).willReturn(true);
+
+    CompanyUpdateDTO companyUpdateDTO = CompanyUpdateDTO.builder()
+        .name("Company S.A.S.")
+        .address("Bogota,Antioquia")
+        .phone("13444545555")
+        .email("email@emailcom")
+        .build();
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.update(1L, companyUpdateDTO));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE.formatted(companyUpdateDTO.getPhone()), exception.getMessage());
+  }
 }
