@@ -38,6 +38,8 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -415,5 +417,17 @@ class CompanyServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.update(1L, companyUpdateDTO));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_PHONE.formatted(companyUpdateDTO.getPhone()), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to delete a company")
+  void testDelete(){
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    willDoNothing().given(companyRepository).delete(any(Company.class));
+    //when
+    companyService.delete(1L);
+    //then
+    verify(companyRepository, times(1)).delete(company);
   }
 }
