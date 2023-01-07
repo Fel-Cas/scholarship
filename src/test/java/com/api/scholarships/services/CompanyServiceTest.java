@@ -63,6 +63,7 @@ class CompanyServiceTest {
     List<User> users=new ArrayList<>();
     users.add(
         User.builder()
+            .id(1L)
             .name("Juanito")
             .surname("Perez")
             .password("123456")
@@ -487,5 +488,23 @@ class CompanyServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.addUser(1L, 2L));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_ADD_USER.formatted(2L), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to remove an user from a company")
+  void removeUser() {
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(userService.getById(anyLong())).willReturn(company.getUsers().get(0));
+    given(companyRepository.existsByUsers(any(User.class))).willReturn(true);
+    given(companyRepository.save(any(Company.class))).willReturn(company);
+    //when
+    Company companyUpdated = companyService.removeUser(1L, 1L);
+    //then
+    assertAll(
+        () -> assertNotNull(companyUpdated),
+        () -> assertNotNull(companyUpdated.getUsers()),
+        () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(0)
+    );
   }
 }
