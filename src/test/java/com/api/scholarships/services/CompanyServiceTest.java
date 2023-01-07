@@ -464,4 +464,28 @@ class CompanyServiceTest {
         () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(2)
     );
   }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to add an user who already belongs to a company")
+  void failAddUser(){
+    //given
+    User user= User.builder()
+        .id(2L)
+        .name("Ricardo")
+        .surname("Richie")
+        .password("123456")
+        .dni("5865486758697")
+        .email("email@emial.com")
+        .createdAt(Instant.now())
+        .updatedAt(Instant.now())
+        .build();
+
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(companyRepository.existsByUsers(any(User.class))).willReturn(true);
+    given(userService.getById(anyLong())).willReturn(user);
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.addUser(1L, 2L));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_ADD_USER.formatted(2L), exception.getMessage());
+  }
 }
