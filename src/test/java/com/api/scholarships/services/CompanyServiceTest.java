@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,23 +59,27 @@ class CompanyServiceTest {
 
   @BeforeEach()
   void setUp() {
+
+    List<User> users=new ArrayList<>();
+    users.add(
+        User.builder()
+            .name("Juanito")
+            .surname("Perez")
+            .password("123456")
+            .dni("5865486758697")
+            .email("email@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
+
     company = Company.builder()
         .name("Company S.A")
         .address("Medellin,Antioquia")
         .phone("123456789")
         .email("email@emailcom")
         .id(1L)
-        .users(List.of(
-            User.builder()
-                .name("Juanito")
-                .surname("Perez")
-                .password("123456")
-                .dni("5865486758697")
-                .email("email@emial.com")
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build()
-        ))
+        .users(users)
         .image(
             Image.builder()
                 .id(1L)
@@ -429,5 +434,34 @@ class CompanyServiceTest {
     companyService.delete(1L);
     //then
     verify(companyRepository, times(1)).delete(company);
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to add an user to a company")
+  void addUser(){
+    //given
+    User user= User.builder()
+        .id(2L)
+        .name("Ricardo")
+        .surname("Richie")
+        .password("123456")
+        .dni("5865486758697")
+        .email("email@emial.com")
+        .createdAt(Instant.now())
+        .updatedAt(Instant.now())
+        .build();
+
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(companyRepository.existsByUsers(any(User.class))).willReturn(false);
+    given(userService.getById(anyLong())).willReturn(user);
+    given(companyRepository.save(any(Company.class))).willReturn(company);
+    //when
+    Company companyUpdated = companyService.addUser(1L, 2L);
+    //then
+    assertAll(
+        () -> assertNotNull(companyUpdated),
+        () -> assertNotNull(companyUpdated.getUsers()),
+        () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(2)
+    );
   }
 }
