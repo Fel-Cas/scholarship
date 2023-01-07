@@ -520,4 +520,20 @@ class CompanyServiceTest {
     //then
     assertEquals(Messages.MESSAGE_COMPANY_REMOVE_USER.formatted(1L), exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CompanyService, test to change company's image")
+  void changeImage() throws IOException {
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(companyRepository.save(any(Company.class))).willReturn(company);
+    willDoNothing().given(imageService).delete(anyLong());
+    given(imageService.save(any(MultipartFile.class))).willReturn(company.getImage());
+    //when
+    companyService.changeImage(1L, new MockMultipartFile("imageFile", "test.png", "image/png", "some image".getBytes()));
+    //then
+    verify(companyRepository, times(1)).save(company);
+    verify(imageService, times(1)).delete(company.getImage().getId());
+    verify(imageService, times(1)).save(any(MultipartFile.class));
+  }
 }
