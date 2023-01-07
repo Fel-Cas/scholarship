@@ -507,4 +507,17 @@ class CompanyServiceTest {
         () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(0)
     );
   }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to remove an user who does not belong to a company")
+  void failRemoveUser() {
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(userService.getById(anyLong())).willReturn(company.getUsers().get(0));
+    given(companyRepository.existsByUsers(any(User.class))).willReturn(false);
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.removeUser(1L, 1L));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_REMOVE_USER.formatted(1L), exception.getMessage());
+  }
 }
