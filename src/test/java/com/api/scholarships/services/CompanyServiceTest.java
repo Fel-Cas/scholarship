@@ -6,6 +6,7 @@ import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
 import com.api.scholarships.services.implementation.CompanyServiceImp;
@@ -249,5 +250,16 @@ class CompanyServiceTest {
         ()-> assertEquals(company.getCreatedAt(), companyFound.getCreatedAt()),
         ()-> assertEquals(company.getUpdatedAt(), companyFound.getUpdatedAt())
     );
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to find a company by id and not found")
+  void findOneNotFound(){
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> companyService.getOne(1L));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_NOT_FOUND.formatted(1L), exception.getMessage());
   }
 }
