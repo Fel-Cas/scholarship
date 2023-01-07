@@ -2,6 +2,8 @@ package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CompanyDTO;
+import com.api.scholarships.dtos.CompanyDTOResponse;
+import com.api.scholarships.dtos.CompanyResponse;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.entities.User;
@@ -19,6 +21,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
@@ -261,5 +266,55 @@ class CompanyServiceTest {
     NotFoundException exception = assertThrows(NotFoundException.class, () -> companyService.getOne(1L));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_NOT_FOUND.formatted(1L), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to find all companies")
+  void findAll(){
+    //given
+    CompanyDTOResponse companyDTOResponse=CompanyDTOResponse.builder()
+        .name("Company S.A")
+        .address("Medellin,Antioquia")
+        .phone("123456789")
+        .email("email@emailcom")
+        .id(1L)
+        .users(List.of(
+            User.builder()
+                .name("Juanito")
+                .surname("Perez")
+                .password("123456")
+                .dni("5865486758697")
+                .email("email@emial.com")
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build()
+        ))
+        .image(
+            Image.builder()
+                .id(1L)
+                .name("image")
+                .imageId("imageId")
+                .url("url")
+                .build()
+        )
+        .createdAt(Instant.now())
+        .updatedAt(Instant.now())
+        .build();
+
+    Page<Company> companies = new PageImpl<>(List.of(company));
+    given(companyRepository.findAll(any(Pageable.class))).willReturn(companies);
+    given(companyMapper.companyToCompanyDTOResponse(List.of(company))).willReturn(List.of(companyDTOResponse));
+    //when
+    CompanyResponse companiesFound = companyService.getAll(0,10, "id", "ASC");
+    //then
+    assertAll(
+        ()->assertNotNull(companiesFound),
+        ()->assertThat(companiesFound.getContent().size()).isGreaterThan(0),
+        ()->assertEquals(0,companiesFound.getNumberPage()),
+        ()->assertEquals(1,companiesFound.getSizePage()),
+        ()->assertEquals(1,companiesFound.getTotalPages()),
+        ()->assertEquals(1,companiesFound.getTotalElements()),
+        ()->assertTrue(companiesFound.isLastOne())
+    );
   }
 }
