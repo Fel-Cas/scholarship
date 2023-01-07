@@ -355,4 +355,24 @@ class CompanyServiceTest {
         ()-> assertEquals(companyUpdateDTO.getEmail(), companyUpdated.getEmail())
     );
   }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to update a company with a name that already exists")
+  void updateNameAlreadyExists(){
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    given(companyRepository.existsByNameAndIdNot(anyString(),anyLong())).willReturn(true);
+
+    CompanyUpdateDTO companyUpdateDTO = CompanyUpdateDTO.builder()
+        .name("Company S.A.S.")
+        .address("Bogota,Antioquia")
+        .phone("13444545555")
+        .email("email@emailcom")
+        .build();
+
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.update(1L, companyUpdateDTO));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME.formatted(companyUpdateDTO.getName()), exception.getMessage());
+  }
 }
