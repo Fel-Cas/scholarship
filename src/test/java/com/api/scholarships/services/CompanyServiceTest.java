@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -225,5 +226,28 @@ class CompanyServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.create(companyDTO));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_ADD_USER.formatted(companyDTO.getUsers().get(0)), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to find a company by id")
+  void findOne(){
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    //when
+    Company companyFound = companyService.getOne(anyLong());
+    //then
+    assertAll(
+        () -> assertNotNull(companyFound),
+        () -> assertNotNull(companyFound.getImage()),
+        () -> assertNotNull(companyFound.getUsers()),
+        () -> assertThat(companyFound.getUsers().size()).isGreaterThan(0),
+        ()-> assertEquals(company.getId(), companyFound.getId()),
+        ()-> assertEquals(company.getName(), companyFound.getName()),
+        ()-> assertEquals(company.getAddress(), companyFound.getAddress()),
+        ()-> assertEquals(company.getPhone(), companyFound.getPhone()),
+        ()-> assertEquals(company.getEmail(), companyFound.getEmail()),
+        ()-> assertEquals(company.getCreatedAt(), companyFound.getCreatedAt()),
+        ()-> assertEquals(company.getUpdatedAt(), companyFound.getUpdatedAt())
+    );
   }
 }
