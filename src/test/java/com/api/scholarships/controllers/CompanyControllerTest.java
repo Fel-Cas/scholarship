@@ -27,6 +27,7 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -171,5 +172,16 @@ class CompanyControllerTest {
         .andExpect(jsonPath("$.address").value(companyUpdate.getAddress()))
         .andExpect(jsonPath("$.phone").value(companyUpdate.getPhone()))
         .andExpect(jsonPath("$.email").value(companyUpdate.getEmail()));
+  }
+
+  @Test
+  @DisplayName("Test CompanyController, test to delete a company")
+  void deleteCompany() throws Exception {
+    //given
+    doNothing().when(companyService).delete(any(Long.class));
+    //when
+    ResultActions response=mockMvc.perform(delete(url+"/{id}",1L));
+    //then
+    response.andExpect(status().isNoContent());
   }
 }
