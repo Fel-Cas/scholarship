@@ -19,7 +19,7 @@ class CompanyMapperTest {
   private CompanyMapper companyMapper = Mappers.getMapper(CompanyMapper.class);
 
   @Test
-  @DisplayName("Test companyToCompanyDTOResponse")
+  @DisplayName("Test to switch from company to CompanyDTOResponse")
   void companyToCompanyDTOResponse() {
     //given
     Company company = Company.builder()
