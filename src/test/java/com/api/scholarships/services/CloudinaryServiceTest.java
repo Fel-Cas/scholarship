@@ -42,4 +42,16 @@ class CloudinaryServiceTest {
     assertNotNull(response.get("url"));
     assertNotNull(response.get("public_id"));
   }
+
+  @Test
+  @DisplayName("Test CloudinaryService, test to delete an image")
+  void delete() throws IOException {
+    //given
+    Map response=cloudinaryService.upload(image);
+    //when
+    response=cloudinaryService.delete(response.get("public_id").toString());
+    //then
+    assertNotNull(response);
+    assertEquals("ok",response.get("result"));
+  }
 }
