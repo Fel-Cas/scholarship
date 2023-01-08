@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -68,13 +69,16 @@ class CompanyControllerTest {
         .url("url")
         .build();
 
+    List<User> users=new ArrayList<>();
+    users.add(user);
+
     company = Company.builder()
         .name("Company S.A")
         .address("Medellin,Antioquia")
         .phone("123456789")
         .email("email@emailcom")
         .id(1L)
-        .users(List.of(user))
+        .users(users)
         .image(image)
         .createdAt(Instant.now())
         .updatedAt(Instant.now())
@@ -86,7 +90,7 @@ class CompanyControllerTest {
         .phone("123456789")
         .email("email@emailcom")
         .id(1L)
-        .users(List.of(user))
+        .users(users)
         .image(image)
         .createdAt(Instant.now())
         .updatedAt(Instant.now())
@@ -183,5 +187,30 @@ class CompanyControllerTest {
     ResultActions response=mockMvc.perform(delete(url+"/{id}",1L));
     //then
     response.andExpect(status().isNoContent());
+  }
+
+  @Test
+  @DisplayName("Test CompanyController, test to add an user to a company")
+  void addUser() throws Exception {
+    //given
+    company.getUsers().add(
+        User.builder()
+            .name("Pepe")
+            .surname("Gallardo")
+            .password("1234567987")
+            .dni("5865486758697")
+            .email("email@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
+    given(companyService.addUser(any(Long.class),any(Long.class))).willReturn(company);
+    given(companyMapper.companyToCompanyDTOResponse(any(Company.class))).willReturn(companyDTOResponse);
+    //when
+    ResultActions response=mockMvc.perform(put(url+"/users/{idCompany}/{idUser}?action=ADD",1L,1L));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.users.size()").value(companyDTOResponse.getUsers().size()));
   }
 }
