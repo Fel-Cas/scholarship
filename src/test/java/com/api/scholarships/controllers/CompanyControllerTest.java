@@ -3,13 +3,13 @@ package com.api.scholarships.controllers;
 import com.api.scholarships.dtos.CompanyDTO;
 import com.api.scholarships.dtos.CompanyDTOResponse;
 import com.api.scholarships.dtos.CompanyResponse;
+import com.api.scholarships.dtos.CompanyUpdateDTO;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.services.interfaces.CompanyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,12 +19,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 
@@ -144,5 +140,36 @@ class CompanyControllerTest {
         .andExpect(jsonPath("$.totalElements").value(companyResponse.getTotalElements()))
         .andExpect(jsonPath("$.sizePage").value(companyResponse.getSizePage()))
         .andExpect(jsonPath("$.lastOne").value(companyResponse.isLastOne()));
+  }
+
+  @Test
+  @DisplayName("Test CompanyController, test to update company's information")
+  void updateInformation() throws Exception {
+    //given
+    CompanyUpdateDTO companyUpdate=CompanyUpdateDTO.builder()
+        .name("Junito's Store")
+        .address("Bogota, Colombia")
+        .phone("123456789")
+        .email("juan@email.com")
+        .build();
+
+    companyDTOResponse.setName(companyUpdate.getName());
+    companyDTOResponse.setAddress(companyUpdate.getAddress());
+    companyDTOResponse.setPhone(companyUpdate.getPhone());
+    companyDTOResponse.setEmail(companyUpdate.getEmail());
+
+    given(companyService.update(any(Long.class),any(CompanyUpdateDTO.class))).willReturn(company);
+    given(companyMapper.companyToCompanyDTOResponse(any(Company.class))).willReturn(companyDTOResponse);
+    //when
+    ResultActions response=mockMvc.perform(put(url+"/{id}",1L)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(companyUpdate)));
+    //then
+    response.andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.name").value(companyUpdate.getName()))
+        .andExpect(jsonPath("$.address").value(companyUpdate.getAddress()))
+        .andExpect(jsonPath("$.phone").value(companyUpdate.getPhone()))
+        .andExpect(jsonPath("$.email").value(companyUpdate.getEmail()));
   }
 }
