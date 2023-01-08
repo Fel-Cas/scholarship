@@ -228,4 +228,17 @@ class CompanyControllerTest {
         .andDo(print())
         .andExpect(jsonPath("$.users.size()").value(companyDTOResponse.getUsers().size()));
   }
+
+  @Test
+  @DisplayName("Test CompanyController, test to get error when users try to add/remove an user to a company")
+  void failAddOrRemove() throws Exception {
+    //given
+    //when
+    ResultActions response=mockMvc.perform(put(url+"/users/{idCompany}/{idUser}?action=Addition",1L,1L));
+    //then
+    response.andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.title").value("Bad Request"))
+        .andExpect(jsonPath("$.status").value(400))
+        .andExpect(jsonPath("$.detail").value("That action is not valid"));
+  }
 }
