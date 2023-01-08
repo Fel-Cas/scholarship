@@ -8,6 +8,7 @@ import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
 import com.api.scholarships.services.interfaces.CompanyService;
@@ -56,7 +57,7 @@ public class CompanyServiceImp implements CompanyService {
   public Company getOne(Long id) {
     Optional<Company> companyFound=companyRepository.findById(id);
     if(companyFound.isEmpty()){
-      throw new BadRequestException(Messages.MESSAGE_COMPANY_NOT_FOUND.formatted(id));
+      throw new NotFoundException(Messages.MESSAGE_COMPANY_NOT_FOUND.formatted(id));
     }
     return companyFound.get();
   }
