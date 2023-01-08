@@ -2,12 +2,14 @@ package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.CompanyDTO;
 import com.api.scholarships.dtos.CompanyDTOResponse;
+import com.api.scholarships.dtos.CompanyResponse;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.services.interfaces.CompanyService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,14 +19,17 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -113,5 +118,31 @@ class CompanyControllerTest {
         .andExpect(jsonPath("$.image.url").value(companyDTOResponse.getImage().getUrl()))
         .andExpect(jsonPath("$.createdAt").value(companyDTOResponse.getCreatedAt().toString()))
         .andExpect(jsonPath("$.updatedAt").value(companyDTOResponse.getUpdatedAt().toString()));
+  }
+
+  @Test
+  @DisplayName("Test CompanyController, test to get all companies")
+  void findAll() throws Exception {
+    //given
+    CompanyResponse companyResponse = CompanyResponse.builder()
+        .content(List.of(companyDTOResponse))
+        .numberPage(0)
+        .totalPages(1)
+        .totalElements(1L)
+        .sizePage(10)
+        .lastOne(true)
+        .build();
+    given(companyService.getAll(any(Integer.class),any(Integer.class),anyString(),anyString())).willReturn(companyResponse);
+    //when
+    ResultActions response=mockMvc.perform(get(url));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.content.size()").value(companyResponse.getContent().size()))
+        .andExpect(jsonPath("$.numberPage").value(companyResponse.getNumberPage()))
+        .andExpect(jsonPath("$.totalPages").value(companyResponse.getTotalPages()))
+        .andExpect(jsonPath("$.totalElements").value(companyResponse.getTotalElements()))
+        .andExpect(jsonPath("$.sizePage").value(companyResponse.getSizePage()))
+        .andExpect(jsonPath("$.lastOne").value(companyResponse.isLastOne()));
   }
 }
