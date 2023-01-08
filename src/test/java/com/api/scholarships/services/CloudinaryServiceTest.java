@@ -31,4 +31,15 @@ class CloudinaryServiceTest {
     image= new MockMultipartFile("imageFile", "test.png", "image/png", inputfile);
   }
 
+  @Test
+  @DisplayName("Test CloudinaryService, test to upload an image")
+  void upload() throws IOException {
+    //when
+    Map response=cloudinaryService.upload(image);
+    //then
+    assertNotNull(response);
+    assertEquals("test",response.get("original_filename"));
+    assertNotNull(response.get("url"));
+    assertNotNull(response.get("public_id"));
+  }
 }
