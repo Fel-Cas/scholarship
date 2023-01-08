@@ -213,4 +213,19 @@ class CompanyControllerTest {
         .andDo(print())
         .andExpect(jsonPath("$.users.size()").value(companyDTOResponse.getUsers().size()));
   }
+
+  @Test
+  @DisplayName("Test CompanyController, test to remove an user from a company")
+  void removeUser() throws Exception {
+    //given
+    company.getUsers().remove(0);
+    given(companyService.removeUser(any(Long.class),any(Long.class))).willReturn(company);
+    given(companyMapper.companyToCompanyDTOResponse(any(Company.class))).willReturn(companyDTOResponse);
+    //when
+    ResultActions response=mockMvc.perform(put(url+"/users/{idCompany}/{idUser}?action=REMOVE",1L,1L));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.users.size()").value(companyDTOResponse.getUsers().size()));
+  }
 }
