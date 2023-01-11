@@ -44,4 +44,10 @@ public class Messages {
   public static final String MESSAGE_COMPANY_NOT_FOUND="Not exists a company with this id %s";
   public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
   public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
+
+  //Country
+  public static final String MESSAGE_COUNTRY_REQUIRED = "Country is required";
+  public static final String MESSAGE_COUNTRY_SIZE = "Country must be between 3 and 50 characters";
+  public static final String MESSAGE_COUNTRY_ABBREVIATION_REQUIRED="Abbreviation is required";
+  public static final String MESSAGE_COUNTRY_ABBREVIATION_SIZE = "Abbreviation must be between 2 and 3 characters";
 }
