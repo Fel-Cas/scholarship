@@ -8,6 +8,6 @@ public interface CountryService {
   public Country create(CountryDTO countryDTO);
   public Country findById(Long id);
   public Country findByName(String name);
-  public CountryResponse findAll();
+  public CountryResponse findAll(int page, int size, String sort, String order);
   public void delete(Long id);
 }
