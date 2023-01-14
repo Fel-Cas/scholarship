@@ -38,4 +38,9 @@ public class CountryController {
   ){
     return ResponseEntity.ok(countryService.findAll(page,size,sort,order));
   }
+
+  @GetMapping(Endpoints.ID)
+  public ResponseEntity<CountryDTOResponse> get(@PathVariable Long id){
+    return ResponseEntity.ok(countryMapper.countryToCountryDTOResponse(countryService.findById(id)));
+  }
 }

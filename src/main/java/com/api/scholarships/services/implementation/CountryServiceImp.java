@@ -5,6 +5,7 @@ import com.api.scholarships.dtos.CountryDTO;
 import com.api.scholarships.dtos.CountryResponse;
 import com.api.scholarships.entities.Country;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CountryMapper;
 import com.api.scholarships.repositories.CountryRepository;
 import com.api.scholarships.services.interfaces.CountryService;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CountryServiceImp implements CountryService {
@@ -35,7 +38,11 @@ public class CountryServiceImp implements CountryService {
 
   @Override
   public Country findById(Long id) {
-    return null;
+    Optional<Country> countryFound=countryRepository.findById(id);
+    if(countryFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_COUNTRY_NOT_FOUND.formatted(id));
+    }
+    return countryFound.get();
   }
 
   @Override
