@@ -70,7 +70,8 @@ public class CountryServiceImp implements CountryService {
 
   @Override
   public void delete(Long id) {
-
+    Country countryFound=findById(id);
+    countryRepository.delete(countryFound);
   }
 
   protected void validateInformationCreateCountry(String countryName, String abbreviation){
