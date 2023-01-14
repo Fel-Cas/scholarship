@@ -47,7 +47,11 @@ public class CountryServiceImp implements CountryService {
 
   @Override
   public Country findByName(String name) {
-    return null;
+    Optional<Country> countryFound=countryRepository.findByCountryName(name);
+    if(countryFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_COUNTRY_NOT_FOUND_BY_NAME.formatted(name));
+    }
+    return countryFound.get();
   }
 
   @Override
