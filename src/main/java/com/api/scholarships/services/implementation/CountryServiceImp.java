@@ -5,9 +5,13 @@ import com.api.scholarships.dtos.CountryDTO;
 import com.api.scholarships.dtos.CountryResponse;
 import com.api.scholarships.entities.Country;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.mappers.CountryMapper;
 import com.api.scholarships.repositories.CountryRepository;
 import com.api.scholarships.services.interfaces.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +19,8 @@ public class CountryServiceImp implements CountryService {
 
   @Autowired
   private CountryRepository countryRepository;
+  @Autowired
+  private CountryMapper countryMapper;
 
   @Override
   public Country create(CountryDTO countryDTO) {
@@ -38,8 +44,17 @@ public class CountryServiceImp implements CountryService {
   }
 
   @Override
-  public CountryResponse findAll() {
-    return null;
+  public CountryResponse findAll(int page, int size, String sort, String order) {
+    Sort sortDirection=order.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sort).ascending() : Sort.by(sort).descending();
+    Page<Country> countriesFound=countryRepository.findAll(PageRequest.of(page,size,sortDirection));
+    return CountryResponse.builder()
+        .content(countryMapper.countryToCountryResponse(countriesFound.getContent()))
+        .totalPages(countriesFound.getTotalPages())
+        .totalElements(countriesFound.getTotalElements())
+        .lastOne(countriesFound.isLast())
+        .numberPage(countriesFound.getNumber())
+        .sizePage(countriesFound.getSize())
+        .build();
   }
 
   @Override
