@@ -15,4 +15,7 @@ public class Endpoints {
   public static final String COMPANIES = "/api/v1/scholarships/companies";
   public static final String COMPANIES_USERS = "/users/{idCompany}/{idUser}";
   public static final String COMPANIES_IMAGES = "/images/{idCompany}";
+
+  //Country
+  public static final String COUNTRIES = "/api/v1/scholarships/countries";
 }
