@@ -44,4 +44,15 @@ public class Messages {
   public static final String MESSAGE_COMPANY_NOT_FOUND="Not exists a company with this id %s";
   public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
   public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
+
+  //Country
+  public static final String MESSAGE_COUNTRY_REQUIRED = "Country is required";
+  public static final String MESSAGE_COUNTRY_SIZE = "Country must be between 3 and 50 characters";
+  public static final String MESSAGE_COUNTRY_ABBREVIATION_REQUIRED="Abbreviation is required";
+  public static final String MESSAGE_COUNTRY_ABBREVIATION_SIZE = "Abbreviation must be between 2 and 3 characters";
+  public static final String MESSAGE_CREATE_COUNTRY_WITH_WRONG_NAME="Already exists a country saved with the same name %s";
+  public static final String MESSAGE_CREATE_COUNTRY_WITH_WRONG_ABBREVIATION="Already exists a country saved with the same abbreviation %s";
+  public static final String MESSAGE_CREATE_COUNTRY_WITH_WRONG_NAME_AND_ABBREVIATION="Already exists a counrty saved with the same name %s and abbreviation %s";
+  public static final String MESSAGE_COUNTRY_NOT_FOUND="Not exists a country with this id %s";
+  public static final String MESSAGE_COUNTRY_NOT_FOUND_BY_NAME="Not exists a country with this name %s";
 }
