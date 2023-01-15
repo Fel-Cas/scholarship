@@ -29,6 +29,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -199,5 +202,15 @@ class CountryServiceTest {
         ()->assertTrue(countriesFound.isLastOne()));
   }
 
-
+  @Test
+  @DisplayName("Test CountryService, test to delete a country")
+  void testDelete(){
+    //given
+    given(countryRepository.findById(any(Long.class))).willReturn(Optional.of(country));
+    willDoNothing().given(countryRepository).delete(any(Country.class));
+    //when
+    countryService.delete(1L);
+    //then
+    verify(countryRepository, times(1)).delete(any(Country.class));
+  }
 }
