@@ -2,6 +2,8 @@ package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CountryDTO;
+import com.api.scholarships.dtos.CountryDTOResponse;
+import com.api.scholarships.dtos.CountryResponse;
 import com.api.scholarships.entities.Country;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
@@ -15,10 +17,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
@@ -165,5 +172,32 @@ class CountryServiceTest {
     //then
     assertEquals(Messages.MESSAGE_COUNTRY_NOT_FOUND_BY_NAME.formatted("Argentina"),exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CountryService, test to find all countries")
+  void testFindAll(){
+    //given
+    CountryDTOResponse countryDTOResponse=CountryDTOResponse.builder()
+        .id(1L)
+        .countryName("BRASIL")
+        .abbreviation("BRA")
+        .build();
+
+    Page<Country> countries=new PageImpl<>(List.of(country));
+    given(countryRepository.findAll(any(Pageable.class))).willReturn(countries);
+    given(countryMapper.countryToCountryResponse(List.of(country))).willReturn(List.of(countryDTOResponse));
+    //when
+    CountryResponse countriesFound=countryService.findAll(0,1,"id","ASC");
+    //then
+    assertAll(
+        ()->assertNotNull(countriesFound),
+        ()->assertThat(countriesFound.getContent().size()).isGreaterThan(0),
+        ()->assertEquals(countriesFound.getTotalPages(),1),
+        ()->assertEquals(countriesFound.getTotalElements(),1),
+        ()->assertEquals(countriesFound.getSizePage(),1),
+        ()->assertEquals(countriesFound.getNumberPage(),0),
+        ()->assertTrue(countriesFound.isLastOne()));
+  }
+
 
 }
