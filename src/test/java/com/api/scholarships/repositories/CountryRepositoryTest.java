@@ -120,4 +120,15 @@ class CountryRepositoryTest {
     assertNotNull(countries);
     assertThat(countries.size()).isGreaterThan(0);
   }
+
+  @Test
+  @DisplayName("Test CountryRepository, test to delete a country")
+  void testDelete(){
+    //given
+    Country countrySaved=countryRepository.save(country);
+    //when
+    countryRepository.delete(countrySaved);
+    //then
+    assertThat(countryRepository.findById(countrySaved.getId())).isEmpty();
+  }
 }
