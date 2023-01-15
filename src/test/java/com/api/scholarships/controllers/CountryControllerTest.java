@@ -6,7 +6,6 @@ import com.api.scholarships.dtos.CountryResponse;
 import com.api.scholarships.entities.Country;
 import com.api.scholarships.mappers.CountryMapper;
 import com.api.scholarships.services.interfaces.CountryService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,9 +19,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -122,5 +121,18 @@ class CountryControllerTest {
         .andExpect(jsonPath("$.id").value(country.getId()))
         .andExpect(jsonPath("$.countryName").value(country.getCountryName()))
         .andExpect(jsonPath("$.abbreviation").value(country.getAbbreviation()));
+  }
+
+  @Test
+  @DisplayName("Test CountryController, test to delete a country")
+  void testDelete() throws Exception {
+    //given
+    willDoNothing().given(countryService).delete(anyLong());
+    //when
+    ResultActions response=client.perform(delete(url+"/"+country.getId())
+        .contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isNoContent())
+        .andDo(print());
   }
 }
