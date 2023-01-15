@@ -1,0 +1,36 @@
+package com.api.scholarships.services;
+
+import com.api.scholarships.entities.Country;
+import com.api.scholarships.mappers.CountryMapper;
+import com.api.scholarships.repositories.CountryRepository;
+import com.api.scholarships.services.implementation.CountryServiceImp;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
+
+import static org.junit.jupiter.api.Assertions.*;
+@ExtendWith(MockitoExtension.class)
+@ActiveProfiles(profiles = "test")
+class CountryServiceTest {
+
+  @Mock
+  private CountryRepository countryRepository;
+  @Mock
+  private CountryMapper countryMapper;
+  @InjectMocks
+  private CountryServiceImp countryService;
+  private Country country;
+
+  @BeforeEach
+  void setUp(){
+    country=Country
+        .builder()
+        .id(1L)
+        .countryName("BRASIL")
+        .abbreviation("BRA")
+        .build();
+  }
+}
