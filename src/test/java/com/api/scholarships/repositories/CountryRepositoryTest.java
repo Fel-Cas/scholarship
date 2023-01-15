@@ -54,4 +54,17 @@ class CountryRepositoryTest {
     assertEquals(countrySaved.getCountryName(),countryFound.get().getCountryName());
     assertEquals(countrySaved.getAbbreviation(),countryFound.get().getAbbreviation());
   }
+
+  @Test
+  @DisplayName("Test CountryRepository, test to determinate if a country exists by name and abbreviation")
+  void testExistsByNameAndAbbreviation(){
+    //given
+    Country countrySaved=countryRepository.save(country);
+    //when
+    boolean exist=countryRepository.existsByCountryNameAndAbbreviation(country.getCountryName(), country.getAbbreviation());
+    boolean noExist=countryRepository.existsByCountryNameAndAbbreviation("xxx", country.getAbbreviation());
+    //then
+    assertTrue(exist);
+    assertFalse(noExist);
+  }
 }
