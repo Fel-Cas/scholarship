@@ -16,9 +16,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import static org.mockito.ArgumentMatchers.any;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -112,5 +113,19 @@ class CountryServiceTest {
     BadRequestException exception=assertThrows(BadRequestException.class,()->countryService.create(countryDTO));
     //then
     assertEquals(Messages.MESSAGE_CREATE_COUNTRY_WITH_WRONG_ABBREVIATION.formatted(countryDTO.getAbbreviation()),exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CountryService, test to find a country by id")
+  void testFindById(){
+    //given
+    given(countryRepository.findById(anyLong())).willReturn(Optional.ofNullable(country));
+    //when
+    Country countryFound=countryService.findById(anyLong());
+    //then
+    assertNotNull(countryFound);
+    assertEquals(1L,countryFound.getId());
+    assertEquals(country.getCountryName(),countryFound.getCountryName());
+    assertEquals(country.getAbbreviation(),countryFound.getAbbreviation());
   }
 }
