@@ -21,8 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -106,5 +105,22 @@ class CountryControllerTest {
         .andExpect(jsonPath("$.lastOne").value(countryResponse.isLastOne()))
         .andExpect(jsonPath("$.totalPages").value(countryResponse.getTotalPages()))
         .andExpect(jsonPath("$.totalElements").value(countryResponse.getTotalElements()));
+  }
+
+  @Test
+  @DisplayName("Test CountryController, test to find a country by id")
+  void testFindById() throws Exception {
+    //given
+    given(countryService.findById(anyLong())).willReturn(country);
+    given(countryMapper.countryToCountryDTOResponse(country)).willReturn(countryDTOResponse);
+    //when
+    ResultActions response=client.perform(get(url+"/"+country.getId())
+        .contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(country.getId()))
+        .andExpect(jsonPath("$.countryName").value(country.getCountryName()))
+        .andExpect(jsonPath("$.abbreviation").value(country.getAbbreviation()));
   }
 }
