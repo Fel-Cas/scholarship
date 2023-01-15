@@ -4,6 +4,7 @@ import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CountryDTO;
 import com.api.scholarships.entities.Country;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CountryMapper;
 import com.api.scholarships.repositories.CountryRepository;
 import com.api.scholarships.services.implementation.CountryServiceImp;
@@ -127,5 +128,16 @@ class CountryServiceTest {
     assertEquals(1L,countryFound.getId());
     assertEquals(country.getCountryName(),countryFound.getCountryName());
     assertEquals(country.getAbbreviation(),countryFound.getAbbreviation());
+  }
+
+  @Test
+  @DisplayName("Test CountryService, test to check error when trying to search for a country that doesn't exist")
+  void testFindByIdNotExist(){
+    //given
+    given(countryRepository.findById(1L)).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->countryService.findById(1L));
+    //then
+    assertEquals(Messages.MESSAGE_COUNTRY_NOT_FOUND.formatted(1L),exception.getMessage());
   }
 }
