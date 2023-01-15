@@ -93,4 +93,18 @@ class CountryRepositoryTest {
     assertTrue(exist);
     assertFalse(noExist);
   }
+
+  @Test
+  @DisplayName("Test CountryRepository, test to find a  Country by name")
+  void findByCountryName() {
+    //given
+    Country countrySaved=countryRepository.save(country);
+    //when
+    Optional<Country> countryFound=countryRepository.findByCountryName(country.getCountryName());
+    //then
+    assertTrue(countryFound.isPresent());
+    assertEquals(countrySaved.getId(),countryFound.get().getId());
+    assertEquals(countrySaved.getCountryName(),countryFound.get().getCountryName());
+    assertEquals(countrySaved.getAbbreviation(),countryFound.get().getAbbreviation());
+  }
 }
