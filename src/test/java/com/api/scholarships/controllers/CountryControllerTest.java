@@ -2,6 +2,7 @@ package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.CountryDTO;
 import com.api.scholarships.dtos.CountryDTOResponse;
+import com.api.scholarships.dtos.CountryResponse;
 import com.api.scholarships.entities.Country;
 import com.api.scholarships.mappers.CountryMapper;
 import com.api.scholarships.services.interfaces.CountryService;
@@ -17,9 +18,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,5 +81,30 @@ class CountryControllerTest {
         .andExpect(jsonPath("$.abbreviation").value(country.getAbbreviation()));
   }
 
-
+  @Test
+  @DisplayName("Test CountryController, test to find all countries")
+  void testFindAll() throws Exception {
+    //given
+    CountryResponse countryResponse=CountryResponse.builder()
+        .content(List.of(countryDTOResponse))
+        .numberPage(0)
+        .sizePage(10)
+        .lastOne(true)
+        .totalPages(1)
+        .totalElements(1L)
+        .build();
+    given(countryService.findAll(anyInt(), anyInt(), anyString(), anyString())).willReturn(countryResponse);
+    //when
+    ResultActions response=client.perform(get(url)
+            .contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.content.size()").value(countryResponse.getContent().size()))
+        .andExpect(jsonPath("$.numberPage").value(countryResponse.getNumberPage()))
+        .andExpect(jsonPath("$.sizePage").value(countryResponse.getSizePage()))
+        .andExpect(jsonPath("$.lastOne").value(countryResponse.isLastOne()))
+        .andExpect(jsonPath("$.totalPages").value(countryResponse.getTotalPages()))
+        .andExpect(jsonPath("$.totalElements").value(countryResponse.getTotalElements()));
+  }
 }
