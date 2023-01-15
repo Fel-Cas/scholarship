@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -106,5 +107,17 @@ class CountryRepositoryTest {
     assertEquals(countrySaved.getId(),countryFound.get().getId());
     assertEquals(countrySaved.getCountryName(),countryFound.get().getCountryName());
     assertEquals(countrySaved.getAbbreviation(),countryFound.get().getAbbreviation());
+  }
+
+  @Test
+  @DisplayName("Test CountryRepository, test to find all countries")
+  void testFindAll(){
+    //given
+    countryRepository.save(country);
+    //when
+    List<Country> countries=countryRepository.findAll();
+    //then
+    assertNotNull(countries);
+    assertThat(countries.size()).isGreaterThan(0);
   }
 }
