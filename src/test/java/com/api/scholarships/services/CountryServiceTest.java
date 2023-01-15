@@ -96,4 +96,21 @@ class CountryServiceTest {
     //then
     assertEquals(Messages.MESSAGE_CREATE_COUNTRY_WITH_WRONG_NAME.formatted(countryDTO.getCountryName()),exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CountryService, test to check the error when users try to create a country with an already saved abbreviation")
+  void testCreateCountryWithWrongAbbreviation(){
+    //given
+    given(countryRepository.existsByCountryNameAndAbbreviation(anyString(), anyString())).willReturn(false);
+    given(countryRepository.existsByCountryName(anyString())).willReturn(false);
+    given(countryRepository.existsByAbbreviation(anyString())).willReturn(true);
+    CountryDTO countryDTO= CountryDTO.builder()
+        .countryName("Brasil")
+        .abbreviation("Bra")
+        .build();
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->countryService.create(countryDTO));
+    //then
+    assertEquals(Messages.MESSAGE_CREATE_COUNTRY_WITH_WRONG_ABBREVIATION.formatted(countryDTO.getAbbreviation()),exception.getMessage());
+  }
 }
