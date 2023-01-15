@@ -140,4 +140,18 @@ class CountryServiceTest {
     //then
     assertEquals(Messages.MESSAGE_COUNTRY_NOT_FOUND.formatted(1L),exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CountryService, test to find a country by name")
+  void testFindByName(){
+    //given
+    given(countryRepository.findByCountryName(country.getCountryName())).willReturn(Optional.ofNullable(country));
+    //when
+    Country countryFound=countryService.findByName(country.getCountryName());
+    //then
+    assertNotNull(countryFound);
+    assertEquals(1L,countryFound.getId());
+    assertEquals(country.getCountryName(),countryFound.getCountryName());
+    assertEquals(country.getAbbreviation(),countryFound.getAbbreviation());
+  }
 }
