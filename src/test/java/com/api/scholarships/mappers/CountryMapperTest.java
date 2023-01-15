@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CountryMapperTest {
@@ -30,4 +32,24 @@ class CountryMapperTest {
         ()->assertEquals(country.getAbbreviation(),countryDTOResponse.getAbbreviation()));
   }
 
+  @Test
+  @DisplayName("Test CountryMapper, test to pass from country list to countryDTOResponse list")
+  void  testToCountryDTOResponseList() {
+    //given
+    List<Country> countries=List.of(
+        Country.builder()
+        .id(1L)
+        .countryName("BRASIL")
+        .abbreviation("BRA")
+        .build());
+
+    //when
+    List<CountryDTOResponse> countryDTOResponse=countryMapper.countryToCountryResponse(countries);
+    //then
+    assertAll(
+        ()->assertEquals(countries.size(),countryDTOResponse.size()),
+        ()->assertEquals(countries.get(0).getId(),countryDTOResponse.get(0).getId()),
+        ()->assertEquals(countries.get(0).getCountryName(),countryDTOResponse.get(0).getCountryName()),
+        ()->assertEquals(countries.get(0).getAbbreviation(),countryDTOResponse.get(0).getAbbreviation()));
+  }
 }
