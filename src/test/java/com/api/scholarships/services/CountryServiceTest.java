@@ -1,7 +1,9 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CountryDTO;
 import com.api.scholarships.entities.Country;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.CountryMapper;
 import com.api.scholarships.repositories.CountryRepository;
 import com.api.scholarships.services.implementation.CountryServiceImp;
@@ -61,5 +63,21 @@ class CountryServiceTest {
     assertEquals(1L, countryCreated.getId());
     assertEquals(countryDTO.getCountryName().toUpperCase(), countryCreated.getCountryName());
     assertEquals(countryDTO.getAbbreviation().toUpperCase(), countryCreated.getAbbreviation());
+  }
+
+  @Test
+  @DisplayName("Test CountryService, test to check the error when users try  to create a country with a name and abbreviation already saved")
+  void testCreateDuplicateCountry(){
+    //given
+    given(countryRepository.existsByCountryNameAndAbbreviation(anyString(), anyString())).willReturn(true);
+    CountryDTO countryDTO= CountryDTO.builder()
+        .countryName("Brasil")
+        .abbreviation("Bra")
+        .build();
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->countryService.create(countryDTO));
+    //then
+    assertEquals(Messages.MESSAGE_CREATE_COUNTRY_WITH_WRONG_NAME_AND_ABBREVIATION.formatted(countryDTO.getCountryName(), countryDTO.getAbbreviation()),
+      exception.getMessage());
   }
 }
