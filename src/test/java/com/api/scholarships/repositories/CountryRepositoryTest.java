@@ -67,4 +67,17 @@ class CountryRepositoryTest {
     assertTrue(exist);
     assertFalse(noExist);
   }
+
+  @Test
+  @DisplayName("Test CountryRepository, test to determinate if a country exists by name")
+  void testExistsByName() {
+    //given
+    Country countrySaved=countryRepository.save(country);
+    //when
+    boolean exist=countryRepository.existsByCountryName(country.getCountryName());
+    boolean noExist=countryRepository.existsByCountryName("xxx");
+    //then
+    assertTrue(exist);
+    assertFalse(noExist);
+  }
 }
