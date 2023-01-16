@@ -58,4 +58,17 @@ class CourseTypeRepositoryTest {
     assertNotNull(allCourseTypes);
     assertThat(allCourseTypes.size()).isGreaterThan(4);
   }
+
+  @Test
+  @DisplayName("Test CourseTypeRepository, test to find a course by name")
+  void testFindByName(){
+    //given
+    //when
+    Optional<CourseType> courseTypeFound=courseTypeRepository.findByCourseType("ESPECIALIZACIÓN");
+    //then
+    assertTrue(courseTypeFound.isPresent());
+    assertNotNull(courseTypeFound);
+    assertEquals(4L, courseTypeFound.get().getId());
+    assertEquals("ESPECIALIZACIÓN",courseTypeFound.get().getCourseType());
+  }
 }
