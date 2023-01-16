@@ -55,4 +55,8 @@ public class Messages {
   public static final String MESSAGE_CREATE_COUNTRY_WITH_WRONG_NAME_AND_ABBREVIATION="Already exists a counrty saved with the same name %s and abbreviation %s";
   public static final String MESSAGE_COUNTRY_NOT_FOUND="Not exists a country with this id %s";
   public static final String MESSAGE_COUNTRY_NOT_FOUND_BY_NAME="Not exists a country with this name %s";
+
+  // course type
+  public static final String MESSAGE_COURSE_TYPE_NOT_FOUND="Not exists a course type with this id %s";
+  public static final String MESSAGE_COURSE_TYPE_NOT_FOUND_BY_NAME="Not exists a course type with this name %s";
 }

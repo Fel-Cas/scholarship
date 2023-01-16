@@ -18,4 +18,7 @@ public class Endpoints {
 
   //Country
   public static final String COUNTRIES = "/api/v1/scholarships/countries";
+
+  // Course Type
+  public static  final String COURSE_TYPE = "/api/v1/scholarships/course-types";
 }
