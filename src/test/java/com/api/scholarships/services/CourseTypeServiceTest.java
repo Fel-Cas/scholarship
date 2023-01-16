@@ -1,6 +1,8 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.entities.CourseType;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CourseTypeMapper;
 import com.api.scholarships.repositories.CourseTypeRepository;
 import com.api.scholarships.services.implementation.CourseTypeServiceImp;
@@ -52,4 +54,16 @@ class CourseTypeServiceTest {
     assertEquals(courseType.getId(),courseTypeFound.getId());
     assertEquals(courseType.getCourseType(),courseTypeFound.getCourseType());
   }
+
+  @Test
+  @DisplayName("Test CourseTypeServce, test to check  an exception when a course type is searched by its id and does not exist")
+  void  testFailFindById(){
+    //given
+    given(courseTypeRepository.findById(1L)).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class, ()->courseTypeService.findById(1L));
+    //then
+    assertEquals(Messages.MESSAGE_COURSE_TYPE_NOT_FOUND.formatted(1L), exception.getMessage());
+  }
+
 }
