@@ -47,4 +47,13 @@ public class CourseTypeServiceImp implements CourseTypeService {
         .totalElements(courseTypesFound.getTotalElements())
         .build();
   }
+
+  @Override
+  public CourseType findByCourseType(String courseType) {
+    Optional<CourseType> courseTypeFound=courseTypeRepository.findByCourseType(courseType);
+    if(courseTypeFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_COURSE_TYPE_NOT_FOUND_BY_NAME.formatted(courseType));
+    }
+    return courseTypeFound.get();
+  }
 }
