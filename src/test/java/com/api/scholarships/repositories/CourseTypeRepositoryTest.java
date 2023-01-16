@@ -71,4 +71,16 @@ class CourseTypeRepositoryTest {
     assertEquals(4L, courseTypeFound.get().getId());
     assertEquals("ESPECIALIZACIÓN",courseTypeFound.get().getCourseType());
   }
+
+  @Test
+  @DisplayName("Test CourseTypeRepository, test to delete a course type")
+  void testDelete(){
+    //given
+    //when
+    courseTypeRepository.deleteById(2L);
+    //then
+    Optional<CourseType> courseTypeFound=courseTypeRepository.findById(2L);
+    assertTrue(courseTypeFound.isEmpty());
+    assertThat(courseTypeRepository.findAll().size()).isLessThan(5);
+  }
 }
