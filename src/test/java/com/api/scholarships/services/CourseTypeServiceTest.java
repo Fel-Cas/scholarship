@@ -100,4 +100,19 @@ class CourseTypeServiceTest {
     );
   }
 
+  @Test
+  @DisplayName("Test CourseTypeService, test to find a course type by name")
+  void testFindByName(){
+    //given
+    given(courseTypeRepository.findByCourseType(anyString())).willReturn(Optional.of(courseType));
+    //when
+    CourseType courseTypeFound=courseTypeService.findByCourseType(anyString());
+    //then
+    assertAll(
+        ()->assertNotNull(courseTypeFound),
+        ()->assertEquals(courseType.getCourseType(),courseTypeFound.getCourseType()),
+        ()->assertEquals(courseType.getId(),courseTypeFound.getId())
+    );
+  }
+
 }
