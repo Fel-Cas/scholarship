@@ -8,7 +8,6 @@ import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CourseTypeMapper;
 import com.api.scholarships.repositories.CourseTypeRepository;
 import com.api.scholarships.services.implementation.CourseTypeServiceImp;
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -115,4 +114,14 @@ class CourseTypeServiceTest {
     );
   }
 
+  @Test
+  @DisplayName("Test CourseTypeService, test to check an exception when searching a course type that doesn't exist")
+  void testFailFindByName(){
+    //given
+    given(courseTypeRepository.findByCourseType(anyString())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception= assertThrows(NotFoundException.class,()->courseTypeService.findByCourseType("CURSO CORTO"));
+    //then
+    assertEquals(Messages.MESSAGE_COURSE_TYPE_NOT_FOUND_BY_NAME.formatted("CURSO CORTO"),exception.getMessage());
+  }
 }
