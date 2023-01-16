@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -45,5 +46,16 @@ class CourseTypeRepositoryTest {
         ()->assertEquals(1L, courseTypeFound.get().getId()),
         ()->assertEquals("CURSO CORTO", courseTypeFound.get().getCourseType())
     );
+  }
+
+  @Test
+  @DisplayName("Test CourseRepository, test to find all courses")
+  void testFindAll(){
+    //given
+    //when
+    List<CourseType> allCourseTypes=courseTypeRepository.findAll();
+    //then
+    assertNotNull(allCourseTypes);
+    assertThat(allCourseTypes.size()).isGreaterThan(4);
   }
 }
