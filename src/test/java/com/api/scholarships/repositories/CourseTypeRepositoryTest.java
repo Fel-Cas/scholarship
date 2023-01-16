@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,5 +31,19 @@ class CourseTypeRepositoryTest {
     assertNotNull(courseTypeSaved);
     assertEquals(courseType.getCourseType(), courseTypeSaved.getCourseType());
     assertThat(courseTypeSaved.getId()).isGreaterThan(0);
+  }
+
+  @Test
+  @DisplayName("Test CourseTypeReposiotry, test to find a course type by id")
+  void testFindById(){
+    //given
+    //when
+    Optional<CourseType> courseTypeFound=courseTypeRepository.findById(1L);
+    //then
+    assertAll(
+        ()->assertTrue(courseTypeFound.isPresent()),
+        ()->assertEquals(1L, courseTypeFound.get().getId()),
+        ()->assertEquals("CURSO CORTO", courseTypeFound.get().getCourseType())
+    );
   }
 }
