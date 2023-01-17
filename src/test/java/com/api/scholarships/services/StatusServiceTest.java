@@ -118,4 +118,16 @@ class StatusServiceTest {
         ()->verify(statusRepository,times(1)).findByStatusName(anyString())
     );
   }
+
+  @Test
+  @DisplayName("Test StatusService, test to check for an exception when trying to find a status by name and it doesn't exist ")
+  void testGetStatusByNameFail(){
+    //given
+    given(statusRepository.findByStatusName("NUEVO")).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->statusService.findByName("NUEVO"));
+    //then
+    assertEquals(Messages.MESSAGE_STATUS_NOT_FOUND_BY_NAME.formatted("NUEVO"), exception.getMessage());
+    verify(statusRepository,times(1)).findByStatusName("NUEVO");
+  }
 }
