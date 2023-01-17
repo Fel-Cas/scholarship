@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -42,5 +43,19 @@ class StatusRepositoryTest {
     //then
     assertNotNull(statusesFound);
     assertEquals(4, statusesFound.size());
+  }
+
+  @Test
+  @DisplayName("Test StatusRepository, test to get a status by id")
+  void testGetStatusById(){
+    //given
+    //when
+    Optional<Status> statusFound=statusRepository.findById(4L);
+    //then
+    assertAll(
+        ()->assertTrue(statusFound.isPresent()),
+        ()->assertEquals(statusFound.get().getId(),4L),
+        ()->assertEquals(statusFound.get().getStatusName(),"CANCELADO")
+    );
   }
 }
