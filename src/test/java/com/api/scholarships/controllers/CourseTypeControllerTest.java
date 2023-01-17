@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @WebMvcTest(CourseTypeController.class)
-@ActiveProfiles(profiles = "test")
 class CourseTypeControllerTest {
 
   @Autowired
@@ -48,7 +47,7 @@ class CourseTypeControllerTest {
   }
 
   @Test
-  @DisplayName("Test CourseTypeController, test to find a course by id")
+  @DisplayName("Test CourseTypeController, test to find a course type by id")
   void testFindById() throws Exception {
     //given
     CourseType courseType=CourseType.builder()
@@ -68,7 +67,7 @@ class CourseTypeControllerTest {
   }
 
   @Test
-  @DisplayName("Test CourseTypeController, test to find all type courses")
+  @DisplayName("Test CourseTypeController, test to find all course types ")
   void  testFindAll() throws Exception {
     //given
     CourseTypeResponse courseTypeResponse= CourseTypeResponse.
