@@ -1,6 +1,7 @@
 package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.StatusDTO;
+import com.api.scholarships.dtos.StatusResponse;
 import com.api.scholarships.entities.Status;
 import com.api.scholarships.mappers.StatusMapper;
 import com.api.scholarships.services.interfaces.StatusService;
@@ -14,8 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,4 +65,32 @@ class StatusControllerTest {
         .andExpect(jsonPath("$.statusName").value(statusToCreate.getStatusName()));
   }
 
+  @Test
+  @DisplayName("Test StatusController, test to find all statuses")
+  void getAllStatutes() throws Exception {
+    //given
+    StatusResponse statusResponse=StatusResponse.builder()
+        .content(List.of(statusDTO))
+        .numberPage(0)
+        .sizePage(10)
+        .lastOne(true)
+        .totalPages(1)
+        .totalElements(1L)
+        .build();
+    given(statusService.findAll(anyInt(), anyInt(), anyString(), anyString())).willReturn(statusResponse);
+    //when
+    ResultActions response=client.perform(get(url).contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.content.size()").value(1))
+        .andExpect(jsonPath("$.content").isArray())
+        .andExpect(jsonPath("$.content").isNotEmpty())
+        .andExpect(jsonPath("$.content.size()").value(1))
+        .andExpect(jsonPath("$.numberPage").value(0))
+        .andExpect(jsonPath("$.sizePage").value(10))
+        .andExpect(jsonPath("$.lastOne").value(true))
+        .andExpect(jsonPath("$.totalPages").value(1))
+        .andExpect(jsonPath("$.totalElements").value(1));
+  }
 }
