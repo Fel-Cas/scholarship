@@ -72,4 +72,15 @@ class StatusRepositoryTest {
         ()->assertEquals("APLAZADO",statusFound.get().getStatusName())
     );
   }
+
+  @Test
+  @DisplayName("Test StatusRepository, test to delete a status")
+  void testDelete(){
+    //given
+    //when
+    statusRepository.deleteById(2L);
+    //then
+    assertTrue(statusRepository.findById(2L).isEmpty());
+    assertTrue(statusRepository.findAll().size()<5);
+  }
 }
