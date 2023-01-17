@@ -35,7 +35,7 @@ class StatusRepositoryTest {
   }
 
   @Test
-  @DisplayName("Test StatusRepository, test to get all statutes")
+  @DisplayName("Test StatusRepository, test to get all statuses")
   void testGetAllStatuses(){
     //given
     //when
@@ -56,6 +56,20 @@ class StatusRepositoryTest {
         ()->assertTrue(statusFound.isPresent()),
         ()->assertEquals(statusFound.get().getId(),4L),
         ()->assertEquals(statusFound.get().getStatusName(),"CANCELADO")
+    );
+  }
+
+  @Test
+  @DisplayName("Test StatusRepository, test to get a status by name")
+  void testGetStatusByName(){
+    //given
+    //when
+    Optional<Status> statusFound=statusRepository.findByStatusName("APLAZADO");
+    //then
+    assertAll(
+        ()->assertNotNull(statusFound),
+        ()->assertEquals(3L, statusFound.get().getId()),
+        ()->assertEquals("APLAZADO",statusFound.get().getStatusName())
     );
   }
 }
