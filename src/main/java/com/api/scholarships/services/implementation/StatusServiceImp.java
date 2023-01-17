@@ -51,6 +51,10 @@ public class StatusServiceImp implements StatusService {
 
   @Override
   public Status findByName(String statusName) {
-    return null;
+    Optional<Status> statusFound=statusRepository.findByStatusName(statusName);
+    if(statusFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_STATUS_NOT_FOUND_BY_NAME.formatted(statusName));
+    }
+    return statusFound.get();
   }
 }
