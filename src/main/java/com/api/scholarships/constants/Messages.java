@@ -59,4 +59,7 @@ public class Messages {
   // course type
   public static final String MESSAGE_COURSE_TYPE_NOT_FOUND="Not exists a course type with this id %s";
   public static final String MESSAGE_COURSE_TYPE_NOT_FOUND_BY_NAME="Not exists a course type with this name %s";
+
+  //Status
+  public static final String MESSAGE_STATUS_NOT_FOUND="Not exists a status with this id %s";
 }
