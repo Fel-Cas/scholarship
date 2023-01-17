@@ -21,4 +21,7 @@ public class Endpoints {
 
   // Course Type
   public static  final String COURSE_TYPE = "/api/v1/scholarships/course-types";
+
+  //Status
+  public static final String STATUS = "/api/v1/scholarships/statuses";
 }
