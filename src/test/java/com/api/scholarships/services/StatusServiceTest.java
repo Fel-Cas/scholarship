@@ -102,4 +102,20 @@ class StatusServiceTest {
         ()->verify(statusRepository,times(1)).findAll(any(Pageable.class))
     );
   }
+
+  @Test
+  @DisplayName("Test StatusService, test to find a status by name")
+  void testGetStatusByName(){
+    //given
+    given(statusRepository.findByStatusName(anyString())).willReturn(Optional.of(status));
+    //when
+    Status statusFound=statusService.findByName(anyString());
+    //then
+    assertAll(
+        ()-> assertNotNull(statusFound),
+        ()->assertEquals(status.getId(),statusFound.getId()),
+        ()->assertEquals(status.getStatusName(),statusFound.getStatusName()),
+        ()->verify(statusRepository,times(1)).findByStatusName(anyString())
+    );
+  }
 }
