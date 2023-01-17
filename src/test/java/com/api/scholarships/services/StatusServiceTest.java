@@ -1,6 +1,8 @@
 package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
+import com.api.scholarships.dtos.StatusDTO;
+import com.api.scholarships.dtos.StatusResponse;
 import com.api.scholarships.entities.Status;
 import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.StatusMapper;
@@ -13,12 +15,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles(profiles = "test")
@@ -51,6 +61,7 @@ class StatusServiceTest {
     assertNotNull(statusFound);
     assertEquals(statusFound.getId(),status.getId());
     assertEquals(statusFound.getStatusName(),status.getStatusName());
+    verify(statusRepository,times(1)).findById(status.getId());
   }
 
   @Test
@@ -62,5 +73,33 @@ class StatusServiceTest {
     NotFoundException notFoundException=assertThrows(NotFoundException.class,()->statusService.findId(status.getId()));
     //then
     assertEquals(Messages.MESSAGE_STATUS_NOT_FOUND.formatted(status.getId()),notFoundException.getMessage());
+    verify(statusRepository,times(1)).findById(status.getId());
+  }
+
+  @Test
+  @DisplayName("Test StatusService, test to find all statuses")
+  void testGetAllStatuses(){
+    //given
+    Page<Status> statuses=new PageImpl<>(List.of(status));
+    given(statusRepository.findAll(any(Pageable.class))).willReturn(statuses);
+
+    StatusDTO statusesDTO=StatusDTO.builder()
+        .id(1L)
+        .statusName("VIGENTE")
+        .build();
+    given(statusMapper.statusToStatusDTO(List.of(status))).willReturn(List.of(statusesDTO));
+    //when
+    StatusResponse statusesFound=statusService.findAll(0, 10, "id", "ASC");
+    //then
+    assertAll(
+        () -> assertNotNull(statusesFound),
+        ()->assertThat(statusesFound.getContent().size()).isGreaterThan(0),
+        ()->assertEquals(0,statusesFound.getNumberPage()),
+        ()->assertEquals(1,statusesFound.getSizePage()),
+        ()->assertEquals(1,statusesFound.getTotalPages()),
+        ()->assertEquals(1,statusesFound.getTotalElements()),
+        ()->assertTrue(statusesFound.isLastOne()),
+        ()->verify(statusRepository,times(1)).findAll(any(Pageable.class))
+    );
   }
 }
