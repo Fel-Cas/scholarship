@@ -75,4 +75,18 @@ class CareerRepositoryTest {
         ()->assertEquals(careerSaved.getCareerName(), careerFound.get().getCareerName())
     );
   }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to check if there is a career by name")
+  void  testCheckIfExistsByName(){
+    //given
+    career.setCareerName("INGENIERIA INDUSTRIAL");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    boolean exists=careerRepository.existsByCareerName(careerSaved.getCareerName());
+    boolean noExists=careerRepository.existsByCareerName("CANTANTE");
+    //then
+    assertTrue(exists);
+    assertFalse(noExists);
+  }
 }
