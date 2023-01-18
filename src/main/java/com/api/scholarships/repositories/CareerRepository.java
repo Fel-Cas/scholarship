@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CareerRepository extends JpaRepository<Career,Long> {
-  boolean existByCareerName(String careerName);
+  boolean existsByCareerName(String careerName);
 }
