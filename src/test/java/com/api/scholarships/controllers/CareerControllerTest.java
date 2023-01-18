@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -113,5 +114,17 @@ class CareerControllerTest {
         .andExpect(jsonPath("$.sizePage").value(careerResponse.getSizePage()))
         .andExpect(jsonPath("$.lastOne").value(careerResponse.isLastOne()))
         .andExpect(content().json(objectMapper.writeValueAsString(careerResponse)));
+  }
+
+  @Test
+  @DisplayName("Test CareerController, test to delete a career")
+  void testDeleteCareer() throws Exception {
+    //given
+    willDoNothing().given(careerService).delete(career.getId());
+    //when
+    ResultActions response=client.perform(delete(url+"/"+career.getId())
+        .contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isNoContent());
   }
 }
