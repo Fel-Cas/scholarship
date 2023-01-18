@@ -58,4 +58,21 @@ class CareerRepositoryTest {
         ()->assertEquals(careerSaved.getCareerName(), careerFound.get().getCareerName())
     );
   }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to find a career by name")
+  void testFindByName(){
+    //given
+    career.setCareerName("INGENIERIA MECANICA");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    Optional<Career> careerFound=careerRepository.findByCareerName(careerSaved.getCareerName());
+    //then
+    assertAll(
+        ()->assertNotNull(careerFound),
+        ()->assertTrue(careerFound.isPresent()),
+        ()->assertEquals(careerSaved.getId(), careerFound.get().getId()),
+        ()->assertEquals(careerSaved.getCareerName(), careerFound.get().getCareerName())
+    );
+  }
 }
