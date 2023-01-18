@@ -75,4 +75,15 @@ class LanguageRepositoryTest {
         ()->assertNotNull(languagesFound),
         ()->assertThat(languagesFound.size()).isGreaterThan(6));
   }
+
+  @Test
+  @DisplayName("Test LanguageRepository, test to delete a language")
+  void testDeleteLanguage(){
+    //given
+    //when
+    languageRepository.deleteById(6L);
+    //then
+    assertTrue(languageRepository.findById(6L).isEmpty());
+    assertThat(languageRepository.findAll().size()).isGreaterThan(5);
+  }
 }
