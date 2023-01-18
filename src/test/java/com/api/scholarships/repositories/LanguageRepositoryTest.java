@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -31,6 +33,20 @@ class LanguageRepositoryTest {
         ()-> assertEquals(languageSaved.getLanguageName(),language.getLanguageName()),
         ()->assertThat(languageSaved.getId()).isGreaterThan(7)
     );
+  }
+
+  @Test
+  @DisplayName("Test LanguageRepository, test to find language by id")
+  void testFindLanguageById(){
+    //given
+    //when
+    Optional<Language> languageFound=languageRepository.findById(3L);
+    //then
+    assertAll(
+        ()->assertNotNull(languageFound),
+        ()->assertTrue(languageFound.isPresent()),
+        ()->assertEquals(languageFound.get().getLanguageName(), "FRANCÉS"),
+        ()->assertThat(languageFound.get().getId()).isEqualTo(3));
   }
 
 }
