@@ -1,12 +1,16 @@
 package com.api.scholarships.services.implementation;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.LanguageResponse;
 import com.api.scholarships.entities.Language;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.LanguageMapper;
 import com.api.scholarships.repositories.LanguageRepository;
 import com.api.scholarships.services.interfaces.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class LanguageServiceImp implements LanguageService {
@@ -18,7 +22,11 @@ public class LanguageServiceImp implements LanguageService {
 
   @Override
   public Language findById(Long id) {
-    return null;
+    Optional<Language> languageFound=languageRepository.findById(id);
+    if(languageFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_LANGUAGE_NOT_FOUND.formatted(id));
+    }
+    return languageFound.get();
   }
 
   @Override
