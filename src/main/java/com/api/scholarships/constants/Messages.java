@@ -72,4 +72,5 @@ public class Messages {
   public static final String MESSAGE_CAREER_NAME_REQUIRED="Career name is required";
   public static final String MESSAGE_CAREER_SIZE="Career name must be between 5 and 255 characters long";
   public static final String MESSAGE_CREATE_CAREER_WITH_WRONG_NAME="Already there is a career saved with this name %s";
+  public static final String MESSAGE_CAREER_NOT_FOUND="There is no career saved with this id %s";
 }
