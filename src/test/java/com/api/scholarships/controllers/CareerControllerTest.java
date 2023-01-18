@@ -2,6 +2,7 @@ package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.CareerDTO;
 import com.api.scholarships.dtos.CareerDTOResponse;
+import com.api.scholarships.dtos.CareerResponse;
 import com.api.scholarships.entities.Career;
 import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.services.interfaces.CareerService;
@@ -16,9 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -84,5 +86,32 @@ class CareerControllerTest {
         .andExpect(jsonPath("$.id").value(career.getId()))
         .andExpect(jsonPath("$.careerName").value(career.getCareerName()))
         .andExpect(content().json(objectMapper.writeValueAsString(careerDTOResponse)));
+  }
+
+  @Test
+  @DisplayName("Test CareerController, test to find all careers")
+  void testFindAllCareers() throws Exception {
+    //given
+    CareerResponse careerResponse=CareerResponse.builder()
+        .content(List.of(careerDTOResponse))
+        .numberPage(0)
+        .totalPages(1)
+        .totalElements(1L)
+        .sizePage(10)
+        .lastOne(true)
+        .build();
+    given(careerService.findAll(anyInt(), anyInt(), anyString(), anyString())).willReturn(careerResponse);
+    //when
+    ResultActions response=client.perform(get(url).contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.content.size()").value(careerResponse.getContent().size()))
+        .andExpect(jsonPath("$.numberPage").value(careerResponse.getNumberPage()))
+        .andExpect(jsonPath("$.totalPages").value(careerResponse.getTotalPages()))
+        .andExpect(jsonPath("$.totalElements").value(careerResponse.getTotalElements()))
+        .andExpect(jsonPath("$.sizePage").value(careerResponse.getSizePage()))
+        .andExpect(jsonPath("$.lastOne").value(careerResponse.isLastOne()))
+        .andExpect(content().json(objectMapper.writeValueAsString(careerResponse)));
   }
 }
