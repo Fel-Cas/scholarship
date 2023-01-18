@@ -9,7 +9,7 @@ INSERT into statuses (status_name) values ('VENCIDO');
 INSERT into statuses (status_name) values ('APLAZADO');
 INSERT into statuses (status_name) values ('CANCELADO');
 
-INSERT into languages(language_name) VALUES('CHINO');
+INSERT into languages(language_name) VALUES('MANDARIN');
 INSERT into languages(language_name) VALUES('ESPAÑOL');
 INSERT into languages(language_name) VALUES('FRANCÉS');
 INSERT into languages(language_name) VALUES('INGLÉS');

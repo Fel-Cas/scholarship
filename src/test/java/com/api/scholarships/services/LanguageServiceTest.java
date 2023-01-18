@@ -117,4 +117,15 @@ class LanguageServiceTest {
         ()->verify(languageRepository,times(1)).findByLanguageName(anyString())
     );
   }
+
+  @Test
+  @DisplayName("Test LanguageService, test to check an error when users try to search for a language by name and it doesn't exist")
+  void testGetLanguagesByNameNotFound(){
+    //given
+    given(languageRepository.findByLanguageName("CHINO")).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()-> languageService.findByName("CHINO"));
+    //then
+    assertEquals(Messages.MESSAGE_LANGUAGE_NOT_FOUND_BY_NAME.formatted("CHINO"),exception.getMessage());
+  }
 }
