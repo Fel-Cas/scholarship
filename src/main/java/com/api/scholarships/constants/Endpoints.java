@@ -27,4 +27,7 @@ public class Endpoints {
 
   //Languages
   public static final String LANGUAGES = "/api/v1/scholarships/languages";
+
+  //Careers
+  public static final String CAREERS = "/api/v1/scholarships/careers";
 }
