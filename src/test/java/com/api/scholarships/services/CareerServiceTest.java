@@ -1,7 +1,9 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CareerDTO;
 import com.api.scholarships.entities.Career;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.repositories.CareerRepository;
 import com.api.scholarships.services.implementation.CareerServiceImp;
@@ -53,6 +55,18 @@ class CareerServiceTest {
         ()->assertEquals(career.getId(),careerSaved.getId()),
         ()->assertEquals(career.getCareerName(),careerSaved.getCareerName())
     );
+  }
+
+  @Test
+  @DisplayName("Test CareerService, test to check for an exception when trying  to save a career with an incorrect name")
+  void testToCheckExceptionCreateCareer(){
+    //given
+    CareerDTO careerDTO=CareerDTO.builder().careerName("CANTANTE").build();
+    given(careerRepository.existsByCareerName(careerDTO.getCareerName())).willReturn(true);
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->careerService.create(careerDTO));
+    //then
+    assertEquals(Messages.MESSAGE_CREATE_CAREER_WITH_WRONG_NAME.formatted(careerDTO.getCareerName()),exception.getMessage());
   }
 
 }
