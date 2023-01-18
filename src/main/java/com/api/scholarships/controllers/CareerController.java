@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Endpoints.CAREERS)
@@ -27,5 +24,11 @@ public class CareerController {
   public ResponseEntity<CareerDTOResponse> create(@Valid @RequestBody CareerDTO careerDTO){
     Career careerSaved=careerService.create(careerDTO);
     return new ResponseEntity<>(careerMapper.careerToCareerDTOResponse(careerSaved), HttpStatus.CREATED);
+  }
+
+  @GetMapping(Endpoints.ID)
+  public ResponseEntity<CareerDTOResponse> getById(@PathVariable("id") Long id){
+    Career careerFound=careerService.findById(id);
+    return ResponseEntity.ok(careerMapper.careerToCareerDTOResponse(careerFound));
   }
 }

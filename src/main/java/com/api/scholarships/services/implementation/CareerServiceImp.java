@@ -5,11 +5,14 @@ import com.api.scholarships.dtos.CareerDTO;
 import com.api.scholarships.dtos.CareerResponse;
 import com.api.scholarships.entities.Career;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.repositories.CareerRepository;
 import com.api.scholarships.services.interfaces.CareerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class CareerServiceImp implements CareerService {
@@ -32,7 +35,11 @@ public class CareerServiceImp implements CareerService {
 
   @Override
   public Career findById(Long id) {
-    return null;
+    Optional<Career> careerFound = careerRepository.findById(id);
+    if(careerFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_CAREER_NOT_FOUND.formatted(id));
+    }
+    return careerFound.get();
   }
 
   @Override
