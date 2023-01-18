@@ -63,4 +63,8 @@ public class Messages {
   //Status
   public static final String MESSAGE_STATUS_NOT_FOUND="Not exists a status with this id %s";
   public static final String MESSAGE_STATUS_NOT_FOUND_BY_NAME="Not exists a status with this name %s";
+
+  //languages
+  public static final String MESSAGE_LANGUAGE_NOT_FOUND="There is no registered language with this id %s";
+  public static final String MESSAGE_LANGUAGE_NOT_FOUND_BY_NAME="There is no registered language with this name %s";
 }
