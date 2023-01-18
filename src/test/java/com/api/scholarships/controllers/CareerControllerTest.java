@@ -17,8 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -62,6 +64,22 @@ class CareerControllerTest {
     //then
     response
         .andExpect(status().isCreated())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(career.getId()))
+        .andExpect(jsonPath("$.careerName").value(career.getCareerName()))
+        .andExpect(content().json(objectMapper.writeValueAsString(careerDTOResponse)));
+  }
+
+  @Test
+  @DisplayName("Test CareerController, test to find a career by id")
+  void testFindCareerById() throws Exception {
+    //given
+    given(careerService.findById(anyLong())).willReturn(career);
+    given(careerMapper.careerToCareerDTOResponse(any(Career.class))).willReturn(careerDTOResponse);
+    //when
+    ResultActions response=client.perform(get(url+"/"+career.getId()).contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
         .andDo(print())
         .andExpect(jsonPath("$.id").value(career.getId()))
         .andExpect(jsonPath("$.careerName").value(career.getCareerName()))
