@@ -10,6 +10,9 @@ import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.repositories.CareerRepository;
 import com.api.scholarships.services.interfaces.CareerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -53,7 +56,16 @@ public class CareerServiceImp implements CareerService {
 
   @Override
   public CareerResponse findAll(int page, int size, String sort, String order) {
-    return null;
+    Sort sortDirection=order.equalsIgnoreCase(Sort.Direction.ASC.name())? Sort.by(sort).ascending() : Sort.by(sort).descending();
+    Page<Career> careersFound=careerRepository.findAll(PageRequest.of(page,size,sortDirection));
+    return CareerResponse.builder()
+        .content(careerMapper.careerListToCareerDTOResponseList(careersFound.getContent()))
+        .numberPage(careersFound.getNumber())
+        .sizePage(careersFound.getSize())
+        .totalElements(careersFound.getTotalElements())
+        .totalPages(careersFound.getTotalPages())
+        .lastOne(careersFound.isLast())
+        .build();
   }
 
   @Override

@@ -1,8 +1,10 @@
 package com.api.scholarships.controllers;
 
 import com.api.scholarships.constants.Endpoints;
+import com.api.scholarships.constants.PaginationRequest;
 import com.api.scholarships.dtos.CareerDTO;
 import com.api.scholarships.dtos.CareerDTOResponse;
+import com.api.scholarships.dtos.CareerResponse;
 import com.api.scholarships.entities.Career;
 import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.services.interfaces.CareerService;
@@ -30,5 +32,15 @@ public class CareerController {
   public ResponseEntity<CareerDTOResponse> getById(@PathVariable("id") Long id){
     Career careerFound=careerService.findById(id);
     return ResponseEntity.ok(careerMapper.careerToCareerDTOResponse(careerFound));
+  }
+
+  @GetMapping()
+  public ResponseEntity<CareerResponse> findAll(
+      @RequestParam(name="numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false ) int page,
+      @RequestParam(name="pageSize", defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE, required = false ) int size,
+      @RequestParam(name="sort", defaultValue = PaginationRequest.DEFAULT_SORT_BY, required = false) String sort,
+      @RequestParam(name="order", defaultValue = PaginationRequest.DEFAULT_SORT_DIR, required = false) String order
+  ){
+    return ResponseEntity.ok(careerService.findAll(page, size, sort, order));
   }
 }
