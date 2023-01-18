@@ -16,9 +16,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -67,6 +68,21 @@ class CareerServiceTest {
     BadRequestException exception=assertThrows(BadRequestException.class,()->careerService.create(careerDTO));
     //then
     assertEquals(Messages.MESSAGE_CREATE_CAREER_WITH_WRONG_NAME.formatted(careerDTO.getCareerName()),exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CareerService, test to find a career by id")
+  void testToFindCareerById(){
+    //given
+    given(careerRepository.findById(anyLong())).willReturn(Optional.of(career));
+    //when
+    Career careerFound=careerService.findById(anyLong());
+    //then
+    assertAll(
+        ()->assertNotNull(careerFound),
+        ()->assertEquals(career.getId(),careerFound.getId()),
+        ()->assertEquals(career.getCareerName(),careerFound.getCareerName())
+    );
   }
 
 }
