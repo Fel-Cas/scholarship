@@ -28,6 +28,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -149,5 +152,17 @@ class CareerServiceTest {
         ()->assertEquals(1, careerResponse.getContent().size()),
         ()->assertTrue(careerResponse.isLastOne())
     );
+  }
+
+  @Test
+  @DisplayName("Test CareerService, test to delete a career")
+  void testToDeleteCareer(){
+    //given
+    given(careerRepository.findById(career.getId())).willReturn(Optional.of(career));
+    willDoNothing().given(careerRepository).delete(career);
+    //when
+    careerService.delete(career.getId());
+    //then
+    verify(careerRepository, times(1)).delete(career);
   }
 }
