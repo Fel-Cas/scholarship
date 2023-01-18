@@ -4,6 +4,7 @@ import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CareerDTO;
 import com.api.scholarships.entities.Career;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.repositories.CareerRepository;
 import com.api.scholarships.services.implementation.CareerServiceImp;
@@ -85,4 +86,14 @@ class CareerServiceTest {
     );
   }
 
+  @Test
+  @DisplayName("Test CareerService, test to check an exception  when trying to find a career by id and doesn't exist")
+  void testToCheckExceptionFindById(){
+    //given
+    given(careerRepository.findById(career.getId())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->careerService.findById(career.getId()));
+    //then
+    assertEquals(Messages.MESSAGE_CAREER_NOT_FOUND.formatted(career.getId()),exception.getMessage());
+  }
 }
