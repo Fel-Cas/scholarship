@@ -66,4 +66,5 @@ public class Messages {
 
   //languages
   public static final String MESSAGE_LANGUAGE_NOT_FOUND="There is no registered language with this id %s";
+  public static final String MESSAGE_LANGUAGE_NOT_FOUND_BY_NAME="There is no registered language with this name %s";
 }
