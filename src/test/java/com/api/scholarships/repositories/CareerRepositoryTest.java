@@ -105,4 +105,16 @@ class CareerRepositoryTest {
         ()->assertThat(careersFound.size()).isGreaterThan(0)
     );
   }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to delete a career")
+  void testDelete(){
+    //given
+    career.setCareerName("YOUTUBER");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    careerRepository.delete(careerSaved);
+    //then
+    assertTrue(careerRepository.findById(careerSaved.getId()).isEmpty());
+  }
 }
