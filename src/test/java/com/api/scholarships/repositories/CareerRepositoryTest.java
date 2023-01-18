@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,5 +89,20 @@ class CareerRepositoryTest {
     //then
     assertTrue(exists);
     assertFalse(noExists);
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to find all career")
+  void testFindAll(){
+    //given
+    career.setCareerName("INGENIERIA MECATRONICA");
+    careerRepository.save(career);
+    //when
+    List<Career> careersFound=careerRepository.findAll();
+    //then
+    assertAll(
+        ()->assertNotNull(careersFound),
+        ()->assertThat(careersFound.size()).isGreaterThan(0)
+    );
   }
 }
