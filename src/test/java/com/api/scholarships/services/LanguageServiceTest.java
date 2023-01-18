@@ -1,7 +1,9 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.LanguageDTO;
 import com.api.scholarships.entities.Language;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.LanguageMapper;
 import com.api.scholarships.repositories.LanguageRepository;
 import com.api.scholarships.services.implementation.LanguageServiceImp;
@@ -19,6 +21,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -55,7 +59,19 @@ class LanguageServiceTest {
     assertAll(
         ()->assertNotNull(languageFound),
         ()->assertEquals(language.getId(),languageFound.getId()),
-        ()->assertEquals(language.getLanguageName(),languageFound.getLanguageName())
+        ()->assertEquals(language.getLanguageName(),languageFound.getLanguageName()),
+        ()->verify(languageRepository,times(1)).findById(anyLong())
     );
+  }
+
+  @Test
+  @DisplayName("Test LanguageService, test to check an error when users try to search for a language by id and it doesn't exist")
+  void  testGetLanguageByIdNotFound(){
+    //given
+    given(languageRepository.findById(10L)).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->languageService.findById(10L));
+    //then
+    assertEquals(Messages.MESSAGE_LANGUAGE_NOT_FOUND.formatted(10L),exception.getMessage());
   }
 }
