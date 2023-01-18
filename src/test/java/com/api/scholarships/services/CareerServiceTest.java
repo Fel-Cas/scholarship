@@ -96,4 +96,19 @@ class CareerServiceTest {
     //then
     assertEquals(Messages.MESSAGE_CAREER_NOT_FOUND.formatted(career.getId()),exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test CareerService, test to find a career by name")
+  void  testToFindCareerByName(){
+    //given
+    given(careerRepository.findByCareerName(anyString())).willReturn(Optional.of(career));
+    //when
+    Career careerFound=careerService.findByName(anyString());
+    //then
+    assertAll(
+        ()->assertNotNull(careerFound),
+        ()->assertEquals(career.getId(),careerFound.getId()),
+        ()->assertEquals(career.getCareerName(),careerFound.getCareerName())
+    );
+  }
 }
