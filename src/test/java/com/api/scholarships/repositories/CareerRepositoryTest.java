@@ -1,0 +1,120 @@
+package com.api.scholarships.repositories;
+
+import com.api.scholarships.entities.Career;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+
+@DataJpaTest
+@ActiveProfiles("test")
+class CareerRepositoryTest {
+
+  @Autowired
+  private  CareerRepository careerRepository;
+  private Career career;
+
+  @BeforeEach
+  void setup(){
+    career=Career.builder()
+        .careerName("ENFERMERIA")
+        .build();
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to create a new career")
+  void testCreateCareer(){
+    //given
+    //when
+    Career careerSaved=careerRepository.save(career);
+    //when
+    assertAll(
+        ()->assertNotNull(careerSaved),
+        ()->assertThat(careerSaved.getId()).isGreaterThan(0),
+        ()->assertEquals("ENFERMERIA", careerSaved.getCareerName())
+    );
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to find a career by id")
+  void testFindById(){
+    //given
+    career.setCareerName("MÚSICA");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    Optional<Career> careerFound=careerRepository.findById(careerSaved.getId());
+    //then
+    assertAll(
+        ()->assertNotNull(careerFound),
+        ()->assertTrue(careerFound.isPresent()),
+        ()->assertEquals(careerSaved.getId(), careerFound.get().getId()),
+        ()->assertEquals(careerSaved.getCareerName(), careerFound.get().getCareerName())
+    );
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to find a career by name")
+  void testFindByName(){
+    //given
+    career.setCareerName("INGENIERIA MECANICA");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    Optional<Career> careerFound=careerRepository.findByCareerName(careerSaved.getCareerName());
+    //then
+    assertAll(
+        ()->assertNotNull(careerFound),
+        ()->assertTrue(careerFound.isPresent()),
+        ()->assertEquals(careerSaved.getId(), careerFound.get().getId()),
+        ()->assertEquals(careerSaved.getCareerName(), careerFound.get().getCareerName())
+    );
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to check if there is a career by name")
+  void  testCheckIfExistsByName(){
+    //given
+    career.setCareerName("INGENIERIA INDUSTRIAL");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    boolean exists=careerRepository.existsByCareerName(careerSaved.getCareerName());
+    boolean noExists=careerRepository.existsByCareerName("CANTANTE");
+    //then
+    assertTrue(exists);
+    assertFalse(noExists);
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to find all career")
+  void testFindAll(){
+    //given
+    career.setCareerName("INGENIERIA MECATRONICA");
+    careerRepository.save(career);
+    //when
+    List<Career> careersFound=careerRepository.findAll();
+    //then
+    assertAll(
+        ()->assertNotNull(careersFound),
+        ()->assertThat(careersFound.size()).isGreaterThan(0)
+    );
+  }
+
+  @Test
+  @DisplayName("Test CareerRepository, test to delete a career")
+  void testDelete(){
+    //given
+    career.setCareerName("YOUTUBER");
+    Career careerSaved=careerRepository.save(career);
+    //when
+    careerRepository.delete(careerSaved);
+    //then
+    assertTrue(careerRepository.findById(careerSaved.getId()).isEmpty());
+  }
+}
