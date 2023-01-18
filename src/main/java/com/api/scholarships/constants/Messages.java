@@ -67,4 +67,8 @@ public class Messages {
   //languages
   public static final String MESSAGE_LANGUAGE_NOT_FOUND="There is no registered language with this id %s";
   public static final String MESSAGE_LANGUAGE_NOT_FOUND_BY_NAME="There is no registered language with this name %s";
+
+  //Careers
+  public static final String MESSAGE_CAREER_NAME_REQUIRED="Career name is required";
+  public static final String MESSAGE_CAREER_SIZE="Career name must be between 5 and 255 characters long";
 }
