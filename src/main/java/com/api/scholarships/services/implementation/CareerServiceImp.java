@@ -44,7 +44,11 @@ public class CareerServiceImp implements CareerService {
 
   @Override
   public Career findByName(String name) {
-    return null;
+    Optional<Career> careerFound = careerRepository.findByCareerName(name);
+    if(careerFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_CAREER_NOT_FOUND_BY_NAME.formatted(name));
+    }
+    return careerFound.get();
   }
 
   @Override
