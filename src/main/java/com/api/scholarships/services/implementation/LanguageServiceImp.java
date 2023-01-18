@@ -8,6 +8,9 @@ import com.api.scholarships.mappers.LanguageMapper;
 import com.api.scholarships.repositories.LanguageRepository;
 import com.api.scholarships.services.interfaces.LanguageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -39,6 +42,15 @@ public class LanguageServiceImp implements LanguageService {
   }
   @Override
   public LanguageResponse findAll(int page, int size, String sort, String order) {
-    return null;
+    Sort sortDirection=order.equalsIgnoreCase(Sort.Direction.ASC.name())?Sort.by(sort).ascending():Sort.by(sort).descending();
+    Page<Language> languagesFound=languageRepository.findAll(PageRequest.of(page,size,sortDirection));
+    return LanguageResponse.builder()
+        .content(languageMapper.languageToLaguageDTO(languagesFound.getContent()))
+        .numberPage(languagesFound.getNumber())
+        .sizePage(languagesFound.getSize())
+        .totalElements(languagesFound.getTotalElements())
+        .totalPages(languagesFound.getTotalPages())
+        .lastOne(languagesFound.isLast())
+        .build();
   }
 }
