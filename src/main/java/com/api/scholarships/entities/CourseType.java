@@ -3,6 +3,8 @@ package com.api.scholarships.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "course_types")
 @AllArgsConstructor
@@ -10,7 +12,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class CourseType {
+public class CourseType implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
