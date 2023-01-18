@@ -49,4 +49,18 @@ class LanguageRepositoryTest {
         ()->assertThat(languageFound.get().getId()).isEqualTo(3));
   }
 
+  @Test
+  @DisplayName("Test LanguageRepository, test to find a language by name")
+  void testFindLanguageByName(){
+    //given
+    //when
+    Optional<Language> languageFound=languageRepository.findByLanguageName("ITALIANO");
+    //then
+    assertAll(
+        ()->assertNotNull(languageFound),
+        ()->assertTrue(languageFound.isPresent()),
+        ()->assertEquals(languageFound.get().getLanguageName(), "ITALIANO"),
+        ()->assertThat(languageFound.get().getId()).isEqualTo(5));
+  }
+
 }
