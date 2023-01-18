@@ -43,4 +43,10 @@ public class CareerController {
   ){
     return ResponseEntity.ok(careerService.findAll(page, size, sort, order));
   }
+
+  @DeleteMapping(Endpoints.ID)
+  public ResponseEntity<Void> delete(@PathVariable("id") Long id){
+    careerService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }

@@ -70,6 +70,7 @@ public class CareerServiceImp implements CareerService {
 
   @Override
   public void delete(Long id) {
-
+    Career careerFound=findById(id);
+    careerRepository.delete(careerFound);
   }
 }
