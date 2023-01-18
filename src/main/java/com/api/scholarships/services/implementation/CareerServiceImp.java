@@ -20,12 +20,12 @@ public class CareerServiceImp implements CareerService {
 
   @Override
   public Career create(CareerDTO careerDTO) {
-    if(careerRepository.existByCareerName(careerDTO.getCareerName())){
+    if(careerRepository.existsByCareerName(careerDTO.getCareerName())){
       throw new BadRequestException(Messages.MESSAGE_CREATE_CAREER_WITH_WRONG_NAME.formatted(careerDTO.getCareerName()));
     }
     return careerRepository.save(
         Career.builder()
-            .careerName(careerDTO.getCareerName())
+            .careerName(careerDTO.getCareerName().toUpperCase())
             .build()
     );
   }
