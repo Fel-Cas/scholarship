@@ -1,8 +1,10 @@
 package com.api.scholarships.services.implementation;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CareerDTO;
 import com.api.scholarships.dtos.CareerResponse;
 import com.api.scholarships.entities.Career;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.CareerMapper;
 import com.api.scholarships.repositories.CareerRepository;
 import com.api.scholarships.services.interfaces.CareerService;
@@ -18,7 +20,14 @@ public class CareerServiceImp implements CareerService {
 
   @Override
   public Career create(CareerDTO careerDTO) {
-    return null;
+    if(careerRepository.existByCareerName(careerDTO.getCareerName())){
+      throw new BadRequestException(Messages.MESSAGE_CREATE_CAREER_WITH_WRONG_NAME.formatted(careerDTO.getCareerName()));
+    }
+    return careerRepository.save(
+        Career.builder()
+            .careerName(careerDTO.getCareerName())
+            .build()
+    );
   }
 
   @Override
