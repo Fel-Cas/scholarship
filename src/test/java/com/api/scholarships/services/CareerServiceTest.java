@@ -111,4 +111,15 @@ class CareerServiceTest {
         ()->assertEquals(career.getCareerName(),careerFound.getCareerName())
     );
   }
+
+  @Test
+  @DisplayName("Test CareerService, test to check an exception  when trying to find a career by name and doesn't exist")
+  void testToCheckExceptionFindByName(){
+    //given
+    given(careerRepository.findByCareerName(career.getCareerName())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->careerService.findByName(career.getCareerName()));
+    //then
+    assertEquals(Messages.MESSAGE_CAREER_NOT_FOUND_BY_NAME.formatted(career.getCareerName()),exception.getMessage());
+  }
 }
