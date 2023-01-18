@@ -101,4 +101,20 @@ class LanguageServiceTest {
         ()->assertTrue(languagesFound.isLastOne())
     );
   }
+
+  @Test
+  @DisplayName("Test LanguageService, test to find a language by name")
+  void testGetLanguagesByName(){
+    //given
+    given(languageRepository.findByLanguageName(anyString())).willReturn(Optional.of(language));
+    //when
+    Language languageFound=languageService.findByName(anyString());
+    //then
+    assertAll(
+        ()->assertNotNull(languageFound),
+        ()->assertEquals(language.getId(),languageFound.getId()),
+        ()->assertEquals(language.getLanguageName(),languageFound.getLanguageName()),
+        ()->verify(languageRepository,times(1)).findByLanguageName(anyString())
+    );
+  }
 }
