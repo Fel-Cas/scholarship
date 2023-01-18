@@ -2,6 +2,8 @@ package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.CareerDTO;
+import com.api.scholarships.dtos.CareerDTOResponse;
+import com.api.scholarships.dtos.CareerResponse;
 import com.api.scholarships.entities.Career;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
@@ -15,8 +17,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -121,5 +127,27 @@ class CareerServiceTest {
     NotFoundException exception=assertThrows(NotFoundException.class,()->careerService.findByName(career.getCareerName()));
     //then
     assertEquals(Messages.MESSAGE_CAREER_NOT_FOUND_BY_NAME.formatted(career.getCareerName()),exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CareerService, test to find all careers")
+  void testToFindAllCareers(){
+    //given
+    CareerDTOResponse careerDTOResponse= new CareerDTOResponse(1L, "INGENIERIA DE SISTEMAS");
+    Page<Career> careers= new PageImpl<>(List.of(career));
+    given(careerRepository.findAll(any(Pageable.class))).willReturn(careers);
+    given(careerMapper.careerListToCareerDTOResponseList(List.of(career))).willReturn(List.of(careerDTOResponse));
+    //when
+    CareerResponse careerResponse= careerService.findAll(0,10,"id","asc");
+    //then
+    assertAll(
+        ()->assertNotNull(careerResponse),
+        ()->assertEquals(0, careerResponse.getNumberPage()),
+        ()->assertEquals(1, careerResponse.getSizePage()),
+        ()->assertEquals(1, careerResponse.getTotalPages()),
+        ()->assertEquals(1, careerResponse.getTotalElements()),
+        ()->assertEquals(1, careerResponse.getContent().size()),
+        ()->assertTrue(careerResponse.isLastOne())
+    );
   }
 }
