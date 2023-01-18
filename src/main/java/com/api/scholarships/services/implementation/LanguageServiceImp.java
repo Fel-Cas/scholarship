@@ -31,9 +31,12 @@ public class LanguageServiceImp implements LanguageService {
 
   @Override
   public Language findByName(String name) {
-    return null;
+    Optional<Language> languageFound=languageRepository.findByLanguageName(name);
+    if(languageFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_LANGUAGE_NOT_FOUND_BY_NAME.formatted(name));
+    }
+    return languageFound.get();
   }
-
   @Override
   public LanguageResponse findAll(int page, int size, String sort, String order) {
     return null;
