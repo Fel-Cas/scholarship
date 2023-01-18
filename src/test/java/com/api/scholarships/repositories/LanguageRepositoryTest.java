@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -63,4 +64,15 @@ class LanguageRepositoryTest {
         ()->assertThat(languageFound.get().getId()).isEqualTo(5));
   }
 
+  @Test
+  @DisplayName("Test LanguageRepository, test to find all languages")
+  void testFindAllLanguages(){
+    //given
+    //when
+    List<Language> languagesFound=languageRepository.findAll();
+    //then
+    assertAll(
+        ()->assertNotNull(languagesFound),
+        ()->assertThat(languagesFound.size()).isGreaterThan(6));
+  }
 }
