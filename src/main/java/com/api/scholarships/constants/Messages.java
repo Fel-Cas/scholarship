@@ -36,7 +36,7 @@ public class Messages {
   public static final String MESSAGE_PHONE_REQUIRED = "Phone is required";
   public static final String MESSAGE_PHONE_SIZE = "Phone must be between 7 and 15 characters";
   public static final String MESSAGE_IMAGE_REQUIRED = "Image is required";
-  public static final String MESSAGE_USERS_REQUIRED = "Users is required";
+  public static final String MESSAGE_USERS_REQUIRED = "Users are required";
   public static final String MESSAGE_USERS_SIZE = "Lists of user must have at least one user";
   public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_NAME="Already exists a company with this name %s";
   public static final String MESSAGE_COMPANY_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL="Already exists a company with this email %s";
@@ -74,4 +74,19 @@ public class Messages {
   public static final String MESSAGE_CREATE_CAREER_WITH_WRONG_NAME="Already there is a career saved with this name %s";
   public static final String MESSAGE_CAREER_NOT_FOUND="There is no career saved with this id %s";
   public static final String MESSAGE_CAREER_NOT_FOUND_BY_NAME="There is no career saved with this name %s";
+
+  //Scholarships
+  public static final String MESSAGE_DESCRIPTION_REQUIRED="Description is required";
+  public static final String MESSAGE_DESCRIPTION_SIZE="Description must have minimun 200 characters";
+  public static final String MESSAGE_START_DATE_REQUIRED="Start date is required";
+  public static final String MESSAGE_END_DATE_REQUIRED="Finish date is required";
+  public static final String MESSAGE_URL_REQUIRED="URL is required";
+  public static final String MESSAGE_URL_VALID="Link must be a valid URL";
+  public static final String MESSAGE_COURSE_TYPE_REQUIRED="Course type is required";
+  public static final String MESSAGE_COURSE_TYPE_SIZE="Course type must be between 2 and 50 characters";
+  public static final String MESSAGE_LANGUAGE_REQUIRED="Language is required";
+  public static final String MESSAGE_LANGUAGE_SIZE="Language must be between 5 and 30 characters";
+  public static final String MESSAGE_COMPANY_REQUIRED="Company id is required";
+  public static final String MESSAGE_CARRERS_ID_REQUIRED="Careers id are required";
+  public static final String MESSAGE_CARRERS_ID_SIZE="Lists of careers must have at least one career";
 }
