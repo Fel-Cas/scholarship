@@ -30,4 +30,7 @@ public class Endpoints {
 
   //Careers
   public static final String CAREERS = "/api/v1/scholarships/careers";
+
+  //Scholarships
+  public static final String SCHOLARSHIPS = "/api/v1/scholarships";
 }
