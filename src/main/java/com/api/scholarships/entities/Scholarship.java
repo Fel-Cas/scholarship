@@ -45,12 +45,9 @@ public class Scholarship implements Serializable {
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "image_id",referencedColumnName = "id")
   private Image image;
-  @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.EAGER)
-  @JoinTable(
-      name = "scholarship_company",
-      joinColumns = {@JoinColumn(name = "scholarship_id")},
-      inverseJoinColumns = {@JoinColumn(name = "company_id")} )
-  private List<Company> companies;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "company_id")
+  private Company company;
   @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, fetch = FetchType.EAGER)
   @JoinTable(
       name = "scholarship_career",
