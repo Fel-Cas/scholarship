@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 @Builder
 @Data
 public class ScholarshipUpdateDTO {
+  @NotEmpty
+  @Size(min=10)
+  private String title;
   @NotEmpty(message = Messages.MESSAGE_DESCRIPTION_REQUIRED)
   @Size(min=200, message = Messages.MESSAGE_DESCRIPTION_SIZE)
   private String description;
