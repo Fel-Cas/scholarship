@@ -4,6 +4,7 @@ import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.dtos.ScholarshipResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.Scholarship;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,7 +19,7 @@ public interface ScholarshipService {
   public Scholarship changeCountry(Long scholarshipId, Long countryId);
   public Scholarship changeStatus(Long scholarshipId, Long statusId);
   public Scholarship changeLanguage(Long scholarshipId, Long languageId);
-  public Scholarship changeImage(Long scholarshipId);
+  public Scholarship changeImage(Long scholarshipId, MultipartFile image) throws IOException;
   public Scholarship addCareer(Long scholarshipId, Long careerId);
   public Scholarship removeCareer(Long scholarshipId, Long careerId);
 }
