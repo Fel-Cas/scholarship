@@ -38,4 +38,5 @@ public class Endpoints {
   public static final String SCHOLARSHIPS_STATUS ="/status/{scholarshipId}/{statusId}";
   public static final String SCHOLARSHIPS_LANGUAGE ="/language/{scholarshipId}/{languageId}";
   public static final String SCHOLARSHIPS_IMAGE ="/image/{scholarshipId}";
+  public static final String SCHOLARSHIPS_CAREER="/career/{scholarshipId}/{careerId}";
 }
