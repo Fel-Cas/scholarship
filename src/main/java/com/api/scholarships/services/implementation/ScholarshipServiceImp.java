@@ -97,8 +97,11 @@ public class ScholarshipServiceImp implements ScholarshipService {
   }
 
   @Override
-  public Scholarship changeCourType(Long scholarshipId, Long courseTypeId) {
-    return null;
+  public Scholarship changeCourseType(Long scholarshipId, Long courseTypeId) {
+    CourseType courseTypeFound=courseTypeService.findById(courseTypeId);
+    Scholarship scholarshipFound=getById(scholarshipId);
+    scholarshipFound.setCourseType(courseTypeFound);
+    return scholarshipRepository.save(scholarshipFound);
   }
 
   @Override

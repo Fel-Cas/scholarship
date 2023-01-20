@@ -53,4 +53,10 @@ public class ScholarshipController {
     Scholarship scholarshipUpdated=scholarshipService.changeCountry(scholarshipId, countryId);
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
+
+  @PutMapping(Endpoints.SCHOLARSHIPS_COURSE_TYPE)
+  public ResponseEntity<ScholarshipDTOResponse> updateCourseType(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("courseTypeId") Long courseTypeId) {
+    Scholarship scholarshipUpdated=scholarshipService.changeCourseType(scholarshipId, courseTypeId);
+    return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
+  }
 }
