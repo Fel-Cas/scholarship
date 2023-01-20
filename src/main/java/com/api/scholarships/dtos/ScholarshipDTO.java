@@ -19,8 +19,8 @@ import java.util.List;
 @Builder
 @Data
 public class ScholarshipDTO {
-  @NotEmpty
-  @Size(min=10)
+  @NotEmpty(message=Messages.MESSAGE_TITLE_IS_REQUIRED)
+  @Size(min=10, message = Messages.MESSAGE_TITLE_SIZE)
   private String title;
   @NotEmpty(message =Messages.MESSAGE_DESCRIPTION_REQUIRED)
   @Size(min=200, message = Messages.MESSAGE_DESCRIPTION_SIZE)
