@@ -2,15 +2,14 @@ package com.api.scholarships.dtos;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.entities.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.validator.constraints.URL;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,13 +19,18 @@ import java.util.List;
 @Builder
 @Data
 public class ScholarshipDTO {
+  @NotEmpty
+  @Size(min=10)
+  private String title;
   @NotEmpty(message =Messages.MESSAGE_DESCRIPTION_REQUIRED)
   @Size(min=200, message = Messages.MESSAGE_DESCRIPTION_SIZE)
   private String description;
-  @NotEmpty(message = Messages.MESSAGE_START_DATE_REQUIRED)
-  private LocalDateTime startDate;
-  @NotEmpty(message = Messages.MESSAGE_END_DATE_REQUIRED)
-  private LocalDateTime finishDate;
+  @NotNull(message = Messages.MESSAGE_START_DATE_REQUIRED)
+  @DateTimeFormat(pattern =  "yyyy-MM-dd")
+  private String startDate;
+  @NotNull(message = Messages.MESSAGE_END_DATE_REQUIRED)
+  @DateTimeFormat(pattern =  "yyyy-MM-dd")
+  private String finishDate;
   @NotEmpty(message = Messages.MESSAGE_URL_REQUIRED)
   @URL(message = Messages.MESSAGE_URL_VALID)
   private String link;
@@ -41,7 +45,7 @@ public class ScholarshipDTO {
   private String language;
   @NotNull(message = Messages.MESSAGE_IMAGE_REQUIRED)
   private MultipartFile image;
-  @NotEmpty(message = Messages.MESSAGE_COMPANY_REQUIRED)
+  @NotNull(message = Messages.MESSAGE_COMPANY_REQUIRED)
   @Positive
   private Long company;
   @NotEmpty(message = Messages.MESSAGE_CARRERS_ID_REQUIRED)
