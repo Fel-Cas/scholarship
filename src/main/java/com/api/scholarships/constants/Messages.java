@@ -90,4 +90,5 @@ public class Messages {
   public static final String MESSAGE_CARRERS_ID_REQUIRED="Careers id are required";
   public static final String MESSAGE_CARRERS_ID_SIZE="Lists of careers must have at least one career";
   public static final String MESSAGE_WRONG_DATES="Finish date must be after the start date";
+  public static final String MESSAGE_SCHOLARSHIP_NOT_FOUND="There isn't scholarship saved with this id %s";
 }
