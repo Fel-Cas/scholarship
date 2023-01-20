@@ -41,4 +41,10 @@ public class ScholarshipController {
     Scholarship scholarshipUpdated=scholarshipService.update(scholarshipUpdateDTO, id);
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
+
+  @DeleteMapping(Endpoints.ID)
+  public ResponseEntity<ScholarshipDTOResponse> delete(@PathVariable("id") long id) throws IOException {
+    scholarshipService.delete(id);
+    return ResponseEntity.noContent().build();
+  }
 }

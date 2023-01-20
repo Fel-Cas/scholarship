@@ -85,8 +85,10 @@ public class ScholarshipServiceImp implements ScholarshipService {
   }
 
   @Override
-  public void delete(long id) {
-
+  public void delete(long id) throws IOException {
+    Scholarship scholarshipFound=getById(id);
+    imageService.delete(scholarshipFound.getImage().getId());
+    scholarshipRepository.delete(scholarshipFound);
   }
 
   @Override
