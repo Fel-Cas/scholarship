@@ -12,6 +12,6 @@ public interface ScholarshipService {
   public Scholarship create(ScholarshipDTO scholarshipDTO) throws IOException, ParseException;
   public Scholarship getById(long id);
   public Scholarship update(ScholarshipUpdateDTO scholarshipUpdateDTO, long id);
-  public void delete(long id);
+  public void delete(long id) throws IOException;
   public ScholarshipResponse findAll();
 }
