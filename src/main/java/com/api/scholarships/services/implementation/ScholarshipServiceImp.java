@@ -121,7 +121,10 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship changeLanguage(Long scholarshipId, Long languageId) {
-    return null;
+    Language languageFound=languageService.findById(languageId);
+    Scholarship scholarshipFound=getById(scholarshipId);
+    scholarshipFound.setLanguage(languageFound);
+    return scholarshipRepository.save(scholarshipFound);
   }
 
   @Override

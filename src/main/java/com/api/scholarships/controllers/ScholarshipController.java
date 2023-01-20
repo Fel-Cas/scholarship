@@ -65,4 +65,10 @@ public class ScholarshipController {
      Scholarship scholarshipUpdated=scholarshipService.changeStatus(scholarshipId, statusId);
      return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
+
+  @PutMapping(Endpoints.SCHOLARSHIPS_LANGUAGE)
+  public ResponseEntity<ScholarshipDTOResponse> updateLanguage(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("languageId") Long languageId) {
+     Scholarship scholarshipUpdated=scholarshipService.changeLanguage(scholarshipId, languageId);
+     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
+  }
 }
