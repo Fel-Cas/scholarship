@@ -33,4 +33,5 @@ public class Endpoints {
 
   //Scholarships
   public static final String SCHOLARSHIPS = "/api/v1/scholarships";
+  public static final String SCHOLARSHIPS_COUNTRY ="/country/{scholarshipId}/{countryId}";
 }
