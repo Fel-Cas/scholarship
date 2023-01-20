@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -22,12 +23,14 @@ public class Scholarship implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Column(nullable = false)
+  private String title;
   @Column(nullable = false,columnDefinition = "TEXT")
   private String description;
   @Column(nullable = false, name = "start_date")
-  private LocalDateTime startDate;
+  private Date startDate;
   @Column(nullable = false, name = "finish_date")
-  private LocalDateTime finishDate;
+  private Date finishDate;
   @Column(name = "link")
   private String link;
   @ManyToOne(fetch = FetchType.EAGER)
