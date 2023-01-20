@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   @Autowired
   private LanguageService languageService;
   @Autowired
-  private StatusService service;
+  private StatusService statusService;
   @Autowired
   private CompanyService companyService;
   @Autowired
@@ -58,7 +57,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
             .link(scholarshipDTO.getLink())
             .courseType(courseTypeService.findByCourseType(scholarshipDTO.getCourseType()))
             .country(countryService.findByName(scholarshipDTO.getCountry()))
-            .status(service.findByName(DEFAULT_STATUS))
+            .status(statusService.findByName(DEFAULT_STATUS))
             .language(languageService.findByName(scholarshipDTO.getLanguage()))
             .image(imageService.save(scholarshipDTO.getImage()))
             .company(companyService.getOne(scholarshipDTO.getCompany()))
@@ -114,7 +113,10 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship changeStatus(Long scholarshipId, Long statusId) {
-    return null;
+    Status statusFound=statusService.findById(statusId);
+    Scholarship scholarshipFound=getById(scholarshipId);
+    scholarshipFound.setStatus(statusFound);
+    return scholarshipRepository.save(scholarshipFound);
   }
 
   @Override
