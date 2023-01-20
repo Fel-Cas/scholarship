@@ -14,7 +14,7 @@ public interface ScholarshipService {
   public Scholarship update(ScholarshipUpdateDTO scholarshipUpdateDTO, long id);
   public void delete(long id) throws IOException;
   public ScholarshipResponse findAll();
-  public Scholarship changeCourType(Long scholarshipId, Long courseTypeId);
+  public Scholarship changeCourseType(Long scholarshipId, Long courseTypeId);
   public Scholarship changeCountry(Long scholarshipId, Long countryId);
   public Scholarship changeStatus(Long scholarshipId, Long statusId);
   public Scholarship changeLanguage(Long scholarshipId, Long languageId);
