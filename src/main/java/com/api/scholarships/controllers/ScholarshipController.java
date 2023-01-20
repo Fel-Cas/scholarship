@@ -1,13 +1,16 @@
 package com.api.scholarships.controllers;
 
 import com.api.scholarships.constants.Endpoints;
+import com.api.scholarships.constants.PaginationRequest;
 import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.dtos.ScholarshipDTOResponse;
+import com.api.scholarships.dtos.ScholarshipResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.Scholarship;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.services.interfaces.ScholarshipService;
+import com.api.scholarships.services.strategyScholarships.ScholarshipType;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,5 +102,17 @@ public class ScholarshipController {
 
     }
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
+  }
+
+  @GetMapping()
+  public ResponseEntity<ScholarshipResponse> getAll(
+    @RequestParam(name="numberPage", defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE,required = false) int page,
+    @RequestParam(name="pageSize", defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE,required = false) int pageSize,
+    @RequestParam(name="sort",defaultValue = PaginationRequest.DEFAULT_SORT_BY,required = false) String sort,
+    @RequestParam(name = "order", defaultValue = PaginationRequest.DEFAULT_SORT_DIR,required = false) String order,
+    @RequestParam(name = "modelCondition", defaultValue=PaginationRequest.DEFAULT_MODEL_CONDITION , required = false) ScholarshipType modelCondition,
+    @RequestParam(name = "id", defaultValue =PaginationRequest.DEFAULT_ID, required = false) Long id
+  ){
+    return ResponseEntity.ok(scholarshipService.findAll(page,pageSize,sort,order,modelCondition,id));
   }
 }

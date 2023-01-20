@@ -10,7 +10,13 @@ import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.interfaces.*;
+import com.api.scholarships.services.strategyScholarships.ScholarshipContext;
+import com.api.scholarships.services.strategyScholarships.ScholarshipType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,6 +46,8 @@ public class ScholarshipServiceImp implements ScholarshipService {
   private ImageService imageService;
   @Autowired
   private ScholarshipMapper scholarshipMapper;
+  @Autowired
+  private ScholarshipContext scholarshipContext;
   private SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd");
   private final String DEFAULT_STATUS="VIGENTE";
 
@@ -92,8 +100,22 @@ public class ScholarshipServiceImp implements ScholarshipService {
   }
 
   @Override
-  public ScholarshipResponse findAll() {
-    return null;
+  public ScholarshipResponse findAll(int page, int size, String sort, String order, ScholarshipType modelCondition, Long idCondition ) {
+    Sort sortDirection=order.equalsIgnoreCase(Sort.Direction.ASC.name())? Sort.by(sort).ascending() : Sort.by(sort).descending();
+    Pageable pageable= PageRequest.of(page,size,sortDirection);
+
+    Page<Scholarship> scholarshipsFound=scholarshipContext
+        .getScholarshipStrategy(modelCondition)
+        .findScholarshipsByCondition(pageable,idCondition);
+
+    return ScholarshipResponse.builder()
+        .content(scholarshipMapper.scholarshipListToScholarshipDTOResponseList(scholarshipsFound.getContent()))
+        .totalPages(scholarshipsFound.getTotalPages())
+        .totalElements(scholarshipsFound.getTotalElements())
+        .lastOne(scholarshipsFound.isLast())
+        .numberPage(scholarshipsFound.getNumber())
+        .sizePage(scholarshipsFound.getSize())
+        .build();
   }
 
   @Override
