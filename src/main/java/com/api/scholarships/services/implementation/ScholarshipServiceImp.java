@@ -96,6 +96,41 @@ public class ScholarshipServiceImp implements ScholarshipService {
     return null;
   }
 
+  @Override
+  public Scholarship changeCourType(Long scholarshipId, Long courseTypeId) {
+    return null;
+  }
+
+  @Override
+  public Scholarship changeCountry(Long scholarshipId, Long countryId) {
+    return null;
+  }
+
+  @Override
+  public Scholarship changeStatus(Long scholarshipId, Long statusId) {
+    return null;
+  }
+
+  @Override
+  public Scholarship changeLanguage(Long scholarshipId, Long languageId) {
+    return null;
+  }
+
+  @Override
+  public Scholarship changeImage(Long scholarshipId) {
+    return null;
+  }
+
+  @Override
+  public Scholarship addCareer(Long scholarshipId, Long careerId) {
+    return null;
+  }
+
+  @Override
+  public Scholarship removeCareer(Long scholarshipId, Long careerId) {
+    return null;
+  }
+
   private void validateDates(Date startDate, Date finishDate) {
     if(!startDate.before(finishDate)){
       throw new BadRequestException(Messages.MESSAGE_WRONG_DATES);
