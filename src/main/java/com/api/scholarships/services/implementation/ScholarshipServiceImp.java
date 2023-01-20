@@ -12,6 +12,7 @@ import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -128,8 +129,12 @@ public class ScholarshipServiceImp implements ScholarshipService {
   }
 
   @Override
-  public Scholarship changeImage(Long scholarshipId) {
-    return null;
+  public Scholarship changeImage(Long scholarshipId, MultipartFile image) throws IOException {
+    Scholarship scholarshipFound=getById(scholarshipId);
+    imageService.delete(scholarshipFound.getImage().getId());
+    Image imageSaved=imageService.save(image);
+    scholarshipFound.setImage(imageSaved);
+    return scholarshipRepository.save(scholarshipFound);
   }
 
   @Override

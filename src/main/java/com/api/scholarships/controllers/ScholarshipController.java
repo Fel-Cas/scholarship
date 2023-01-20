@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -70,5 +71,11 @@ public class ScholarshipController {
   public ResponseEntity<ScholarshipDTOResponse> updateLanguage(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("languageId") Long languageId) {
      Scholarship scholarshipUpdated=scholarshipService.changeLanguage(scholarshipId, languageId);
      return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
+  }
+
+  @PutMapping(Endpoints.SCHOLARSHIPS_IMAGE)
+  public ResponseEntity<ScholarshipDTOResponse> updateImage(@PathVariable("scholarshipId") Long scholarshipId, @RequestParam("image")MultipartFile image) throws IOException {
+    Scholarship scholarshipUpdated=scholarshipService.changeImage(scholarshipId, image);
+    return  ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 }
