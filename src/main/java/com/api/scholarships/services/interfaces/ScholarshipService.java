@@ -4,6 +4,7 @@ import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.dtos.ScholarshipResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.Scholarship;
+import com.api.scholarships.services.strategyScholarships.ScholarshipType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ public interface ScholarshipService {
   public Scholarship getById(long id);
   public Scholarship update(ScholarshipUpdateDTO scholarshipUpdateDTO, long id);
   public void delete(long id) throws IOException;
-  public ScholarshipResponse findAll();
+  public ScholarshipResponse findAll(int page, int size, String sort, String order, ScholarshipType modelCondition, Long idCondition);
   public Scholarship changeCourseType(Long scholarshipId, Long courseTypeId);
   public Scholarship changeCountry(Long scholarshipId, Long countryId);
   public Scholarship changeStatus(Long scholarshipId, Long statusId);
