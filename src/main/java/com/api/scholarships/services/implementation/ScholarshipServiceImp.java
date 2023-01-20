@@ -6,6 +6,7 @@ import com.api.scholarships.dtos.ScholarshipResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.interfaces.*;
@@ -16,10 +17,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,7 +69,11 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship getById(long id) {
-    return null;
+    Optional<Scholarship> scholarshipFound=scholarshipRepository.findById(id);
+    if(scholarshipFound.isEmpty()){
+      throw new NotFoundException(Messages.MESSAGE_SCHOLARSHIP_NOT_FOUND.formatted(id));
+    }
+    return scholarshipFound.get();
   }
 
   @Override

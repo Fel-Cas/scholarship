@@ -10,10 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,5 +27,11 @@ public class ScholarshipController {
   public ResponseEntity<ScholarshipDTOResponse> create(@Valid @ModelAttribute ScholarshipDTO scholarshipDTO) throws IOException, ParseException {
     Scholarship scholarshipSaved=scholarshipService.create(scholarshipDTO);
     return new ResponseEntity<>(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipSaved), HttpStatus.CREATED);
+  }
+
+  @GetMapping(Endpoints.ID)
+  public ResponseEntity<ScholarshipDTOResponse> findById(@PathVariable("id") long id) {
+    Scholarship scholarshipFound=scholarshipService.getById(id);
+    return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipFound));
   }
 }
