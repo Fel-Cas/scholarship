@@ -47,4 +47,10 @@ public class ScholarshipController {
     scholarshipService.delete(id);
     return ResponseEntity.noContent().build();
   }
+
+  @PutMapping(Endpoints.SCHOLARSHIPS_COUNTRY)
+  public ResponseEntity<ScholarshipDTOResponse> updateCountry(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("countryId") Long countryId) {
+    Scholarship scholarshipUpdated=scholarshipService.changeCountry(scholarshipId, countryId);
+    return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
+  }
 }

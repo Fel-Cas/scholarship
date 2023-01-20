@@ -103,7 +103,10 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship changeCountry(Long scholarshipId, Long countryId) {
-    return null;
+    Country countryFound=countryService.findById(countryId);
+    Scholarship scholarshipFound=getById(scholarshipId);
+    scholarshipFound.setCountry(countryFound);
+    return scholarshipRepository.save(scholarshipFound);
   }
 
   @Override
