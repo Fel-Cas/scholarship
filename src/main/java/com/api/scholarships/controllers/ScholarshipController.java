@@ -3,6 +3,7 @@ package com.api.scholarships.controllers;
 import com.api.scholarships.constants.Endpoints;
 import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.dtos.ScholarshipDTOResponse;
+import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.Scholarship;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.services.interfaces.ScholarshipService;
@@ -33,5 +34,11 @@ public class ScholarshipController {
   public ResponseEntity<ScholarshipDTOResponse> findById(@PathVariable("id") long id) {
     Scholarship scholarshipFound=scholarshipService.getById(id);
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipFound));
+  }
+
+  @PutMapping(Endpoints.ID)
+  public ResponseEntity<ScholarshipDTOResponse> update(@PathVariable("id") long id, @Valid @RequestBody ScholarshipUpdateDTO scholarshipUpdateDTO){
+    Scholarship scholarshipUpdated=scholarshipService.update(scholarshipUpdateDTO, id);
+    return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 }

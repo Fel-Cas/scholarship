@@ -78,7 +78,10 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship update(ScholarshipUpdateDTO scholarshipUpdateDTO, long id) {
-    return null;
+    validateDates(scholarshipUpdateDTO.getStartDate(),scholarshipUpdateDTO.getFinishDate());
+    Scholarship schorlarshipFound=getById(id);
+    updateInformation(schorlarshipFound, scholarshipUpdateDTO);
+    return scholarshipRepository.save(schorlarshipFound);
   }
 
   @Override
@@ -101,5 +104,13 @@ public class ScholarshipServiceImp implements ScholarshipService {
     return new HashSet<>(careers)
         .stream().map(career->careerService.findByName(career))
         .collect(Collectors.toList());
+  }
+
+  private void updateInformation(Scholarship schorlarshipFound, ScholarshipUpdateDTO scholarshipUpdateDTO) {
+    schorlarshipFound.setTitle(scholarshipUpdateDTO.getTitle().toUpperCase());
+    schorlarshipFound.setDescription(scholarshipUpdateDTO.getDescription());
+    schorlarshipFound.setLink(scholarshipUpdateDTO.getLink());
+    schorlarshipFound.setStartDate(scholarshipUpdateDTO.getStartDate());
+    schorlarshipFound.setFinishDate(scholarshipUpdateDTO.getFinishDate());
   }
 }
