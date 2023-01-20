@@ -78,4 +78,10 @@ public class ScholarshipController {
     Scholarship scholarshipUpdated=scholarshipService.changeImage(scholarshipId, image);
     return  ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
+
+  @PutMapping(Endpoints.SCHOLARSHIPS_CAREER)
+  public ResponseEntity<ScholarshipDTOResponse> updateCareer(@PathVariable("scholarshipId") Long scholarshipId,@PathVariable("careerId") Long careerId){
+    Scholarship scholarshipUpdated=scholarshipService.addCareer(scholarshipId, careerId);
+    return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
+  }
 }
