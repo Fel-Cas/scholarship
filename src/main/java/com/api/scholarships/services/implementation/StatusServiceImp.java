@@ -26,7 +26,7 @@ public class StatusServiceImp implements StatusService {
   private StatusMapper statusMapper;
 
   @Override
-  public Status findId(Long id) {
+  public Status findById(Long id) {
     Optional<Status> statusFound = statusRepository.findById(id);
     if(statusFound.isEmpty()){
       throw new NotFoundException(Messages.MESSAGE_STATUS_NOT_FOUND.formatted(id));

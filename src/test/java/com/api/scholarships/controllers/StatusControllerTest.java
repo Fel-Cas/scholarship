@@ -53,7 +53,7 @@ class StatusControllerTest {
         .id(1L)
         .statusName("CERRADO")
         .build();
-    given(statusService.findId(anyLong())).willReturn(statusToCreate);
+    given(statusService.findById(anyLong())).willReturn(statusToCreate);
     given(statusMapper.statusToStatusDTO(any(Status.class))).willReturn(statusDTO);
     //when
     ResultActions response=client.perform(get(url+"/"+statusToCreate.getId())

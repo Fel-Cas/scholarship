@@ -21,7 +21,7 @@ public class StatusController {
 
   @GetMapping(Endpoints.ID)
   public ResponseEntity<StatusDTO> getOne(@PathVariable("id") Long id){
-    Status statusFound=statusService.findId(id);
+    Status statusFound=statusService.findById(id);
     return ResponseEntity.ok(statusMapper.statusToStatusDTO(statusFound));
   }
 
