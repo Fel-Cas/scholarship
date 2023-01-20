@@ -93,4 +93,5 @@ public class Messages {
   public static final String MESSAGE_SCHOLARSHIP_NOT_FOUND="There isn't scholarship saved with this id %s";
   public static final String MESSAGE_TITLE_IS_REQUIRED="Title is required";
   public static final String MESSAGE_TITLE_SIZE="Title must be at least 10 characters long";
+  public static final String MESSAGE_DUPLICATE_CAREER="The scholarship alredy have this career %s associated";
 }
