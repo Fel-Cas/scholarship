@@ -142,7 +142,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
     Scholarship scholarshipFound=getById(scholarshipId);
     Career careerFound=careerService.findById(careerId);
     if(scholarshipFound.getCareers().contains(careerFound)){
-      throw new BadRequestException("The scholarship alredy have this career %s associated".formatted(careerFound.getCareerName()));
+      throw new BadRequestException(Messages.MESSAGE_DUPLICATE_CAREER.formatted(careerFound.getCareerName()));
     }
     scholarshipFound.getCareers().add(careerFound);
     return scholarshipRepository.save(scholarshipFound);
@@ -150,7 +150,16 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship removeCareer(Long scholarshipId, Long careerId) {
-    return null;
+    Scholarship scholarshipFound=getById(scholarshipId);
+    if(scholarshipFound.getCareers().size()==1){
+      throw new BadRequestException(Messages.MESSAGE_CANNOT_REMOVE_CAREER);
+    }
+    Career careerFound=careerService.findById(careerId);
+    if(!scholarshipFound.getCareers().contains(careerFound)){
+      throw new BadRequestException(Messages.MESSAGE_REMOVE_NO_ASSOCIATE_CAREER.formatted(careerFound.getCareerName(),scholarshipId));
+    }
+    scholarshipFound.getCareers().remove(careerFound);
+    return scholarshipRepository.save(scholarshipFound);
   }
 
   private void validateDates(Date startDate, Date finishDate) {

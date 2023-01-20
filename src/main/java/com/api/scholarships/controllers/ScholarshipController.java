@@ -5,6 +5,7 @@ import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.dtos.ScholarshipDTOResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.Scholarship;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.services.interfaces.ScholarshipService;
 import jakarta.validation.Valid;
@@ -80,8 +81,23 @@ public class ScholarshipController {
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_CAREER)
-  public ResponseEntity<ScholarshipDTOResponse> updateCareer(@PathVariable("scholarshipId") Long scholarshipId,@PathVariable("careerId") Long careerId){
-    Scholarship scholarshipUpdated=scholarshipService.addCareer(scholarshipId, careerId);
+  public ResponseEntity<ScholarshipDTOResponse> updateCareers(
+      @PathVariable("scholarshipId") Long scholarshipId,
+      @PathVariable("careerId") Long careerId,
+      @RequestParam(value = "action") String action
+  ){
+    Scholarship scholarshipUpdated;
+    switch (action){
+      case "ADD":
+        scholarshipUpdated=scholarshipService.addCareer(scholarshipId, careerId);
+        break;
+      case "REMOVE":
+        scholarshipUpdated=scholarshipService.removeCareer(scholarshipId, careerId);
+        break;
+      default:
+        throw new BadRequestException("That action %s is no valid".formatted(action));
+
+    }
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 }
