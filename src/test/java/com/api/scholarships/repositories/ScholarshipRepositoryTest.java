@@ -6,6 +6,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
@@ -162,6 +166,28 @@ class ScholarshipRepositoryTest {
     assertAll(
         ()->assertNotNull(scholarshipsFound),
         ()->assertThat(scholarshipsFound.size()).isGreaterThan(0)
+    );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to find scholarships by course type")
+  void testFindScholarshipsByCourseType(){
+    //given
+    scholarshipRepository.save(scholarship);
+    CourseType courseTypeFound=courseTypeRepository.findById(1L).get();
+    Sort sortDirection=Sort.by("id").ascending();
+    Pageable pageable= PageRequest.of(0,10,sortDirection);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipRepository.findByCourseType(courseTypeFound,pageable);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipsFound),
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertTrue(scholarshipsFound.isLast()),
+        ()->assertThat(scholarshipsFound.getTotalPages()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getNumber()).isEqualTo(0),
+        ()->assertEquals(10,scholarshipsFound.getSize())
     );
   }
 }
