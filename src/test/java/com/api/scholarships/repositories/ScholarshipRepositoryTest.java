@@ -300,4 +300,17 @@ class ScholarshipRepositoryTest {
         ()->assertEquals(10,scholarshipsFound.getSize())
     );
   }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to delete a scholarship")
+  void testDelete(){
+    //given
+    Scholarship scholarshipSaved=scholarshipRepository.save(scholarship);
+    //when
+    scholarshipRepository.delete(scholarshipSaved);
+    //then
+    System.out.println(scholarshipSaved.getId());
+    Optional<Scholarship> scholarshipFound=scholarshipRepository.findById(scholarshipSaved.getId());
+    assertTrue(scholarshipFound.isEmpty());
+  }
 }
