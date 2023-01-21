@@ -234,4 +234,26 @@ class ScholarshipRepositoryTest {
         ()->assertEquals(10,scholarshipsFound.getSize())
     );
   }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to find scholarships by language")
+  void  testFindScholarshipsByLanguage(){
+    //given
+    scholarshipRepository.save(scholarship);
+    Language languageFound=scholarship.getLanguage();
+    Sort sortDirection=Sort.by("id").ascending();
+    Pageable pageable= PageRequest.of(0,10,sortDirection);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipRepository.findByLanguage(languageFound,pageable);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipsFound),
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertTrue(scholarshipsFound.isLast()),
+        ()->assertThat(scholarshipsFound.getTotalPages()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getNumber()).isEqualTo(0),
+        ()->assertEquals(10,scholarshipsFound.getSize())
+    );
+  }
 }
