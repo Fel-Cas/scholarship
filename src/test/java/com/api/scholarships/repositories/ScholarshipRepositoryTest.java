@@ -174,11 +174,33 @@ class ScholarshipRepositoryTest {
   void testFindScholarshipsByCourseType(){
     //given
     scholarshipRepository.save(scholarship);
-    CourseType courseTypeFound=courseTypeRepository.findById(1L).get();
+    CourseType courseTypeFound=scholarship.getCourseType();
     Sort sortDirection=Sort.by("id").ascending();
     Pageable pageable= PageRequest.of(0,10,sortDirection);
     //when
     Page<Scholarship> scholarshipsFound=scholarshipRepository.findByCourseType(courseTypeFound,pageable);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipsFound),
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertTrue(scholarshipsFound.isLast()),
+        ()->assertThat(scholarshipsFound.getTotalPages()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getNumber()).isEqualTo(0),
+        ()->assertEquals(10,scholarshipsFound.getSize())
+    );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to find scholarships by Country")
+  void testFindScholarshipsByCountry(){
+    //given
+    scholarshipRepository.save(scholarship);
+    Country countryFound=scholarship.getCountry();
+    Sort sortDirection=Sort.by("id").ascending();
+    Pageable pageable= PageRequest.of(0,10,sortDirection);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipRepository.findByCountry(countryFound,pageable);
     //then
     assertAll(
         ()->assertNotNull(scholarshipsFound),
