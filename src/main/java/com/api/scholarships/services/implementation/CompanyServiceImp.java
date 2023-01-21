@@ -86,6 +86,7 @@ public class CompanyServiceImp implements CompanyService {
 
   @Override
   public void delete(Long id) {
+    //TODO: Think about if can remove a company
     Company companyFound=getOne(id);
     companyRepository.delete(companyFound);
   }
@@ -108,6 +109,7 @@ public class CompanyServiceImp implements CompanyService {
     if(!companyRepository.existsByUsers(userFound)){
       throw new BadRequestException(Messages.MESSAGE_COMPANY_REMOVE_USER.formatted(userId));
     }
+    //TODO: Verifiy if can remove all users!!!
     companyFound.getUsers().remove(userFound);
     return companyRepository.save(companyFound);
   }

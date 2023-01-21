@@ -56,7 +56,7 @@ class StatusServiceTest {
     //given
     given(statusRepository.findById(status.getId())).willReturn(Optional.of(status));
     //when
-    Status statusFound=statusService.findId(status.getId());
+    Status statusFound=statusService.findById(status.getId());
     //then
     assertNotNull(statusFound);
     assertEquals(statusFound.getId(),status.getId());
@@ -70,7 +70,7 @@ class StatusServiceTest {
     //given
     given(statusRepository.findById(status.getId())).willReturn(Optional.empty());
     //when
-    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->statusService.findId(status.getId()));
+    NotFoundException notFoundException=assertThrows(NotFoundException.class,()->statusService.findById(status.getId()));
     //then
     assertEquals(Messages.MESSAGE_STATUS_NOT_FOUND.formatted(status.getId()),notFoundException.getMessage());
     verify(statusRepository,times(1)).findById(status.getId());

@@ -30,4 +30,13 @@ public class Endpoints {
 
   //Careers
   public static final String CAREERS = "/api/v1/scholarships/careers";
+
+  //Scholarships
+  public static final String SCHOLARSHIPS = "/api/v1/scholarships";
+  public static final String SCHOLARSHIPS_COUNTRY ="/country/{scholarshipId}/{countryId}";
+  public static final String SCHOLARSHIPS_COURSE_TYPE ="/course-type/{scholarshipId}/{courseTypeId}";
+  public static final String SCHOLARSHIPS_STATUS ="/status/{scholarshipId}/{statusId}";
+  public static final String SCHOLARSHIPS_LANGUAGE ="/language/{scholarshipId}/{languageId}";
+  public static final String SCHOLARSHIPS_IMAGE ="/image/{scholarshipId}";
+  public static final String SCHOLARSHIPS_CAREER="/career/{scholarshipId}/{careerId}";
 }

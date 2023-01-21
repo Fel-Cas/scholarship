@@ -1,5 +1,6 @@
 package com.api.scholarships.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -34,6 +35,7 @@ public class Company implements Serializable {
   private Image image;
   @OneToMany(fetch = FetchType.EAGER,cascade ={CascadeType.MERGE,CascadeType.PERSIST})
   @JoinColumn(name = "company_id")
+  @JsonIgnore
   private List<User> users;
   @CreationTimestamp
   private Instant createdAt;
