@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
@@ -113,12 +114,39 @@ class ScholarshipRepositoryTest {
         ()->assertEquals(scholarship.getStartDate(),scholarshipSaved.getStartDate()),
         ()->assertEquals(scholarship.getFinishDate(),scholarshipSaved.getFinishDate()),
         ()->assertEquals(scholarship.getLink(),scholarshipSaved.getLink()),
-        ()->assertNotNull(scholarship.getCourseType()),
-        ()->assertNotNull(scholarship.getCountry()),
-        ()->assertNotNull(scholarship.getStatus()),
-        ()->assertNotNull(scholarship.getLanguage()),
-        ()->assertNotNull(scholarship.getImage()),
-        ()->assertNotNull(scholarship.getCompany()),
+        ()->assertNotNull(scholarshipSaved.getCourseType()),
+        ()->assertNotNull(scholarshipSaved.getCountry()),
+        ()->assertNotNull(scholarshipSaved.getStatus()),
+        ()->assertNotNull(scholarshipSaved.getLanguage()),
+        ()->assertNotNull(scholarshipSaved.getImage()),
+        ()->assertNotNull(scholarshipSaved.getCompany()),
+        ()->assertThat(scholarshipSaved.getCareers().size()).isGreaterThan(0)
+    );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to find a scholarship by id")
+  void testFindById(){
+    //given
+    Scholarship scholarshipSaved=scholarshipRepository.save(scholarship);
+    //when
+    Optional<Scholarship> scholarshipFound=scholarshipRepository.findById(scholarshipSaved.getId());
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipFound),
+        ()->assertTrue(scholarshipFound.isPresent()),
+        ()->assertEquals(scholarshipSaved.getId(),scholarshipFound.get().getId()),
+        ()->assertEquals(scholarship.getTitle(),scholarshipFound.get().getTitle()),
+        ()->assertEquals(scholarship.getDescription(),scholarshipFound.get().getDescription()),
+        ()->assertEquals(scholarship.getStartDate(),scholarshipFound.get().getStartDate()),
+        ()->assertEquals(scholarship.getFinishDate(),scholarshipFound.get().getFinishDate()),
+        ()->assertEquals(scholarship.getLink(),scholarshipFound.get().getLink()),
+        ()->assertNotNull(scholarshipFound.get().getCourseType()),
+        ()->assertNotNull(scholarshipFound.get().getCountry()),
+        ()->assertNotNull(scholarshipFound.get().getStatus()),
+        ()->assertNotNull(scholarshipFound.get().getLanguage()),
+        ()->assertNotNull(scholarshipFound.get().getImage()),
+        ()->assertNotNull(scholarshipFound.get().getCompany()),
         ()->assertThat(scholarshipSaved.getCareers().size()).isGreaterThan(0)
     );
   }
