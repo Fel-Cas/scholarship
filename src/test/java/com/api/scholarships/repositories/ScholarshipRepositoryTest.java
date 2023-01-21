@@ -150,4 +150,18 @@ class ScholarshipRepositoryTest {
         ()->assertThat(scholarshipSaved.getCareers().size()).isGreaterThan(0)
     );
   }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to find all scholarships")
+  void testFindAll(){
+    //given
+    scholarshipRepository.save(scholarship);
+    //when
+    List<Scholarship> scholarshipsFound = scholarshipRepository.findAll();
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipsFound),
+        ()->assertThat(scholarshipsFound.size()).isGreaterThan(0)
+    );
+  }
 }
