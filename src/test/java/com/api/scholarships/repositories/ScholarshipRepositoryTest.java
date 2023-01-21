@@ -278,4 +278,26 @@ class ScholarshipRepositoryTest {
         ()->assertEquals(10,scholarshipsFound.getSize())
     );
   }
+
+  @Test
+  @DisplayName("Test ScolarshipRepository, test to find scholarships by career")
+  void  testFindScholarshipsByCareer(){
+    //given
+    scholarshipRepository.save(scholarship);
+    Career careerFound=scholarship.getCareers().get(0);
+    Sort sortDirection=Sort.by("id").ascending();
+    Pageable pageable= PageRequest.of(0,10,sortDirection);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipRepository.findByCareers(careerFound,pageable);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipsFound),
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertTrue(scholarshipsFound.isLast()),
+        ()->assertThat(scholarshipsFound.getTotalPages()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getNumber()).isEqualTo(0),
+        ()->assertEquals(10,scholarshipsFound.getSize())
+    );
+  }
 }
