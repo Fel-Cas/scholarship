@@ -2,16 +2,18 @@ package com.api.scholarships.repositories;
 
 import com.api.scholarships.entities.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -44,7 +46,7 @@ class ScholarshipRepositoryTest {
     );
 
     //Save company
-    Company companySaved = Company.builder()
+    Company companySaved = companyRepository.save(Company.builder()
         .name("Company S.A")
         .address("Medellin,Antioquia")
         .phone("123456789")
@@ -52,7 +54,8 @@ class ScholarshipRepositoryTest {
         .id(1L)
         .createdAt(Instant.now())
         .updatedAt(Instant.now())
-        .build();
+        .build()
+    );
 
     // Save country
     Country countrySaved= countryRepository.save( Country
@@ -93,5 +96,30 @@ class ScholarshipRepositoryTest {
         .company(companySaved)
         .careers(List.of(careerSaved))
         .build();
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipRepository, test to create a scholarship")
+  void testCreate(){
+    //given
+    //when
+    Scholarship scholarshipSaved=scholarshipRepository.save(scholarship);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipSaved),
+        ()->assertThat(scholarshipSaved.getId()).isGreaterThan(0),
+        ()->assertEquals(scholarship.getTitle(),scholarshipSaved.getTitle()),
+        ()->assertEquals(scholarship.getDescription(),scholarshipSaved.getDescription()),
+        ()->assertEquals(scholarship.getStartDate(),scholarshipSaved.getStartDate()),
+        ()->assertEquals(scholarship.getFinishDate(),scholarshipSaved.getFinishDate()),
+        ()->assertEquals(scholarship.getLink(),scholarshipSaved.getLink()),
+        ()->assertNotNull(scholarship.getCourseType()),
+        ()->assertNotNull(scholarship.getCountry()),
+        ()->assertNotNull(scholarship.getStatus()),
+        ()->assertNotNull(scholarship.getLanguage()),
+        ()->assertNotNull(scholarship.getImage()),
+        ()->assertNotNull(scholarship.getCompany()),
+        ()->assertThat(scholarshipSaved.getCareers().size()).isGreaterThan(0)
+    );
   }
 }
