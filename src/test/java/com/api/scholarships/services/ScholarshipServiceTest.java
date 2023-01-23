@@ -361,4 +361,24 @@ class ScholarshipServiceTest {
         ()->assertEquals(scholarshipUpdated.getCourseType().getCourseType(),courseTypeFound.getCourseType())
     );
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the country of  a scholarship")
+  void  changeCountryOfScholarshipTest() {
+    //given
+    Country countryFound=new Country(2L,"MEXICO","MEX");
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(countryService.findById(2L)).willReturn(countryFound);
+    scholarship.setCountry(countryFound);
+    given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.changeCountry(1L,2L);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdated.getCountry().getId(),countryFound.getId()),
+        ()->assertEquals(scholarshipUpdated.getCountry().getCountryName(),countryFound.getCountryName()),
+        ()->assertEquals(scholarshipUpdated.getCountry().getAbbreviation(),countryFound.getAbbreviation())
+    );
+  }
 }
