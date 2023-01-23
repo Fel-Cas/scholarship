@@ -342,4 +342,23 @@ class ScholarshipServiceTest {
         ()->assertTrue(response.isLastOne())
     );
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the course type of a scholarship")
+  void changeCourseTypeOfScholarshipTest() {
+    //given
+    CourseType courseTypeFound=new CourseType(2L,"MAESTRIA");
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(courseTypeService.findById(2L)).willReturn(courseTypeFound);
+    scholarship.setCourseType(courseTypeFound);
+    given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.changeCourseType(1L,2L);
+    //then
+    assertAll(
+        ()-> assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdated.getCourseType().getId(),courseTypeFound.getId()),
+        ()->assertEquals(scholarshipUpdated.getCourseType().getCourseType(),courseTypeFound.getCourseType())
+    );
+  }
 }
