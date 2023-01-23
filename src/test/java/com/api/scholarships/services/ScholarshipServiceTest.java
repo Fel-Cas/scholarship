@@ -381,4 +381,24 @@ class ScholarshipServiceTest {
         ()->assertEquals(scholarshipUpdated.getCountry().getAbbreviation(),countryFound.getAbbreviation())
     );
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the status of a scholarship")
+  void changeStatusOfScholarshipTest() {
+    //given
+    Status statusFound=new Status(2L,"CANCELADO");
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(statusService.findById(2L)).willReturn(statusFound);
+    scholarship.setStatus(statusFound);
+    given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.changeStatus(1L,2L);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdated.getStatus().getId(),statusFound.getId()),
+        ()->assertEquals(scholarshipUpdated.getStatus().getStatusName(),statusFound.getStatusName())
+    );
+
+  }
 }
