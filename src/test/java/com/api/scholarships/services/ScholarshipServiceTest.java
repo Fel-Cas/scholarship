@@ -9,6 +9,7 @@ import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.implementation.ScholarshipServiceImp;
 import com.api.scholarships.services.interfaces.*;
 import com.api.scholarships.services.strategyScholarships.ScholarshipContext;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,10 +26,10 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -195,5 +196,29 @@ class ScholarshipServiceTest {
     //then
     assertNotNull(exception);
     assertEquals(Messages.MESSAGE_WRONG_DATES,exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to find a scholarship by id")
+  void testFindById(){
+    //given
+    given(scholarshipRepository.findById(anyLong())).willReturn(Optional.of(scholarship));
+    //when
+    Scholarship scholarshipFound=scholarshipService.getById(anyLong());
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipFound),
+        ()->assertEquals(scholarshipFound.getDescription(), scholarship.getDescription()),
+        ()->assertEquals(scholarshipFound.getStartDate(), scholarship.getStartDate()),
+        ()->assertEquals(scholarshipFound.getFinishDate(), scholarship.getFinishDate()),
+        ()->assertEquals(scholarshipFound.getLink(), scholarship.getLink()),
+        ()->assertNotNull(scholarshipFound.getCourseType()),
+        ()->assertNotNull(scholarshipFound.getCountry()),
+        ()->assertNotNull(scholarshipFound.getStatus()),
+        ()->assertNotNull(scholarshipFound.getLanguage()),
+        ()->assertNotNull(scholarshipFound.getImage()),
+        ()->assertNotNull(scholarshipFound.getCompany()),
+        ()-> AssertionsForClassTypes.assertThat(scholarshipFound.getCareers().size()).isGreaterThan(0)
+    );
   }
 }
