@@ -529,4 +529,15 @@ class ScholarshipServiceTest {
     assertNotNull(scholarshipUpdated);
     assertThat(scholarshipUpdated.getCareers().size()).isEqualTo(1);
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to check an exception when tryin to remove a career of a scholarship, but the scholarship has only a career")
+  void removeCareerExceptionTest(){
+    //given
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.removeCareer(1L,2L));
+    //then
+    assertEquals(Messages.MESSAGE_CANNOT_REMOVE_CAREER,exception.getMessage());
+  }
 }
