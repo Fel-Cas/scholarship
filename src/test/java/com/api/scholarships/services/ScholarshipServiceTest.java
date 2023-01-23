@@ -401,4 +401,24 @@ class ScholarshipServiceTest {
     );
 
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the language of a scholarship ")
+  void changeLanguageOfScholarshipTest() {
+    //given
+    Language languageFound=new Language(2L,"INGLES");
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(languageService.findById(2L)).willReturn(languageFound);
+    scholarship.setLanguage(languageFound);
+    given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.changeLanguage(1L,2L);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdated.getLanguage().getId(),languageFound.getId()),
+        ()->assertEquals(scholarshipUpdated.getLanguage().getLanguageName(),languageFound.getLanguageName())
+    );
+
+  }
 }
