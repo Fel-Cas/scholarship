@@ -1,7 +1,9 @@
 package com.api.scholarships.services;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.entities.*;
+import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.implementation.ScholarshipServiceImp;
@@ -169,5 +171,29 @@ class ScholarshipServiceTest {
         ()->assertNotNull(scholarshipSaved.getCompany()),
         ()->assertThat(scholarshipSaved.getCareers().size()).isGreaterThan(0)
     );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to check for an exception when trying to create a scholarship with wrong dates")
+  void testFailCreate(){
+    //given
+    ScholarshipDTO scholarshipDTO=ScholarshipDTO.builder()
+        .title("Mi titulo")
+        .description("Descripción de la beca")
+        .startDate("2023-01-01")
+        .finishDate("2022-02-02")
+        .link("http:localhost:6788/admin/api/scholarships")
+        .courseType("BOOTCAMP")
+        .country("COLOMBIA")
+        .language("ESPAÑOL")
+        .image(new MockMultipartFile("imageFile", "test.png", "image/png", "some image".getBytes()))
+        .company(1L)
+        .careers(List.of("INGENIERIA DE SISTEMAS"))
+        .build();
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.create(scholarshipDTO));
+    //then
+    assertNotNull(exception);
+    assertEquals(Messages.MESSAGE_WRONG_DATES,exception.getMessage());
   }
 }
