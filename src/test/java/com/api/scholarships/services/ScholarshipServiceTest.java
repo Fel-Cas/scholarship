@@ -23,6 +23,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -34,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -97,6 +99,7 @@ class ScholarshipServiceTest {
         .build();
     //image
     image=Image.builder()
+        .id(1L)
         .url("https://localhost:8080/images/profile")
         .imageId("dsdsdsd")
         .name("profile.png")
@@ -276,5 +279,19 @@ class ScholarshipServiceTest {
         ()->assertNotNull(scholarshipUpdated.getCompany()),
         ()-> AssertionsForClassTypes.assertThat(scholarshipUpdated.getCareers().size()).isGreaterThan(0)
     );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to delete a scholarship")
+  void deleteScholarship() throws IOException {
+    //given
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    willDoNothing().given(imageService).delete(1L);
+    willDoNothing().given(scholarshipRepository).delete(scholarship);
+    //when
+    scholarshipService.delete(1L);
+    //then
+    verify(scholarshipRepository,times(1)).delete(scholarship);
+    verify(imageService, times(1)).delete(1L);
   }
 }
