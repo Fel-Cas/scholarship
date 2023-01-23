@@ -540,4 +540,20 @@ class ScholarshipServiceTest {
     //then
     assertEquals(Messages.MESSAGE_CANNOT_REMOVE_CAREER,exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to check an exception when tryin to remove a career of a scholarship, but the career isn't associated with the scholarship")
+  void  removeCareerExceptionTest2(){
+    //given
+    Career career=new Career(2L,"EDUCACIÓN");
+    scholarship.getCareers().add(career);
+    Career careerFound=new Career(3L,"LITERATURA");
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(careerService.findById(3L)).willReturn(careerFound);
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.removeCareer(1L,3L));
+    //then
+    assertEquals(Messages.MESSAGE_REMOVE_NO_ASSOCIATE_CAREER.formatted(careerFound.getCareerName(),1L),exception.getMessage());
+
+  }
 }
