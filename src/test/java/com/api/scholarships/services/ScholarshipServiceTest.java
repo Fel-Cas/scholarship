@@ -498,4 +498,35 @@ class ScholarshipServiceTest {
     //then
     assertEquals(Messages.MESSAGE_DUPLICATE_CAREER.formatted(career.getCareerName()),exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to remove a career of a scholarship")
+  void removeCareerOfScholarship() throws ParseException {
+    //given
+    Career careerFound=new Career(2L,"EDUCACIÓN");
+    scholarship.getCareers().add(careerFound);
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(careerService.findById(2L)).willReturn(careerFound);
+    Scholarship scholarshipResponse=Scholarship.builder()
+        .id(1L)
+        .title("Mi titulo")
+        .description("Descripción de la beca")
+        .startDate(format.parse("2023-01-01"))
+        .finishDate(format.parse("2023-02-02"))
+        .link("http:localhost:6788/admin/api/scholarships")
+        .courseType(courseType)
+        .country(country)
+        .status(status)
+        .language(language)
+        .image(image)
+        .company(company)
+        .careers(List.of(career))
+        .build();
+    given(scholarshipRepository.save(scholarshipResponse)).willReturn(scholarshipResponse);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.removeCareer(1L,2L);
+    //then
+    assertNotNull(scholarshipUpdated);
+    assertThat(scholarshipUpdated.getCareers().size()).isEqualTo(1);
+  }
 }
