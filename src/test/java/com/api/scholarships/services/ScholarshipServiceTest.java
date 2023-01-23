@@ -421,4 +421,30 @@ class ScholarshipServiceTest {
     );
 
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the image of a scholarship")
+  void changeImageOfScholarshipTest() throws IOException {
+    //given
+    Image imageCreated=Image
+        .builder()
+        .id(2L)
+        .url("/home/user/test.png")
+        .name("image.jpeg")
+        .imageId("wewe433erere")
+        .build();
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(imageService.save(any(MultipartFile.class))).willReturn(imageCreated);
+    scholarship.setImage(imageCreated);
+    given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.changeImage(1L,new MockMultipartFile( "image", "image.jpeg", "image/jpeg","".getBytes()));
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdated.getImage().getId(),imageCreated.getId()),
+        ()->assertEquals(scholarshipUpdated.getImage().getImageId(),imageCreated.getImageId()),
+        ()->assertEquals(scholarshipUpdated.getImage().getName(),imageCreated.getName()),
+        ()->assertEquals(scholarshipUpdated.getImage().getUrl(),imageCreated.getUrl()));
+  }
 }
