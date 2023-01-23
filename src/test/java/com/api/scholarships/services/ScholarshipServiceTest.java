@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -83,6 +84,8 @@ class ScholarshipServiceTest {
 
   @BeforeEach
   void setUp() throws ParseException {
+    List<Career> careers=new ArrayList<>();
+
     //Course type
     courseType=CourseType.builder()
         .id(1L)
@@ -116,6 +119,7 @@ class ScholarshipServiceTest {
         .id(1L)
         .careerName("INGENIERIA DE SISTEMAS")
         .build();
+    careers.add(career);
     //company
     company=Company.builder()
         .name("Company S.A")
@@ -141,7 +145,7 @@ class ScholarshipServiceTest {
         .language(language)
         .image(image)
         .company(company)
-        .careers(List.of(career))
+        .careers(careers)
         .build();
   }
 
@@ -446,5 +450,40 @@ class ScholarshipServiceTest {
         ()->assertEquals(scholarshipUpdated.getImage().getImageId(),imageCreated.getImageId()),
         ()->assertEquals(scholarshipUpdated.getImage().getName(),imageCreated.getName()),
         ()->assertEquals(scholarshipUpdated.getImage().getUrl(),imageCreated.getUrl()));
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, Test to add a career of a scholarship")
+  void addCareerTest() throws ParseException {
+    //given
+
+    Career careerFound=new Career(2L,"EDUCACIÓN");
+    Scholarship scholarshipResponse=Scholarship.builder()
+        .id(1L)
+        .title("Mi titulo")
+        .description("Descripción de la beca")
+        .startDate(format.parse("2023-01-01"))
+        .finishDate(format.parse("2023-02-02"))
+        .link("http:localhost:6788/admin/api/scholarships")
+        .courseType(courseType)
+        .country(country)
+        .status(status)
+        .language(language)
+        .image(image)
+        .company(company)
+        .careers(List.of(career, careerFound))
+        .build();
+
+
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(careerService.findById(2L)).willReturn(careerFound);
+    given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarshipResponse);
+
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.addCareer(1L,2L);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdated.getCareers().size(),2));
   }
 }
