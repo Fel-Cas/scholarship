@@ -486,4 +486,16 @@ class ScholarshipServiceTest {
         ()->assertNotNull(scholarshipUpdated),
         ()->assertEquals(scholarshipUpdated.getCareers().size(),2));
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to check for an exception to when trying to add a career to a scholarship but it is already assocciated")
+  void addScholarshipverifyException(){
+    //given
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    given(careerService.findById(2L)).willReturn(career);
+    //when
+    BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.addCareer(1L,2L));
+    //then
+    assertEquals(Messages.MESSAGE_DUPLICATE_CAREER.formatted(career.getCareerName()),exception.getMessage());
+  }
 }
