@@ -4,6 +4,7 @@ import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.ScholarshipDTO;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.implementation.ScholarshipServiceImp;
@@ -32,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("Test")
@@ -220,5 +223,18 @@ class ScholarshipServiceTest {
         ()->assertNotNull(scholarshipFound.getCompany()),
         ()-> AssertionsForClassTypes.assertThat(scholarshipFound.getCareers().size()).isGreaterThan(0)
     );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to check if  an exception occurs when searching a scholarship by id and it doesn't exist")
+  void testGetByIdWhenScholarshipNotFound() {
+    //given
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.empty());
+    //when
+    NotFoundException exception=assertThrows(NotFoundException.class,()->scholarshipService.getById(1L));
+    //then
+    assertNotNull(exception);
+    assertEquals(Messages.MESSAGE_SCHOLARSHIP_NOT_FOUND.formatted(1L), exception.getMessage());
+    verify(scholarshipRepository,times(1)).findById(1L);
   }
 }
