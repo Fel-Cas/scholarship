@@ -2,6 +2,8 @@ package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.ScholarshipDTO;
+import com.api.scholarships.dtos.ScholarshipDTOResponse;
+import com.api.scholarships.dtos.ScholarshipResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.exceptions.BadRequestException;
@@ -11,6 +13,8 @@ import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.implementation.ScholarshipServiceImp;
 import com.api.scholarships.services.interfaces.*;
 import com.api.scholarships.services.strategyScholarships.ScholarshipContext;
+import com.api.scholarships.services.strategyScholarships.ScholarshipStrategy;
+import com.api.scholarships.services.strategyScholarships.ScholarshipType;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.multipart.MultipartFile;
@@ -62,6 +67,8 @@ class ScholarshipServiceTest {
   private ScholarshipMapper scholarshipMapper;
   @Mock
   private ScholarshipContext scholarshipContext;
+  @Mock
+  private ScholarshipStrategy scholarshipStrategy;
   @InjectMocks
   private ScholarshipServiceImp scholarshipService;
   private CourseType courseType;
@@ -293,5 +300,46 @@ class ScholarshipServiceTest {
     //then
     verify(scholarshipRepository,times(1)).delete(scholarship);
     verify(imageService, times(1)).delete(1L);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to find all scholarships")
+  void testFindAll() throws ParseException {
+    //given
+    ScholarshipDTOResponse scholarshipDTOResponse=ScholarshipDTOResponse.builder()
+        .title("Mi titulo")
+        .id(1L)
+        .description("Descripción de la beca")
+        .startDate(format.parse("2023-01-01"))
+        .finishDate(format.parse("2023-02-02"))
+        .link("http:localhost:6788/admin/api/scholarships")
+        .courseType(courseType)
+        .country(country)
+        .status(status)
+        .language(language)
+        .image(image)
+        .company(company)
+        .careers(List.of(career))
+        .build();
+
+    Sort sortDirection=Sort.by("id").ascending();
+    Pageable pageable= PageRequest.of(0,10,sortDirection);
+    given(scholarshipContext.getScholarshipStrategy(ScholarshipType.DEFAULT)).willReturn(scholarshipStrategy);
+    Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));
+    given(scholarshipStrategy.findScholarshipsByCondition(pageable,1L)).willReturn(scholarships);
+
+    given(scholarshipMapper.scholarshipListToScholarshipDTOResponseList(List.of(scholarship))).willReturn(List.of(scholarshipDTOResponse));
+    //when
+    ScholarshipResponse response=scholarshipService.findAll(0,10,"id","ASC",ScholarshipType.DEFAULT,1L);
+    //then
+    assertAll(
+        ()-> assertNotNull(response),
+        ()->assertThat(response.getContent()).hasSize(1),
+        ()->assertEquals(0,response.getNumberPage()),
+        ()->assertEquals(1,response.getSizePage()),
+        ()->assertEquals(1,response.getTotalPages()),
+        ()->assertEquals(1,response.getTotalElements()),
+        ()->assertTrue(response.isLastOne())
+    );
   }
 }
