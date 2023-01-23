@@ -2,6 +2,7 @@ package com.api.scholarships.services;
 
 import com.api.scholarships.constants.Messages;
 import com.api.scholarships.dtos.ScholarshipDTO;
+import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
@@ -236,5 +237,44 @@ class ScholarshipServiceTest {
     assertNotNull(exception);
     assertEquals(Messages.MESSAGE_SCHOLARSHIP_NOT_FOUND.formatted(1L), exception.getMessage());
     verify(scholarshipRepository,times(1)).findById(1L);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to update a scholarship")
+  void testUpdateScholarship() throws ParseException {
+    //given
+    ScholarshipUpdateDTO scholarshipUpdateDTO=ScholarshipUpdateDTO.builder()
+        .title("BIG DATA SCHOLARSHIP")
+        .description("Esta es una beca especializarse en la manipulación de datos")
+        .link("http://loclahost:9090/big-data")
+        .startDate(format.parse("2022-11-12"))
+        .finishDate(format.parse("2023-02-14 "))
+        .build();
+    given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
+    scholarship.setTitle(scholarshipUpdateDTO.getTitle());
+    scholarship.setDescription(scholarshipUpdateDTO.getDescription());
+    scholarship.setLink(scholarshipUpdateDTO.getLink());
+    scholarship.setStartDate(scholarshipUpdateDTO.getStartDate());
+    scholarship.setFinishDate(scholarshipUpdateDTO.getFinishDate());
+    given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarship);
+    //when
+    Scholarship scholarshipUpdated=scholarshipService.update(scholarshipUpdateDTO,1L);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipUpdated),
+        ()->assertEquals(scholarshipUpdateDTO.getTitle(),scholarshipUpdated.getTitle()),
+        ()->assertEquals(scholarshipUpdateDTO.getDescription(),scholarshipUpdated.getDescription()),
+        ()->assertEquals(scholarshipUpdateDTO.getLink(),scholarshipUpdated.getLink()),
+        ()->assertEquals(scholarshipUpdateDTO.getStartDate(),scholarshipUpdated.getStartDate()),
+        ()->assertEquals(scholarshipUpdateDTO.getFinishDate(),scholarshipUpdated.getFinishDate()),
+        ()->assertNotNull(scholarshipUpdated.getCourseType()),
+        ()->assertNotNull(scholarshipUpdated.getCourseType()),
+        ()->assertNotNull(scholarshipUpdated.getCountry()),
+        ()->assertNotNull(scholarshipUpdated.getStatus()),
+        ()->assertNotNull(scholarshipUpdated.getLanguage()),
+        ()->assertNotNull(scholarshipUpdated.getImage()),
+        ()->assertNotNull(scholarshipUpdated.getCompany()),
+        ()-> AssertionsForClassTypes.assertThat(scholarshipUpdated.getCareers().size()).isGreaterThan(0)
+    );
   }
 }
