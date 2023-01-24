@@ -103,4 +103,25 @@ class ScholarshipCountryTest {
         .build();
   }
 
+  @Test
+  @DisplayName("Test CountryStrategy, test to find scholarships by country")
+  void testToFindScholarshipsByCareer(){
+    //given
+    given(countryService.findById(1L)).willReturn(country);
+    Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));
+    Pageable pageable= PageRequest.of(0,1, Sort.by(Sort.Direction.DESC,"id"));
+    given(scholarshipRepository.findByCountry(country,pageable)).willReturn(scholarships);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipCountry.findScholarshipsByCondition(pageable,1L);
+    //then
+    assertAll(
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isEqualTo(1),
+        ()->assertEquals(0,scholarshipsFound.getNumber()),
+        ()->assertEquals(1,scholarshipsFound.getTotalPages()),
+        ()->assertEquals(1,scholarshipsFound.getSize()),
+        ()->assertTrue(scholarshipsFound.isLast())
+
+    );
+  }
 }
