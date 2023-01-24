@@ -3,11 +3,15 @@ package com.api.scholarships.services.strategyScholarships;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.interfaces.CountryService;
+import com.api.scholarships.services.interfaces.CourseTypeService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -16,7 +20,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -24,9 +30,9 @@ class ScholarshipCourseTypeTest {
   @Mock
   private ScholarshipRepository scholarshipRepository;
   @Mock
-  private CountryService countryService;
+  private CourseTypeService courseTypeService;
   @InjectMocks
-  private ScholarshipCountry scholarshipCountry;
+  private ScholarshipCourseType scholarshipCourseType;
   private CourseType courseType;
   private Scholarship scholarship;
   private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -98,4 +104,25 @@ class ScholarshipCourseTypeTest {
         .build();
   }
 
+  @Test
+  @DisplayName("Test CourseTypeStrategy, test to find scholarships by course type")
+  void testToFindScholarshipsByCareer(){
+    //given
+    given(courseTypeService.findById(1L)).willReturn(courseType);
+    Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));
+    Pageable pageable= PageRequest.of(0,1, Sort.by(Sort.Direction.DESC,"id"));
+    given(scholarshipRepository.findByCourseType(courseType,pageable)).willReturn(scholarships);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipCourseType.findScholarshipsByCondition(pageable,1L);
+    //then
+    assertAll(
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isEqualTo(1),
+        ()->assertEquals(0,scholarshipsFound.getNumber()),
+        ()->assertEquals(1,scholarshipsFound.getTotalPages()),
+        ()->assertEquals(1,scholarshipsFound.getSize()),
+        ()->assertTrue(scholarshipsFound.isLast())
+
+    );
+  }
 }
