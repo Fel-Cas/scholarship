@@ -205,4 +205,26 @@ class ScholarshipControllerTest {
         .andDo(print());
     verify(scholarshipService, times(1)).delete(1L);
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the country of a scholarship")
+  void testChangeCountry() throws Exception {
+    //given
+    Country country=new Country(1L, "INGLATERRA","ING");
+    scholarship.setCountry(country);
+    scholarshipDTOResponse.setCountry(country);
+    given(scholarshipService.changeCountry(1L,2L)).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/country/1/2").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(scholarship.getId()))
+        .andExpect(jsonPath("$.title").value(scholarshipDTOResponse.getTitle()))
+        .andExpect(jsonPath("$.description").value(scholarshipDTOResponse.getDescription()))
+        .andExpect(jsonPath("$.link").value(scholarshipDTOResponse.getLink()))
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+    verify(scholarshipService, times(1)).changeCountry(1L,2L);
+  }
 }
