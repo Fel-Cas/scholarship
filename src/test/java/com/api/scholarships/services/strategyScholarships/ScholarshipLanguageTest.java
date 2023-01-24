@@ -105,7 +105,7 @@ class ScholarshipLanguageTest {
 
   @Test
   @DisplayName("Test ScholarshipLanguage, test to find scholarships by language")
-  void testToFindScholarshipsByCareer(){
+  void testToFindScholarshipsByLanguage(){
     //given
     given(languageService.findById(1L)).willReturn(language);
     Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));

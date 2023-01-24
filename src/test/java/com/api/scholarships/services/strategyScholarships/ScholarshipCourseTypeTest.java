@@ -106,7 +106,7 @@ class ScholarshipCourseTypeTest {
 
   @Test
   @DisplayName("Test CourseTypeStrategy, test to find scholarships by course type")
-  void testToFindScholarshipsByCareer(){
+  void testToFindScholarshipsByCourseType(){
     //given
     given(courseTypeService.findById(1L)).willReturn(courseType);
     Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));

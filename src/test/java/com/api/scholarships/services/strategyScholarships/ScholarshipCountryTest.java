@@ -105,7 +105,7 @@ class ScholarshipCountryTest {
 
   @Test
   @DisplayName("Test CountryStrategy, test to find scholarships by country")
-  void testToFindScholarshipsByCareer(){
+  void testToFindScholarshipsByCountry(){
     //given
     given(countryService.findById(1L)).willReturn(country);
     Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));
