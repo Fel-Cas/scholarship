@@ -55,4 +55,12 @@ class ScholarshipContextTest {
     assertNotNull(companyStrategy);
     assertEquals(companyStrategy.typeStrategy(),ScholarshipType.COMPANY);
   }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load country strategy")
+  void  testLoadCountryStrategy(){
+    ScholarshipStrategy countryStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.COUNTRY);
+    assertNotNull(countryStrategy);
+    assertEquals(countryStrategy.typeStrategy(),ScholarshipType.COUNTRY);
+  }
 }
