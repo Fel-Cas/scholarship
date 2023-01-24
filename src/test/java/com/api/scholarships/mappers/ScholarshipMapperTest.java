@@ -1,7 +1,10 @@
 package com.api.scholarships.mappers;
 
+import com.api.scholarships.dtos.ScholarshipDTOResponse;
 import com.api.scholarships.entities.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
 import java.text.ParseException;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class ScholarshipMapperTest {
 
@@ -84,4 +88,29 @@ class ScholarshipMapperTest {
         .build();
   }
 
+  @Test
+  @DisplayName("Test ScholarshipMapper, test to pass from Scholarship class to ScholarshipDTOResponse class")
+  void testToPassFromScholarshipToScholarshipDTOResponse(){
+    //given
+    //when
+    ScholarshipDTOResponse scholarshipDTOResponse=scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship);
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipDTOResponse),
+        ()->assertEquals(scholarship.getId(),scholarshipDTOResponse.getId()),
+        ()->assertEquals(scholarship.getTitle(),scholarshipDTOResponse.getTitle()),
+        ()->assertEquals(scholarship.getDescription(),scholarshipDTOResponse.getDescription()),
+        ()->assertEquals(scholarship.getStartDate(),scholarshipDTOResponse.getStartDate()),
+        ()->assertEquals(scholarship.getFinishDate(),scholarshipDTOResponse.getFinishDate()),
+        ()->assertEquals(scholarship.getLink(),scholarshipDTOResponse.getLink()),
+        ()->assertEquals(scholarship.getCourseType(),scholarshipDTOResponse.getCourseType()),
+        ()->assertEquals(scholarship.getStatus(),scholarshipDTOResponse.getStatus()),
+        ()->assertEquals(scholarship.getImage(),scholarshipDTOResponse.getImage()),
+        ()->assertEquals(scholarship.getCountry(),scholarshipDTOResponse.getCountry()),
+        ()->assertEquals(scholarship.getLanguage(),scholarshipDTOResponse.getLanguage()),
+        ()->assertEquals(scholarship.getCompany(),scholarshipDTOResponse.getCompany()),
+        ()->assertThat(scholarshipDTOResponse.getCareers().size()).isEqualTo(1)
+
+    );
+  }
 }
