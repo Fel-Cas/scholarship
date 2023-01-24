@@ -1,10 +1,12 @@
 package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.ScholarshipDTOResponse;
+import com.api.scholarships.dtos.ScholarshipResponse;
 import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.services.interfaces.ScholarshipService;
+import com.api.scholarships.services.strategyScholarships.ScholarshipType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
@@ -325,5 +328,24 @@ class ScholarshipControllerTest {
         .andExpect(jsonPath("$.detail").value("That action %s is no valid".formatted("ADIOS")));
   }
 
-
+  @Test
+  @DisplayName("Test ScholarshipService, Test to find all scholarships")
+  void testFindAll() throws Exception {
+    //given
+    ScholarshipResponse scholarshipResponse=ScholarshipResponse.builder()
+        .content(List.of(scholarshipDTOResponse))
+        .numberPage(0)
+        .sizePage(10)
+        .lastOne(true)
+        .totalPages(1)
+        .totalElements(1L)
+        .build();
+    given(scholarshipService.findAll(anyInt(), anyInt(), anyString(), anyString(),any(ScholarshipType.class),anyLong())).willReturn(scholarshipResponse);
+    //when
+    ResultActions response=client.perform(get(url).contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipResponse)));
+  }
 }
