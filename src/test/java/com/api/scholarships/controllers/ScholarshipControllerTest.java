@@ -245,4 +245,21 @@ class ScholarshipControllerTest {
         .andDo(print())
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the status of a scholarship")
+  void testChangeStatus() throws Exception {
+    //given
+    Status status=Status.builder().id(1L).statusName("ACTIVE").build();
+    scholarship.setStatus(status);
+    scholarshipDTOResponse.setStatus(status);
+    given(scholarshipService.changeStatus(anyLong(),anyLong())).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/status/1/2").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+  }
 }
