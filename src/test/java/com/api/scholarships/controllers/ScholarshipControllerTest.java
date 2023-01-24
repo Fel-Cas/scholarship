@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -24,6 +25,9 @@ import java.util.List;
 
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -187,5 +191,18 @@ class ScholarshipControllerTest {
         .andExpect(jsonPath("$.description").value(scholarshipDTOResponse.getDescription()))
         .andExpect(jsonPath("$.link").value(scholarshipDTOResponse.getLink()))
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to delete a scholarship")
+  void testDelete() throws Exception {
+    //given
+    willDoNothing().given(scholarshipService).delete(1L);
+    //when
+    ResultActions response=client.perform(delete(url+"/1").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isNoContent())
+        .andDo(print());
+    verify(scholarshipService, times(1)).delete(1L);
   }
 }
