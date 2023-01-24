@@ -2,6 +2,7 @@ package com.api.scholarships.mappers;
 
 import com.api.scholarships.dtos.ScholarshipDTOResponse;
 import com.api.scholarships.entities.*;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,6 +104,8 @@ class ScholarshipMapperTest {
         ()->assertEquals(scholarship.getStartDate(),scholarshipDTOResponse.getStartDate()),
         ()->assertEquals(scholarship.getFinishDate(),scholarshipDTOResponse.getFinishDate()),
         ()->assertEquals(scholarship.getLink(),scholarshipDTOResponse.getLink()),
+        ()->assertEquals(scholarship.getCreatedAt(),scholarshipDTOResponse.getCreatedAt()),
+        ()->assertEquals(scholarship.getUpdatedAt(),scholarshipDTOResponse.getUpdatedAt()),
         ()->assertEquals(scholarship.getCourseType(),scholarshipDTOResponse.getCourseType()),
         ()->assertEquals(scholarship.getStatus(),scholarshipDTOResponse.getStatus()),
         ()->assertEquals(scholarship.getImage(),scholarshipDTOResponse.getImage()),
@@ -110,6 +113,35 @@ class ScholarshipMapperTest {
         ()->assertEquals(scholarship.getLanguage(),scholarshipDTOResponse.getLanguage()),
         ()->assertEquals(scholarship.getCompany(),scholarshipDTOResponse.getCompany()),
         ()->assertThat(scholarshipDTOResponse.getCareers().size()).isEqualTo(1)
+
+    );
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipMapper, test to pass from  Scholarship items list to  ScholarshipDTOResponse items list")
+  void testToPassScholarshipListToScholarshipDTOResponseList(){
+    //given
+    //when
+    List<ScholarshipDTOResponse> scholarshipDTOSResponse=scholarshipMapper.scholarshipListToScholarshipDTOResponseList(List.of(scholarship));
+    //then
+    assertAll(
+        ()->assertNotNull(scholarshipDTOSResponse),
+        ()->assertEquals(scholarship.getId(),scholarshipDTOSResponse.get(0).getId()),
+        ()->assertEquals(scholarship.getTitle(),scholarshipDTOSResponse.get(0).getTitle()),
+        ()->assertEquals(scholarship.getDescription(),scholarshipDTOSResponse.get(0).getDescription()),
+        ()->assertEquals(scholarship.getStartDate(),scholarshipDTOSResponse.get(0).getStartDate()),
+        ()->assertEquals(scholarship.getFinishDate(),scholarshipDTOSResponse.get(0).getFinishDate()),
+        ()->assertEquals(scholarship.getLink(),scholarshipDTOSResponse.get(0).getLink()),
+        ()->assertEquals(scholarship.getCreatedAt(),scholarshipDTOSResponse.get(0).getCreatedAt()),
+        ()->assertEquals(scholarship.getUpdatedAt(),scholarshipDTOSResponse.get(0).getUpdatedAt()),
+        ()->assertEquals(scholarship.getCourseType(),scholarshipDTOSResponse.get(0).getCourseType()),
+        ()->assertEquals(scholarship.getStatus(),scholarshipDTOSResponse.get(0).getStatus()),
+        ()->assertEquals(scholarship.getImage(),scholarshipDTOSResponse.get(0).getImage()),
+        ()->assertEquals(scholarship.getCountry(),scholarshipDTOSResponse.get(0).getCountry()),
+        ()->assertEquals(scholarship.getLanguage(),scholarshipDTOSResponse.get(0).getLanguage()),
+        ()->assertEquals(scholarship.getCompany(),scholarshipDTOSResponse.get(0).getCompany()),
+        ()-> AssertionsForClassTypes.assertThat(scholarshipDTOSResponse.get(0).getCareers().size()).isEqualTo(1)
+
 
     );
   }
