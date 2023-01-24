@@ -1,6 +1,8 @@
 package com.api.scholarships.services.strategyScholarships;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,4 +32,11 @@ class ScholarshipContextTest {
     scholarshipContext.afterPropertiesSet();
   }
 
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load default strategy")
+  void testLoadDefaultStrategy(){
+    ScholarshipStrategy defaultStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.DEFAULT);
+    assertNotNull(defaultStrategy);
+    assertEquals(defaultStrategy.typeStrategy(),ScholarshipType.DEFAULT);
+  }
 }
