@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
@@ -226,5 +227,22 @@ class ScholarshipControllerTest {
         .andExpect(jsonPath("$.link").value(scholarshipDTOResponse.getLink()))
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
     verify(scholarshipService, times(1)).changeCountry(1L,2L);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the course type of a scholarship")
+  void testChangeCourseType() throws Exception {
+    //given
+    CourseType courseType=CourseType.builder().id(1L).courseType("BOOTCAMP").build();
+    scholarship.setCourseType(courseType);
+    scholarshipDTOResponse.setCourseType(courseType);
+    given(scholarshipService.changeCourseType(anyLong(),anyLong())).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/course-type/1/2").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
   }
 }
