@@ -297,4 +297,20 @@ class ScholarshipControllerTest {
         .andDo(print())
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, Test to remove a career of a scholarship")
+  void testRemoveCareer() throws Exception {
+    //given
+    scholarship.getCareers().remove(0);
+    scholarshipDTOResponse.getCareers().remove(0);
+    given(scholarshipService.removeCareer(anyLong(),anyLong())).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/career/1/2?action=REMOVE").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+  }
 }
