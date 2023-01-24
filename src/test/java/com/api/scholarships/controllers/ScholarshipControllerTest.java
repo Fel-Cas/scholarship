@@ -262,4 +262,22 @@ class ScholarshipControllerTest {
         .andDo(print())
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to change the language of a scholarship")
+  void testChangeLanguage() throws Exception {
+    //given
+    Language language=Language.builder().id(1L).languageName("ENGLISH").build();
+    scholarship.setLanguage(language);
+    scholarshipDTOResponse.setLanguage(language);
+    given(scholarshipService.changeLanguage(anyLong(),anyLong())).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/language/1/2").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+
+  }
 }
