@@ -79,4 +79,12 @@ class ScholarshipContextTest {
     assertNotNull(languageStrategy);
     assertEquals(languageStrategy.typeStrategy(),ScholarshipType.LANGUAGE);
   }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load status strategy")
+  void testLoadStatusStrategy(){
+    ScholarshipStrategy statusStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS);
+    assertNotNull(statusStrategy);
+    assertEquals(statusStrategy.typeStrategy(),ScholarshipType.STATUS);
+  }
 }
