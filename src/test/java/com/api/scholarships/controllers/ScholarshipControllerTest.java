@@ -280,4 +280,21 @@ class ScholarshipControllerTest {
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
 
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, test to add a career to a scholarship")
+  void testAddCareer() throws Exception {
+    //given
+    Career career=Career.builder().id(1L).careerName("ENTERPRISE").build();
+    scholarship.getCareers().add(career);
+    scholarshipDTOResponse.getCareers().add(career);
+    given(scholarshipService.addCareer(anyLong(),anyLong())).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/career/1/2?action=ADD").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+  }
 }
