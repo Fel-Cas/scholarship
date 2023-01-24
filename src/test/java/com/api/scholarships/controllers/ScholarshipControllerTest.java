@@ -313,4 +313,17 @@ class ScholarshipControllerTest {
         .andDo(print())
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
   }
+
+  @Test
+  @DisplayName("Test ScholarshipService, Test to check error when trying to add o remove a career of a scholarship and users don't choose an action")
+  void testAddRemoveOrCareerError() throws Exception {
+    //given
+    //when
+    ResultActions response=client.perform(put(url+"/career/1/2?action=ADIOS").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.detail").value("That action %s is no valid".formatted("ADIOS")));
+  }
+
+
 }
