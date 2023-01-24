@@ -6,10 +6,14 @@ import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.services.interfaces.ScholarshipService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ScholarshipController.class)
 class ScholarshipControllerTest {
@@ -70,7 +79,12 @@ class ScholarshipControllerTest {
         .id(1L)
         .careerName("INGENIERIA DE SISTEMAS")
         .build();
+    Career career1=Career.builder()
+        .id(2L)
+        .careerName("MATEMATICAS")
+        .build();
     careers.add(career);
+    careers.add(career1);
     //company
     Company company=Company.builder()
         .name("Company S.A")
@@ -114,5 +128,25 @@ class ScholarshipControllerTest {
         .company(company)
         .careers(careers)
         .build();
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipController, test to get one scholarship by id")
+  void testGetOne() throws Exception {
+    //given
+    given(scholarshipService.getById(1L)).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(get(url+"/1").contentType(MediaType.APPLICATION_JSON));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+        .andExpect(jsonPath("$.id").value(scholarship.getId()))
+        .andExpect(jsonPath("$.title").value(scholarship.getTitle()))
+        .andExpect(jsonPath("$.description").value(scholarship.getDescription()))
+        .andExpect(jsonPath("$.link ").value(scholarship.getLink()))
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
+
   }
 }
