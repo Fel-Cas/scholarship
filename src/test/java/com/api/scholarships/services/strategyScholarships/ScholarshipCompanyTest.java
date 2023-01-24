@@ -4,10 +4,13 @@ import com.api.scholarships.entities.*;
 import com.api.scholarships.repositories.ScholarshipRepository;
 import com.api.scholarships.services.interfaces.CompanyService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.text.ParseException;
@@ -17,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 class ScholarshipCompanyTest {
@@ -95,6 +101,28 @@ class ScholarshipCompanyTest {
         .company(company)
         .careers(careers)
         .build();
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipCompany, test to find scholarships by company")
+  void testFindScholarshipsByCompany() {
+    //given
+    given(companyService.getOne(1L)).willReturn(company);
+    Pageable pageable=PageRequest.of(0,10, Sort.by(Sort.Direction.ASC,"id"));
+    Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));
+    given(scholarshipRepository.findByCompany(company,pageable)).willReturn(scholarships);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipCompany.findScholarshipsByCondition(pageable,1L);
+    //then
+    assertAll(
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isEqualTo(1),
+        ()->assertEquals(0,scholarshipsFound.getNumber()),
+        ()->assertEquals(1,scholarshipsFound.getTotalPages()),
+        ()->assertEquals(1,scholarshipsFound.getSize()),
+        ()->assertTrue(scholarshipsFound.isLast())
+
+    );
   }
 
 }
