@@ -39,4 +39,12 @@ class ScholarshipContextTest {
     assertNotNull(defaultStrategy);
     assertEquals(defaultStrategy.typeStrategy(),ScholarshipType.DEFAULT);
   }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load career strategy")
+  void testLoadCareerStrategy(){
+    ScholarshipStrategy careerStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.CAREER);
+    assertNotNull(careerStrategy);
+    assertEquals(careerStrategy.typeStrategy(),ScholarshipType.CAREER);
+  }
 }
