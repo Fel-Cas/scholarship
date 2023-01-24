@@ -96,4 +96,5 @@ public class Messages {
   public static final String MESSAGE_DUPLICATE_CAREER="The scholarship alredy have this career %s associated";
   public static final String MESSAGE_CANNOT_REMOVE_CAREER="A scholarship must have at least one associated career";
   public static final String MESSAGE_REMOVE_NO_ASSOCIATE_CAREER= "This career %s  isn't associate a  scholarship with id %s";
+  public static final String MESSAGE_WRONG_STRATEGY="Type of  strategy not valid";
 }

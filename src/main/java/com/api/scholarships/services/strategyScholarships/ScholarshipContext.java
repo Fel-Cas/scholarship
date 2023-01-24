@@ -1,6 +1,8 @@
 package com.api.scholarships.services.strategyScholarships;
 
+import com.api.scholarships.constants.Messages;
 import com.api.scholarships.exceptions.BadRequestException;
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class ScholarshipContext implements InitializingBean {
 
   public ScholarshipStrategy getScholarshipStrategy(ScholarshipType type){
     if(!ScholarshipType.exists(type)){
-      throw new BadRequestException("I");
+      throw new BadRequestException(Messages.MESSAGE_WRONG_STRATEGY);
     }
     return map.get(type);
   }
