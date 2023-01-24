@@ -1,6 +1,7 @@
 package com.api.scholarships.controllers;
 
 import com.api.scholarships.dtos.ScholarshipDTOResponse;
+import com.api.scholarships.dtos.ScholarshipUpdateDTO;
 import com.api.scholarships.entities.*;
 import com.api.scholarships.mappers.ScholarshipMapper;
 import com.api.scholarships.services.interfaces.ScholarshipService;
@@ -21,8 +22,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
+
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -148,5 +148,44 @@ class ScholarshipControllerTest {
         .andExpect(jsonPath("$.link ").value(scholarship.getLink()))
         .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
 
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipController, test to update one scholarship")
+  void testUpdateOne() throws Exception {
+    //given
+    ScholarshipUpdateDTO scholarshipUpdateDTO=ScholarshipUpdateDTO.builder()
+        .title("BIG DATA SCHOLARSHIP")
+        .description("La beca de Big Data es una oportunidad de estudio y formación para aquellos interesados en adquirir habilidades y conocimientos en el campo de la gestión y análisis de datos masivos. Los beneficiarios de la beca tendrán la oportunidad de aprender técnicas y herramientas avanzadas para el manejo y análisis de datos, así como también la aplicación práctica de estas habilidades en proyectos reales. Además, la beca también puede incluir la posibilidad de trabajar en colaboración con profesionales y empresas líderes en el campo del Big Data.")
+        .link("http://loclahost:9090/big-data")
+        .startDate(format.parse("2022-11-12"))
+        .finishDate(format.parse("2023-02-14 "))
+        .build();
+
+    scholarship.setTitle(scholarshipUpdateDTO.getTitle());
+    scholarship.setDescription(scholarshipUpdateDTO.getDescription());
+    scholarship.setLink(scholarshipUpdateDTO.getLink());
+    scholarship.setStartDate(scholarshipUpdateDTO.getStartDate());
+    scholarship.setFinishDate(scholarshipUpdateDTO.getFinishDate());
+
+    scholarshipDTOResponse.setTitle(scholarshipUpdateDTO.getTitle());
+    scholarshipDTOResponse.setDescription(scholarshipUpdateDTO.getDescription());
+    scholarshipDTOResponse.setLink(scholarshipUpdateDTO.getLink());
+    scholarshipDTOResponse.setStartDate(scholarshipUpdateDTO.getStartDate());
+    scholarshipDTOResponse.setFinishDate(scholarshipUpdateDTO.getFinishDate());
+
+    given(scholarshipService.update( scholarshipUpdateDTO,1L)).willReturn(scholarship);
+    given(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarship)).willReturn(scholarshipDTOResponse);
+    //when
+    ResultActions response=client.perform(put(url+"/1").contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(scholarshipUpdateDTO)));
+    //then
+    response.andExpect(status().isOk())
+        .andDo(print())
+        .andExpect(jsonPath("$.id").value(scholarship.getId()))
+        .andExpect(jsonPath("$.title").value(scholarshipDTOResponse.getTitle()))
+        .andExpect(jsonPath("$.description").value(scholarshipDTOResponse.getDescription()))
+        .andExpect(jsonPath("$.link").value(scholarshipDTOResponse.getLink()))
+        .andExpect(content().json(objectMapper.writeValueAsString(scholarshipDTOResponse)));
   }
 }
