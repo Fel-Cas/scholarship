@@ -107,11 +107,13 @@ public class CompanyServiceImp implements CompanyService {
   @Override
   public Company removeUser(Long id, Long userId) {
     Company companyFound=getOne(id);
+    if(companyFound.getUsers().size()==1){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_WITHOUT_USERS);
+    }
     User userFound=userService.getById(userId);
     if(!companyRepository.existsByUsers(userFound)){
       throw new BadRequestException(Messages.MESSAGE_COMPANY_REMOVE_USER.formatted(userId));
     }
-    //TODO: Verifiy if can remove all users!!!
     companyFound.getUsers().remove(userFound);
     return companyRepository.save(companyFound);
   }
