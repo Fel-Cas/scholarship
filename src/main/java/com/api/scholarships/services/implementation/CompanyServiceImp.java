@@ -22,8 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImp implements CompanyService {
@@ -155,12 +157,12 @@ public class CompanyServiceImp implements CompanyService {
   }
 
   protected List<User> loadUsers(List<Long> usersId){
-    return usersId.stream().map(userId->{
-      User userFound=userService.getById(userId);
-      if(companyRepository.existsByUsers(userFound)){
-        throw new BadRequestException(Messages.MESSAGE_COMPANY_ADD_USER.formatted(userId));
-      }
-      return userFound;
-    }).toList();
+    return new HashSet<>(usersId).stream().map(userId->{
+        User userFound=userService.getById(userId);
+        if(companyRepository.existsByUsers(userFound)){
+          throw new BadRequestException(Messages.MESSAGE_COMPANY_ADD_USER.formatted(userId));
+        }
+        return userFound;
+      }).collect(Collectors.toList());
   }
 }
