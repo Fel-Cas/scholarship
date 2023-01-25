@@ -427,7 +427,7 @@ class CompanyServiceTest {
 
   @Test
   @DisplayName("Test CompanyService, test to delete a company")
-  void testDelete(){
+  void testDelete() throws IOException {
     //given
     given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
     willDoNothing().given(companyRepository).delete(any(Company.class));
