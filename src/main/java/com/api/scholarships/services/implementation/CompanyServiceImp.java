@@ -13,12 +13,14 @@ import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
 import com.api.scholarships.services.interfaces.CompanyService;
 import com.api.scholarships.services.interfaces.ImageService;
+import com.api.scholarships.services.interfaces.ScholarshipService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -87,9 +89,19 @@ public class CompanyServiceImp implements CompanyService {
   }
 
   @Override
-  public void delete(Long id) {
-    //TODO: Think about if can remove a company
+  @Transactional
+  public void delete(Long id) throws IOException {
     Company companyFound=getOne(id);
+    if(companyFound.getScholarships().size()>0){
+      companyFound.getScholarships().stream().forEach(scholarship -> {
+        try {
+          imageService.delete(scholarship.getImage().getId());
+        } catch (IOException e) {
+          throw new BadRequestException(e.getMessage());
+        }
+      });
+    }
+    imageService.delete(companyFound.getImage().getId());
     companyRepository.delete(companyFound);
   }
 
