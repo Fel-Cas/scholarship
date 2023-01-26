@@ -511,13 +511,25 @@ class CompanyServiceTest {
     given(userService.getById(anyLong())).willReturn(company.getUsers().get(0));
     given(companyRepository.existsByUsers(any(User.class))).willReturn(true);
     given(companyRepository.save(any(Company.class))).willReturn(company);
+    company.getUsers().add(
+        User.builder()
+            .id(2L)
+            .name("Pedro")
+            .surname("Perez")
+            .password("123456778")
+            .dni("12343445678")
+            .email("ppe@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
     //when
     Company companyUpdated = companyService.removeUser(1L, 1L);
     //then
     assertAll(
         () -> assertNotNull(companyUpdated),
         () -> assertNotNull(companyUpdated.getUsers()),
-        () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(0)
+        () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(1)
     );
   }
 
@@ -528,10 +540,33 @@ class CompanyServiceTest {
     given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
     given(userService.getById(anyLong())).willReturn(company.getUsers().get(0));
     given(companyRepository.existsByUsers(any(User.class))).willReturn(false);
+    company.getUsers().add(
+        User.builder()
+            .id(2L)
+            .name("Pedro")
+            .surname("Perez")
+            .password("123456778")
+            .dni("12343445678")
+            .email("ppe@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
     //when
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.removeUser(1L, 1L));
     //then
     assertEquals(Messages.MESSAGE_COMPANY_REMOVE_USER.formatted(1L), exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to delete all users in a company")
+  void  failRemoveAllUsers() {
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.removeUser(1L,1L));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_WITHOUT_USERS,exception.getMessage());
   }
 
   @Test
