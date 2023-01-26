@@ -540,6 +540,18 @@ class CompanyServiceTest {
     given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
     given(userService.getById(anyLong())).willReturn(company.getUsers().get(0));
     given(companyRepository.existsByUsers(any(User.class))).willReturn(false);
+    company.getUsers().add(
+        User.builder()
+            .id(2L)
+            .name("Pedro")
+            .surname("Perez")
+            .password("123456778")
+            .dni("12343445678")
+            .email("ppe@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
     //when
     BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.removeUser(1L, 1L));
     //then
