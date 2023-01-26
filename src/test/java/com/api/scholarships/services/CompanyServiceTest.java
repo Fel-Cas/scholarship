@@ -511,13 +511,25 @@ class CompanyServiceTest {
     given(userService.getById(anyLong())).willReturn(company.getUsers().get(0));
     given(companyRepository.existsByUsers(any(User.class))).willReturn(true);
     given(companyRepository.save(any(Company.class))).willReturn(company);
+    company.getUsers().add(
+        User.builder()
+            .id(2L)
+            .name("Pedro")
+            .surname("Perez")
+            .password("123456778")
+            .dni("12343445678")
+            .email("ppe@emial.com")
+            .createdAt(Instant.now())
+            .updatedAt(Instant.now())
+            .build()
+    );
     //when
     Company companyUpdated = companyService.removeUser(1L, 1L);
     //then
     assertAll(
         () -> assertNotNull(companyUpdated),
         () -> assertNotNull(companyUpdated.getUsers()),
-        () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(0)
+        () -> assertThat(companyUpdated.getUsers().size()).isEqualTo(1)
     );
   }
 
