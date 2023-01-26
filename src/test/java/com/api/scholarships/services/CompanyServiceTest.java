@@ -7,6 +7,7 @@ import com.api.scholarships.dtos.CompanyResponse;
 import com.api.scholarships.dtos.CompanyUpdateDTO;
 import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Image;
+import com.api.scholarships.entities.Scholarship;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
 import com.api.scholarships.exceptions.NotFoundException;
@@ -89,6 +90,16 @@ class CompanyServiceTest {
                 .url("url")
                 .build()
         )
+        .scholarships(List.of(
+            Scholarship.builder()
+                .image(Image.builder()
+                    .id(1L)
+                    .name("image")
+                    .imageId("imageId")
+                    .url("url")
+                    .build())
+                .build()
+        ))
         .createdAt(Instant.now())
         .updatedAt(Instant.now())
         .build();
@@ -427,14 +438,16 @@ class CompanyServiceTest {
 
   @Test
   @DisplayName("Test CompanyService, test to delete a company")
-  void testDelete(){
+  void testDelete() throws IOException {
     //given
     given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
     willDoNothing().given(companyRepository).delete(any(Company.class));
+    willDoNothing().given(imageService).delete(1L);
     //when
     companyService.delete(1L);
     //then
     verify(companyRepository, times(1)).delete(company);
+    verify(imageService, times(2)).delete(1L);
   }
 
   @Test

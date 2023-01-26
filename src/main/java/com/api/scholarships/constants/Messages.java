@@ -44,6 +44,7 @@ public class Messages {
   public static final String MESSAGE_COMPANY_NOT_FOUND="Not exists a company with this id %s";
   public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
   public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
+  public static final String MESSAGE_COMPANY_WITHOUT_USERS="A company cannot be without assigned users";
 
   //Country
   public static final String MESSAGE_COUNTRY_REQUIRED = "Country is required";

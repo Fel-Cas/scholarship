@@ -13,17 +13,21 @@ import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
 import com.api.scholarships.services.interfaces.CompanyService;
 import com.api.scholarships.services.interfaces.ImageService;
+import com.api.scholarships.services.interfaces.ScholarshipService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CompanyServiceImp implements CompanyService {
@@ -85,9 +89,19 @@ public class CompanyServiceImp implements CompanyService {
   }
 
   @Override
-  public void delete(Long id) {
-    //TODO: Think about if can remove a company
+  @Transactional
+  public void delete(Long id) throws IOException {
     Company companyFound=getOne(id);
+    if(companyFound.getScholarships().size()>0){
+      companyFound.getScholarships().stream().forEach(scholarship -> {
+        try {
+          imageService.delete(scholarship.getImage().getId());
+        } catch (IOException e) {
+          throw new BadRequestException(e.getMessage());
+        }
+      });
+    }
+    imageService.delete(companyFound.getImage().getId());
     companyRepository.delete(companyFound);
   }
 
@@ -105,11 +119,13 @@ public class CompanyServiceImp implements CompanyService {
   @Override
   public Company removeUser(Long id, Long userId) {
     Company companyFound=getOne(id);
+    if(companyFound.getUsers().size()==1){
+      throw new BadRequestException(Messages.MESSAGE_COMPANY_WITHOUT_USERS);
+    }
     User userFound=userService.getById(userId);
     if(!companyRepository.existsByUsers(userFound)){
       throw new BadRequestException(Messages.MESSAGE_COMPANY_REMOVE_USER.formatted(userId));
     }
-    //TODO: Verifiy if can remove all users!!!
     companyFound.getUsers().remove(userFound);
     return companyRepository.save(companyFound);
   }
@@ -155,12 +171,12 @@ public class CompanyServiceImp implements CompanyService {
   }
 
   protected List<User> loadUsers(List<Long> usersId){
-    return usersId.stream().map(userId->{
-      User userFound=userService.getById(userId);
-      if(companyRepository.existsByUsers(userFound)){
-        throw new BadRequestException(Messages.MESSAGE_COMPANY_ADD_USER.formatted(userId));
-      }
-      return userFound;
-    }).toList();
+    return new HashSet<>(usersId).stream().map(userId->{
+        User userFound=userService.getById(userId);
+        if(companyRepository.existsByUsers(userFound)){
+          throw new BadRequestException(Messages.MESSAGE_COMPANY_ADD_USER.formatted(userId));
+        }
+        return userFound;
+      }).collect(Collectors.toList());
   }
 }

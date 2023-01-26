@@ -13,7 +13,7 @@ public interface CompanyService {
   public Company getOne(Long id);
   public CompanyResponse getAll(int page, int size, String sort, String order);
   public Company update(Long id, CompanyUpdateDTO companyDTO);
-  public void delete(Long id);
+  public void delete(Long id) throws IOException;
   public Company addUser(Long id, Long userId);
   public Company removeUser(Long id, Long userId);
   public void changeImage(Long id, MultipartFile image) throws IOException;

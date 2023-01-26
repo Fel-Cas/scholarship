@@ -37,6 +37,10 @@ public class Company implements Serializable {
   @JoinColumn(name = "company_id")
   @JsonIgnore
   private List<User> users;
+  @OneToMany(cascade ={CascadeType.MERGE,CascadeType.PERSIST, CascadeType.REMOVE}, orphanRemoval = true)
+  @JoinColumn(name = "company_id")
+  @JsonIgnore
+  private List<Scholarship> scholarships;
   @CreationTimestamp
   private Instant createdAt;
   @UpdateTimestamp

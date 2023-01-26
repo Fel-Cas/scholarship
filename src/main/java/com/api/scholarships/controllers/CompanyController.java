@@ -56,7 +56,7 @@ public class CompanyController {
   }
 
   @DeleteMapping(Endpoints.ID)
-  public ResponseEntity<?> delete(@PathVariable Long id){
+  public ResponseEntity<?> delete(@PathVariable Long id) throws IOException {
     companyService.delete(id);
     return ResponseEntity.noContent().build();
   }
