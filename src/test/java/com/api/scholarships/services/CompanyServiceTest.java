@@ -559,6 +559,17 @@ class CompanyServiceTest {
   }
 
   @Test
+  @DisplayName("Test CompanyService, test to get an error when trying to delete all users in a company")
+  void  failRemoveAllUsers() {
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.removeUser(1L,1L));
+    //then
+    assertEquals(Messages.MESSAGE_COMPANY_WITHOUT_USERS,exception.getMessage());
+  }
+
+  @Test
   @DisplayName("Test CompanyService, test to change company's image")
   void changeImage() throws IOException {
     //given
