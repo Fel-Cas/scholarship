@@ -17,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -182,6 +183,12 @@ public class ScholarshipServiceImp implements ScholarshipService {
     }
     scholarshipFound.getCareers().remove(careerFound);
     return scholarshipRepository.save(scholarshipFound);
+  }
+
+  @Override
+  @Scheduled(cron ="0 0 0 * * ?", zone = "America/Bogota")
+  public void updateScholarshipsStatus() {
+    scholarshipRepository.updateScholarshipStatus();
   }
 
   private void validateDates(Date startDate, Date finishDate) {
