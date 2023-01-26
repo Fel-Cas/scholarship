@@ -23,4 +23,5 @@ public interface ScholarshipService {
   public Scholarship changeImage(Long scholarshipId, MultipartFile image) throws IOException;
   public Scholarship addCareer(Long scholarshipId, Long careerId);
   public Scholarship removeCareer(Long scholarshipId, Long careerId);
+  public void updateScholarshipsStatus();
 }
