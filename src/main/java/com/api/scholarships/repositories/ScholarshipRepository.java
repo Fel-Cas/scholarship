@@ -20,4 +20,5 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
   Page<Scholarship> findByStatusAndCareers(Status status, Career career, Pageable pageable);
   Page<Scholarship> findByStatusAndCompany(Status status, Company company, Pageable pageable);
   Page<Scholarship> findByStatusAndCountry(Status status, Country country, Pageable pageable);
+  Page<Scholarship> findByStatusAndCourseType(Status status, CourseType courseType, Pageable pageable);
 }
