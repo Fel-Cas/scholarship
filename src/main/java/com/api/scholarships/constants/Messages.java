@@ -45,6 +45,7 @@ public class Messages {
   public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
   public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
   public static final String MESSAGE_COMPANY_WITHOUT_USERS="A company cannot be without assigned users";
+  public static final String MESSAGE_CANNOT_DELETE_COMPANY="It isn't possible to delete the company because it has related scholarship";
 
   //Country
   public static final String MESSAGE_COUNTRY_REQUIRED = "Country is required";
