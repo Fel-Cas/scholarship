@@ -17,4 +17,5 @@ public interface ScholarshipRepository extends JpaRepository<Scholarship, Long> 
   Page<Scholarship> findByCareers(Career career, Pageable pageable);
   @Procedure("update_scholarships_status")
   void updateScholarshipStatus();
+  Page<Scholarship> findByStatusAndCareers(Status status, Career career, Pageable pageable);
 }
