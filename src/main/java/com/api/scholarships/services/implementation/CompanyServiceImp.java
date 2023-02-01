@@ -91,6 +91,7 @@ public class CompanyServiceImp implements CompanyService {
   @Override
   @Transactional
   public void delete(Long id) throws IOException {
+    //TODO:Do others test cases
     Company companyFound=getOne(id);
     if(companyFound.getScholarships().size()>0){
       throw new BadRequestException(Messages.MESSAGE_CANNOT_DELETE_COMPANY);
