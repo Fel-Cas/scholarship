@@ -91,15 +91,10 @@ public class CompanyServiceImp implements CompanyService {
   @Override
   @Transactional
   public void delete(Long id) throws IOException {
+    //TODO:Do others test cases
     Company companyFound=getOne(id);
     if(companyFound.getScholarships().size()>0){
-      companyFound.getScholarships().stream().forEach(scholarship -> {
-        try {
-          imageService.delete(scholarship.getImage().getId());
-        } catch (IOException e) {
-          throw new BadRequestException(e.getMessage());
-        }
-      });
+      throw new BadRequestException(Messages.MESSAGE_CANNOT_DELETE_COMPANY);
     }
     imageService.delete(companyFound.getImage().getId());
     companyRepository.delete(companyFound);
