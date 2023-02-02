@@ -5,6 +5,7 @@ import com.api.scholarships.dtos.UserDTO;
 import com.api.scholarships.dtos.UserDTOResponse;
 import com.api.scholarships.dtos.UserResponse;
 import com.api.scholarships.dtos.UserUpdateDTO;
+import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.Role;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
@@ -314,5 +315,17 @@ class UserServiceTest {
     userService.delete(1L);
     //then
     verify(userRepository,times(1)).delete(any(User.class));
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to verify an exception when trying to delete a user that belongs a company")
+  void testDeleteWithCompany(){
+    //given
+    user.setCompany(new Company());
+    given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.delete(1L));
+    //then
+    assertEquals(Messages.MESSAGE_CANNOT_DELETE_USER, exception.getMessage());
   }
 }
