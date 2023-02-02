@@ -26,7 +26,12 @@ class ScholarshipContextTest {
         new ScholarshipCourseType(),
         new ScholarshipDefault(),
         new ScholarshipLanguage(),
-        new ScholarshipStatus()
+        new ScholarshipStatus(),
+        new ScholarshipStatusCareer(),
+        new ScholarshipStatusCompany(),
+        new ScholarshipStatusCountry(),
+        new ScholarshipStatusCourseType(),
+        new ScholarshipStatusLanguage()
         );
     scholarshipContext=new ScholarshipContext(strategies);
     scholarshipContext.afterPropertiesSet();
