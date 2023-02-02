@@ -109,7 +109,7 @@ class ScholarshipStatusCareerTest {
   }
   @Test
   @DisplayName("Test ScholarshipStatusCareer, test to find scholarships by status and Career")
-  void testToFindScholarshipsByLanguage(){
+  void testToFindScholarshipsByStatusAndCareer(){
     //given
     given(careerService.findById(1L)).willReturn(career);
     given(statusService.findByName(Variables.STATUS_DEFAULT)).willReturn(status);
