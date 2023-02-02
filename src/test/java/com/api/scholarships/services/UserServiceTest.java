@@ -307,6 +307,7 @@ class UserServiceTest {
   @DisplayName("Test UserService, test to delete a user")
   void testDelete(){
     //given
+    user.setCompany(null);
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
     willDoNothing().given(userRepository).delete(any(User.class));
     //when
