@@ -26,7 +26,12 @@ class ScholarshipContextTest {
         new ScholarshipCourseType(),
         new ScholarshipDefault(),
         new ScholarshipLanguage(),
-        new ScholarshipStatus()
+        new ScholarshipStatus(),
+        new ScholarshipStatusCareer(),
+        new ScholarshipStatusCompany(),
+        new ScholarshipStatusCountry(),
+        new ScholarshipStatusCourseType(),
+        new ScholarshipStatusLanguage()
         );
     scholarshipContext=new ScholarshipContext(strategies);
     scholarshipContext.afterPropertiesSet();
@@ -86,5 +91,45 @@ class ScholarshipContextTest {
     ScholarshipStrategy statusStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS);
     assertNotNull(statusStrategy);
     assertEquals(statusStrategy.typeStrategy(),ScholarshipType.STATUS);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load statusCareer strategy")
+  void    testLoadStatusCareerStrategy(){
+    ScholarshipStrategy scholarshipStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS_CAREER);
+    assertNotNull(scholarshipStrategy);
+    assertEquals(scholarshipStrategy.typeStrategy(),ScholarshipType.STATUS_CAREER);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load statusCompany strategy")
+  void testLoadStatusCompanyStrategy(){
+    ScholarshipStrategy scholarshipStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS_COMPANY);
+    assertNotNull(scholarshipStrategy);
+    assertEquals(scholarshipStrategy.typeStrategy(),ScholarshipType.STATUS_COMPANY);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load statusCountry strategy")
+  void testLoadStatusCountryStrategy(){
+    ScholarshipStrategy scholarshipStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS_COUNTRY);
+    assertNotNull(scholarshipStrategy);
+    assertEquals(scholarshipStrategy.typeStrategy(),ScholarshipType.STATUS_COUNTRY);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load statusCourseType strategy")
+  void testLoadStatusCourseTypeStrategy(){
+    ScholarshipStrategy scholarshipStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS_COURSETYPE);
+    assertNotNull(scholarshipStrategy);
+    assertEquals(scholarshipStrategy.typeStrategy(),ScholarshipType.STATUS_COURSETYPE);
+  }
+
+  @Test
+  @DisplayName("Test ScholarshipContext, test to load statusLanguage strategy")
+  void testLoadStatusLanguageStrategy(){
+    ScholarshipStrategy scholarshipStrategy=scholarshipContext.getScholarshipStrategy(ScholarshipType.STATUS_LANGUAGE);
+    assertNotNull(scholarshipStrategy);
+    assertEquals(scholarshipStrategy.typeStrategy(),ScholarshipType.STATUS_LANGUAGE);
   }
 }

@@ -21,7 +21,7 @@ public class Messages {
   public static final String MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL ="Already exists a legal representative with this email";
   public static final String MESSAGE_USER_NOT_FOUND ="Not exists a legal representative with this id %s";
   public static final String MESSAGE_USER_NOT_FOUND_BY_DNI ="Not exists a legal representative with this dni %s";
-
+  public static final String MESSAGE_CANNOT_DELETE_USER ="It isn't possible delete a user that belongsto a company";
   //Role Service
   public static final String MESSAGE_ROLE_NOT_FOUND ="Not exists a role with this id %s";
   public static final String MESSAGE_ROLE_NOT_FOUND_BY_NAME ="Not exists a role with this name %s";
@@ -45,8 +45,8 @@ public class Messages {
   public static final String MESSAGE_COMPANY_ADD_USER="User %s already has a company assigned";
   public static final String MESSAGE_COMPANY_REMOVE_USER="User %s has not a company assigned";
   public static final String MESSAGE_COMPANY_WITHOUT_USERS="A company cannot be without assigned users";
-  public static final String MESSAGE_CANNOT_DELETE_COMPANY="It isn't possible to delete the company because it has related scholarship";
-
+  public static final String MESSAGE_CANNOT_DELETE_COMPANY_WITH_SCHOLARSHIPS ="It isn't possible to delete the company because it has related scholarship";
+  public static final String MESSAGE_CANNOT_DELETE_COMPANY_WITH_USERS ="It isn't possible to remove a company because it has users assigned";
   //Country
   public static final String MESSAGE_COUNTRY_REQUIRED = "Country is required";
   public static final String MESSAGE_COUNTRY_SIZE = "Country must be between 3 and 50 characters";
