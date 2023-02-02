@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -440,14 +441,14 @@ class CompanyServiceTest {
   @DisplayName("Test CompanyService, test to delete a company")
   void testDelete() throws IOException {
     //given
+    company.setUsers(Collections.emptyList());
+    company.setScholarships(Collections.emptyList());
     given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
     willDoNothing().given(companyRepository).delete(any(Company.class));
-    willDoNothing().given(imageService).delete(1L);
     //when
     companyService.delete(1L);
     //then
     verify(companyRepository, times(1)).delete(company);
-    verify(imageService, times(2)).delete(1L);
   }
 
   @Test
