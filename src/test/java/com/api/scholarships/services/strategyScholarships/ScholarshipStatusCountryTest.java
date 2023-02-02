@@ -59,7 +59,7 @@ class ScholarshipStatusCountryTest {
         .abbreviation("COL")
         .build();
     //status
-    Status status= Status.builder()
+    status= Status.builder()
         .id(1L)
         .statusName("ACTIVO")
         .build();

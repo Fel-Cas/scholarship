@@ -83,7 +83,6 @@ public class UserServiceImp implements UserService {
 
   @Override
   public void delete(Long id) {
-    // TODO:verify if an user with a company it's possible delete
     User userFound = getById(id);
     if(userFound.getCompany()!= null){
       throw new BadRequestException(Messages.MESSAGE_CANNOT_DELETE_USER);
