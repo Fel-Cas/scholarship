@@ -107,5 +107,26 @@ class ScholarshipStatusCareerTest {
         .careers(careers)
         .build();
   }
+  @Test
+  @DisplayName("Test ScholarshipStatusCareer, test to find scholarships by status and Career")
+  void testToFindScholarshipsByLanguage(){
+    //given
+    given(careerService.findById(1L)).willReturn(career);
+    given(statusService.findByName(Variables.STATUS_DEFAULT)).willReturn(status);
+    Page<Scholarship> scholarships=new PageImpl<>(List.of(scholarship));
+    Pageable pageable= PageRequest.of(0,1, Sort.by(Sort.Direction.DESC,"id"));
+    given(scholarshipRepository.findByStatusAndCareers(status,career,pageable)).willReturn(scholarships);
+    //when
+    Page<Scholarship> scholarshipsFound=scholarshipStatusCareer.findScholarshipsByCondition(pageable,1L);
+    //then
+    assertAll(
+        ()->assertThat(scholarshipsFound.getContent().size()).isGreaterThan(0),
+        ()->assertThat(scholarshipsFound.getTotalElements()).isEqualTo(1),
+        ()->assertEquals(0,scholarshipsFound.getNumber()),
+        ()->assertEquals(1,scholarshipsFound.getTotalPages()),
+        ()->assertEquals(1,scholarshipsFound.getSize()),
+        ()->assertTrue(scholarshipsFound.isLast())
 
+    );
+  }
 }
