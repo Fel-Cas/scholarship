@@ -452,6 +452,17 @@ class CompanyServiceTest {
   }
 
   @Test
+  @DisplayName("Test CompanyService, test to verify error when trying to delete a company whit scholarships")
+  void testDeleteWithScholarships() {
+    //given
+    given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+    //when
+    BadRequestException exception = assertThrows(BadRequestException.class, () -> companyService.delete(1L));
+    //then
+    assertEquals(Messages.MESSAGE_CANNOT_DELETE_COMPANY_WITH_SCHOLARSHIPS.formatted(company.getName()), exception.getMessage());
+  }
+
+  @Test
   @DisplayName("Test CompanyService, test to add an user to a company")
   void addUser(){
     //given
