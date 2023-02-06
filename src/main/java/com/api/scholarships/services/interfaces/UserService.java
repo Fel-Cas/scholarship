@@ -12,4 +12,5 @@ public interface UserService {
   public User getByDNI(String dni);
   public User update(Long id, UserUpdateDTO legalRepresentative);
   public void delete(Long id);
+  public User getByEmail(String email);
 }
