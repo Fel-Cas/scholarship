@@ -22,6 +22,7 @@ public class Messages {
   public static final String MESSAGE_USER_NOT_FOUND ="Not exists a legal representative with this id %s";
   public static final String MESSAGE_USER_NOT_FOUND_BY_DNI ="Not exists a legal representative with this dni %s";
   public static final String MESSAGE_CANNOT_DELETE_USER ="It isn't possible delete a user that belongsto a company";
+  public static final String MESSAGE_USER_NOT_FOUND_BY_EMAIL="User or password incorrect";
   //Role Service
   public static final String MESSAGE_ROLE_NOT_FOUND ="Not exists a role with this id %s";
   public static final String MESSAGE_ROLE_NOT_FOUND_BY_NAME ="Not exists a role with this name %s";
