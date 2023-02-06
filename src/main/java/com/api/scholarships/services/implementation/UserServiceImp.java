@@ -18,6 +18,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImp implements UserService {
 
@@ -88,6 +90,13 @@ public class UserServiceImp implements UserService {
       throw new BadRequestException(Messages.MESSAGE_CANNOT_DELETE_USER);
     }
     userRepository.delete(userFound);
+  }
+
+  @Override
+  public User getByEmail(String email) {
+    Optional<User> userFound = userRepository.findByEmail(email);
+    if (userFound.isEmpty()) throw new NotFoundException(Messages.MESSAGE_USER_NOT_FOUND_BY_EMAIL);
+    return userFound.get();
   }
 
   protected void updateUserData(User userFound, UserUpdateDTO userUpdateDTO) {
