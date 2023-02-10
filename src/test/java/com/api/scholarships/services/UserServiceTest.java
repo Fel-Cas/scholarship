@@ -13,6 +13,7 @@ import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
 import com.api.scholarships.services.implementation.UserServiceImp;
+import com.api.scholarships.services.interfaces.CurrentUserService;
 import com.api.scholarships.services.interfaces.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +49,8 @@ class UserServiceTest {
   private RoleService roleService;
   @Mock
   private UserMapper userMapper;
+  @Mock
+  private CurrentUserService currentUserService;
   @InjectMocks
   private UserServiceImp userService;
   private User user;
@@ -188,6 +191,7 @@ class UserServiceTest {
   void testFindUserById() {
     //given
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    willDoNothing().given(currentUserService).verifyCorrectUser(any(User.class));
     //when
     User userFound=userService.getById(1L);
     //then
