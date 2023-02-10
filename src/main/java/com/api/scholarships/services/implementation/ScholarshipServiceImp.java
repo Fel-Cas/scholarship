@@ -49,6 +49,8 @@ public class ScholarshipServiceImp implements ScholarshipService {
   @Autowired
   private ScholarshipMapper scholarshipMapper;
   @Autowired
+  private CurrentUserService currentUserService;
+  @Autowired
   private ScholarshipContext scholarshipContext;
   private SimpleDateFormat simpleDateFormat= new SimpleDateFormat("yyyy-MM-dd");
   private final String DEFAULT_STATUS="VIGENTE";
@@ -56,6 +58,8 @@ public class ScholarshipServiceImp implements ScholarshipService {
 
   @Override
   public Scholarship create(ScholarshipDTO scholarshipDTO) throws IOException, ParseException {
+    Company companyFound=companyService.getOne(scholarshipDTO.getCompany());
+    currentUserService.verifyCorrectUserInCompany(companyFound);
     validateDates(simpleDateFormat.parse(scholarshipDTO.getStartDate()),
         simpleDateFormat.parse(scholarshipDTO.getFinishDate()));
     List<Career> careers=loadCareers(scholarshipDTO.getCareers());
@@ -71,7 +75,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
             .status(statusService.findByName(DEFAULT_STATUS))
             .language(languageService.findByName(scholarshipDTO.getLanguage()))
             .image(imageService.save(scholarshipDTO.getImage()))
-            .company(companyService.getOne(scholarshipDTO.getCompany()))
+            .company(companyFound)
             .careers(careers)
             .build()
     );
@@ -90,6 +94,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   public Scholarship update(ScholarshipUpdateDTO scholarshipUpdateDTO, long id) {
     validateDates(scholarshipUpdateDTO.getStartDate(),scholarshipUpdateDTO.getFinishDate());
     Scholarship schorlarshipFound=getById(id);
+    currentUserService.verifyCorrectUserInScholarship(schorlarshipFound);
     updateInformation(schorlarshipFound, scholarshipUpdateDTO);
     return scholarshipRepository.save(schorlarshipFound);
   }
@@ -97,6 +102,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   @Override
   public void delete(long id) throws IOException {
     Scholarship scholarshipFound=getById(id);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     imageService.delete(scholarshipFound.getImage().getId());
     scholarshipRepository.delete(scholarshipFound);
   }
@@ -124,6 +130,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   public Scholarship changeCourseType(Long scholarshipId, Long courseTypeId) {
     CourseType courseTypeFound=courseTypeService.findById(courseTypeId);
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     scholarshipFound.setCourseType(courseTypeFound);
     return scholarshipRepository.save(scholarshipFound);
   }
@@ -132,6 +139,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   public Scholarship changeCountry(Long scholarshipId, Long countryId) {
     Country countryFound=countryService.findById(countryId);
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     scholarshipFound.setCountry(countryFound);
     return scholarshipRepository.save(scholarshipFound);
   }
@@ -140,6 +148,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   public Scholarship changeStatus(Long scholarshipId, Long statusId) {
     Status statusFound=statusService.findById(statusId);
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     scholarshipFound.setStatus(statusFound);
     return scholarshipRepository.save(scholarshipFound);
   }
@@ -148,6 +157,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   public Scholarship changeLanguage(Long scholarshipId, Long languageId) {
     Language languageFound=languageService.findById(languageId);
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     scholarshipFound.setLanguage(languageFound);
     return scholarshipRepository.save(scholarshipFound);
   }
@@ -158,12 +168,14 @@ public class ScholarshipServiceImp implements ScholarshipService {
     imageService.delete(scholarshipFound.getImage().getId());
     Image imageSaved=imageService.save(image);
     scholarshipFound.setImage(imageSaved);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     return scholarshipRepository.save(scholarshipFound);
   }
 
   @Override
   public Scholarship addCareer(Long scholarshipId, Long careerId) {
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     Career careerFound=careerService.findById(careerId);
     if(scholarshipFound.getCareers().contains(careerFound)){
       throw new BadRequestException(Messages.MESSAGE_DUPLICATE_CAREER.formatted(careerFound.getCareerName()));
@@ -175,6 +187,7 @@ public class ScholarshipServiceImp implements ScholarshipService {
   @Override
   public Scholarship removeCareer(Long scholarshipId, Long careerId) {
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     if(scholarshipFound.getCareers().size()==1){
       throw new BadRequestException(Messages.MESSAGE_CANNOT_REMOVE_CAREER);
     }
