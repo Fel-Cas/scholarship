@@ -353,4 +353,15 @@ class UserServiceTest {
         ()-> assertNotNull(userFound.getRole())
     );
   }
+
+  @Test
+  @DisplayName("Test UserService, test to verify an exception when trying to get an user by email that not exists")
+  void testGetUserByEmailAndVerifyException(){
+    //given
+    given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getByEmail(user.getEmail()));
+    //then
+    assertEquals(Messages.MESSAGE_USER_NOT_FOUND_BY_EMAIL, exception.getMessage());
+  }
 }
