@@ -217,6 +217,7 @@ class UserServiceTest {
   void testFindUserByDni() {
     //given
     given(userRepository.findByDni(anyString())).willReturn(Optional.of(user));
+    willDoNothing().given(currentUserService).verifyCorrectUser(any(User.class));
     //when
     User userFound=userService.getByDNI(user.getDni());
     //then
