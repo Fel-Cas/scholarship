@@ -607,7 +607,7 @@ class CompanyServiceTest {
     given(companyRepository.save(any(Company.class))).willReturn(company);
     willDoNothing().given(imageService).delete(anyLong());
     given(imageService.save(any(MultipartFile.class))).willReturn(company.getImage());
-    willDoNothing().given(currentUserService).verifyCorrectUserInCompany(any(Company.class)));
+    willDoNothing().given(currentUserService).verifyCorrectUserInCompany(any(Company.class));
     //when
     companyService.changeImage(1L, new MockMultipartFile("imageFile", "test.png", "image/png", "some image".getBytes()));
     //then
