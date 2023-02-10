@@ -14,9 +14,8 @@ public class CurrentUsersService {
   @Autowired
   private UserRepository userRepository;
 
-  public User getCurrentUser() {
+  public String getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String currentUserEmail = authentication.getName();
-    return userRepository.findByEmail(currentUserEmail).get();
+    return authentication.getName();
   }
 }
