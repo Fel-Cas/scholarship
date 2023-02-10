@@ -424,6 +424,7 @@ class ScholarshipServiceTest {
     given(languageService.findById(2L)).willReturn(languageFound);
     scholarship.setLanguage(languageFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeLanguage(1L,2L);
     //then
