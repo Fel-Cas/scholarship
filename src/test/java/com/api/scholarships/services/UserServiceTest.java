@@ -334,4 +334,23 @@ class UserServiceTest {
     //then
     assertEquals(Messages.MESSAGE_CANNOT_DELETE_USER, exception.getMessage());
   }
+
+  @Test
+  @DisplayName("Test UserService, test to get an user by email")
+  void testGetUserByEmail(){
+    //given
+    given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
+    //when
+    User userFound=userService.getByEmail(user.getEmail());
+    //then
+    assertAll(
+        ()->assertNotNull(userFound),
+        ()-> assertEquals(userFound.getId(),user.getId()),
+        ()-> assertEquals(userFound.getName(),user.getName()),
+        ()-> assertEquals(userFound.getSurname(),user.getSurname()),
+        ()-> assertEquals(userFound.getDni(),user.getDni()),
+        ()-> assertEquals(userFound.getEmail(),user.getEmail()),
+        ()-> assertNotNull(userFound.getRole())
+    );
+  }
 }
