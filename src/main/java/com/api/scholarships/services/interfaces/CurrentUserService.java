@@ -1,5 +1,7 @@
 package com.api.scholarships.services.interfaces;
 
+import com.api.scholarships.entities.User;
+
 public interface CurrentUserService {
-  public String getCurrentUser();
+  void verifyCorrectUser(User user);
 }
