@@ -44,7 +44,6 @@ public class UserController {
   }
 
   @GetMapping(Endpoints.ID)
-  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<UserDTOResponse> findById(@PathVariable Long id){
     return ResponseEntity.ok(userMapper.userToUserDTOResponse(userService.getById(id)));
   }
