@@ -403,6 +403,7 @@ class ScholarshipServiceTest {
     given(statusService.findById(2L)).willReturn(statusFound);
     scholarship.setStatus(statusFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeStatus(1L,2L);
     //then
