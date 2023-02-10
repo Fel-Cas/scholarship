@@ -40,4 +40,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<Object>(errors,HttpStatus.BAD_REQUEST);
   }
 
+  @ExceptionHandler(ForbiddenException.class)
+  public final ProblemDetail handlerForbiddenException(ForbiddenException forbiddenException){
+    ProblemDetail body=ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN,"FORBIDDEN");
+    body.setDetail(forbiddenException.getMessage());
+    return body;
+  }
+
 }

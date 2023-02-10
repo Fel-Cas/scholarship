@@ -39,4 +39,8 @@ public class Endpoints {
   public static final String SCHOLARSHIPS_LANGUAGE ="/language/{scholarshipId}/{languageId}";
   public static final String SCHOLARSHIPS_IMAGE ="/image/{scholarshipId}";
   public static final String SCHOLARSHIPS_CAREER="/career/{scholarshipId}/{careerId}";
+
+  //Auth
+  public static final String AUTH = "/api/v1/scholarships/auth";
+  public static final String LOGIN= "/login";
 }

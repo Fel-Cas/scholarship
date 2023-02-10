@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,12 +26,14 @@ public class UserController {
   private UserService userService;
 
   @PostMapping()
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<UserDTOResponse> save(@Valid @RequestBody UserDTO userDTO){
     User user = userService.save(userDTO);
     return new ResponseEntity(userMapper.userToUserDTOResponse(user), HttpStatus.CREATED);
   }
 
   @GetMapping()
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<UserResponse> findAll(
       @RequestParam(value ="numberPage" ,defaultValue = PaginationRequest.DEFAULT_NUMBER_PAGE, required = false) int page,
       @RequestParam(value ="pagesize",defaultValue = PaginationRequest.DEFAULT_PAGE_SIZE,required = false) int size,
@@ -46,16 +49,19 @@ public class UserController {
   }
 
   @GetMapping(Endpoints.USERS_DNI)
+  @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<UserDTOResponse> findByDNI(@PathVariable String dni){
     return ResponseEntity.ok(userMapper.userToUserDTOResponse(userService.getByDNI(dni)));
   }
 
   @PutMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<UserDTOResponse> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO legalRepresentativeDTO){
     return ResponseEntity.ok(userMapper.userToUserDTOResponse(userService.update(id, legalRepresentativeDTO)));
   }
 
   @DeleteMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<Void> delete(@PathVariable Long id){
     userService.delete(id);
     return ResponseEntity.noContent().build();

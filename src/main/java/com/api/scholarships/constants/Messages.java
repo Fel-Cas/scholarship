@@ -1,6 +1,7 @@
 package com.api.scholarships.constants;
 
 public class Messages {
+  public static final String MESSAGE_ACCESS_DENIED= "It's impossible make this action";
   //User
   public static final String MESSAGE_NAME_REQUIRED = "Name is required";
   public static final String MESSAGE_NAME_SIZE = "Name must be between 2 and 50 characters";
@@ -22,6 +23,7 @@ public class Messages {
   public static final String MESSAGE_USER_NOT_FOUND ="Not exists a legal representative with this id %s";
   public static final String MESSAGE_USER_NOT_FOUND_BY_DNI ="Not exists a legal representative with this dni %s";
   public static final String MESSAGE_CANNOT_DELETE_USER ="It isn't possible delete a user that belongsto a company";
+  public static final String MESSAGE_USER_NOT_FOUND_BY_EMAIL="User or password incorrect";
   //Role Service
   public static final String MESSAGE_ROLE_NOT_FOUND ="Not exists a role with this id %s";
   public static final String MESSAGE_ROLE_NOT_FOUND_BY_NAME ="Not exists a role with this name %s";

@@ -12,6 +12,7 @@ import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
 import com.api.scholarships.services.interfaces.CompanyService;
+import com.api.scholarships.services.interfaces.CurrentUserService;
 import com.api.scholarships.services.interfaces.ImageService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class CompanyServiceImp implements CompanyService {
   private ImageService imageService ;
   @Autowired
   private UserService userService;
+  @Autowired
+  private CurrentUserService currentUserService;
 
   @Override
   public Company create(CompanyDTO companyDTO) throws IOException {
@@ -81,6 +84,7 @@ public class CompanyServiceImp implements CompanyService {
   @Override
   public Company update(Long id, CompanyUpdateDTO companyDTO) {
     Company companyFound=getOne(id);
+    currentUserService.verifyCorrectUserInCompany(companyFound);
     validateUniqueInformationUpdateCompany(companyDTO,id);
     updateCompanyData(companyFound,companyDTO);
     return companyRepository.save(companyFound);
@@ -127,6 +131,7 @@ public class CompanyServiceImp implements CompanyService {
   @Override
   public void changeImage(Long id, MultipartFile image) throws IOException {
     Company companyFound=getOne(id);
+    currentUserService.verifyCorrectUserInCompany(companyFound);
     imageService.delete(companyFound.getImage().getId());
     Image imageCreated=imageService.save(image);
     companyFound.setImage(imageCreated);

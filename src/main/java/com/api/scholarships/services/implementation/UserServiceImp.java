@@ -7,16 +7,21 @@ import com.api.scholarships.dtos.UserUpdateDTO;
 import com.api.scholarships.entities.Role;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.BadRequestException;
+import com.api.scholarships.exceptions.ForbiddenException;
 import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
+import com.api.scholarships.services.interfaces.CurrentUserService;
 import com.api.scholarships.services.interfaces.RoleService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImp implements UserService {
@@ -27,6 +32,8 @@ public class UserServiceImp implements UserService {
   private UserMapper userMapper;
   @Autowired
   private RoleService roleService;
+  @Autowired
+  private CurrentUserService currentUserService;
 
   @Override
   public User save(UserDTO userDTO) {
@@ -60,21 +67,24 @@ public class UserServiceImp implements UserService {
 
   @Override
   public User getById(Long id) {
-    User user = userRepository.findById(id)
+    User userFound = userRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(Messages.MESSAGE_USER_NOT_FOUND.formatted(id)));
-    return user;
+    currentUserService.verifyCorrectUser(userFound);
+    return userFound;
   }
 
   @Override
   public User getByDNI(String dni) {
     User userFound = userRepository.findByDni(dni)
         .orElseThrow(() -> new NotFoundException(Messages.MESSAGE_USER_NOT_FOUND_BY_DNI.formatted(dni)));
+    currentUserService.verifyCorrectUser(userFound);
     return userFound;
   }
 
   @Override
   public User update(Long id, UserUpdateDTO userUpdateDTO) {
     User userFound = getById(id);
+    currentUserService.verifyCorrectUser(userFound);
     if(userRepository.existsByEmailAndIdNot(userUpdateDTO.getEmail(),id)) throw new BadRequestException(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_EMAIL);
     if(userRepository.existsByDniAndIdNot(userUpdateDTO.getDni(),id)) throw new BadRequestException(Messages.MESSAGE_USER_BAD_REQUEST_CREATE_WITH_WRONG_DNI);
     updateUserData(userFound, userUpdateDTO);
@@ -88,6 +98,14 @@ public class UserServiceImp implements UserService {
       throw new BadRequestException(Messages.MESSAGE_CANNOT_DELETE_USER);
     }
     userRepository.delete(userFound);
+  }
+
+  @Override
+  public User getByEmail(String email) {
+    //TODO: implement test of this method
+    Optional<User> userFound = userRepository.findByEmail(email);
+    if (userFound.isEmpty()) throw new NotFoundException(Messages.MESSAGE_USER_NOT_FOUND_BY_EMAIL);
+    return userFound.get();
   }
 
   protected void updateUserData(User userFound, UserUpdateDTO userUpdateDTO) {
