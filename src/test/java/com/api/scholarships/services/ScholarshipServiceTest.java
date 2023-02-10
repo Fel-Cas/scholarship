@@ -70,6 +70,8 @@ class ScholarshipServiceTest {
   private ScholarshipContext scholarshipContext;
   @Mock
   private ScholarshipStrategy scholarshipStrategy;
+  @Mock
+  private CurrentUserService currentUserService;
   @InjectMocks
   private ScholarshipServiceImp scholarshipService;
   private CourseType courseType;
@@ -173,6 +175,8 @@ class ScholarshipServiceTest {
     given(languageService.findByName(anyString())).willReturn(language);
     given(imageService.save(any(MultipartFile.class))).willReturn(image);
     given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarship);
+    given(companyService.getOne(anyLong())).willReturn(company);
+    willDoNothing().given(currentUserService).verifyCorrectUserInCompany(company);
     //when
     Scholarship scholarshipSaved=scholarshipService.create(scholarshipDTO);
     //then
