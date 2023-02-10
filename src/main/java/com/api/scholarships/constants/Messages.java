@@ -1,6 +1,7 @@
 package com.api.scholarships.constants;
 
 public class Messages {
+  public static final String MESSAGE_ACCESS_DENIED= "It's impossible make this action";
   //User
   public static final String MESSAGE_NAME_REQUIRED = "Name is required";
   public static final String MESSAGE_NAME_SIZE = "Name must be between 2 and 50 characters";
