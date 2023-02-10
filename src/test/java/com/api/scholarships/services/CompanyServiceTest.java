@@ -14,6 +14,7 @@ import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.CompanyMapper;
 import com.api.scholarships.repositories.CompanyRepository;
 import com.api.scholarships.services.implementation.CompanyServiceImp;
+import com.api.scholarships.services.interfaces.CurrentUserService;
 import com.api.scholarships.services.interfaces.ImageService;
 import com.api.scholarships.services.interfaces.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,6 +56,8 @@ class CompanyServiceTest {
   private ImageService imageService;
   @Mock
   private UserService userService;
+  @Mock
+  private CurrentUserService currentUserService;
   @InjectMocks
   private CompanyServiceImp companyService;
   private Company company;
@@ -347,6 +350,7 @@ class CompanyServiceTest {
     given(companyRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(false);
     given(companyRepository.existsByNameAndIdNot(anyString(),anyLong())).willReturn(false);
     given(companyRepository.existsByPhoneAndIdNot(anyString(),anyLong())).willReturn(false);
+    willDoNothing().given(currentUserService).verifyCorrectUserInCompany(any(Company.class));
 
     CompanyUpdateDTO companyUpdateDTO = CompanyUpdateDTO.builder()
         .name("Company S.A.S.")
@@ -603,6 +607,7 @@ class CompanyServiceTest {
     given(companyRepository.save(any(Company.class))).willReturn(company);
     willDoNothing().given(imageService).delete(anyLong());
     given(imageService.save(any(MultipartFile.class))).willReturn(company.getImage());
+    willDoNothing().given(currentUserService).verifyCorrectUserInCompany(any(Company.class)));
     //when
     companyService.changeImage(1L, new MockMultipartFile("imageFile", "test.png", "image/png", "some image".getBytes()));
     //then
