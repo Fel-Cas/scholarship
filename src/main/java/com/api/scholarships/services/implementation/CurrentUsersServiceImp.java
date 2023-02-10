@@ -1,6 +1,7 @@
 package com.api.scholarships.services.implementation;
 
 import com.api.scholarships.constants.Messages;
+import com.api.scholarships.entities.Company;
 import com.api.scholarships.entities.User;
 import com.api.scholarships.exceptions.ForbiddenException;
 import com.api.scholarships.services.interfaces.CurrentUserService;
@@ -20,5 +21,15 @@ public class CurrentUsersServiceImp implements CurrentUserService {
     if (!user.getEmail().equals(getCurrentUser())){
       throw new ForbiddenException(Messages.MESSAGE_ACCESS_DENIED);
     }
+  }
+
+  @Override
+  public void verifyCorrectUserInCompany(Company company) {
+    company.getUsers().stream()
+        .filter(user -> user
+            .getEmail()
+            .equals(getCurrentUser()))
+        .findFirst()
+        .orElseThrow(() -> new ForbiddenException(Messages.MESSAGE_ACCESS_DENIED));
   }
 }
