@@ -275,6 +275,7 @@ class ScholarshipServiceTest {
     scholarship.setStartDate(scholarshipUpdateDTO.getStartDate());
     scholarship.setFinishDate(scholarshipUpdateDTO.getFinishDate());
     given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.update(scholarshipUpdateDTO,1L);
     //then
