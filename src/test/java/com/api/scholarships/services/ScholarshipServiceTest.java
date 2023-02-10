@@ -504,6 +504,7 @@ class ScholarshipServiceTest {
     //given
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     given(careerService.findById(2L)).willReturn(career);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.addCareer(1L,2L));
     //then
@@ -534,6 +535,7 @@ class ScholarshipServiceTest {
         .careers(List.of(career))
         .build();
     given(scholarshipRepository.save(scholarshipResponse)).willReturn(scholarshipResponse);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.removeCareer(1L,2L);
     //then
@@ -561,6 +563,7 @@ class ScholarshipServiceTest {
     Career careerFound=new Career(3L,"LITERATURA");
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     given(careerService.findById(3L)).willReturn(careerFound);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.removeCareer(1L,3L));
     //then
