@@ -253,6 +253,7 @@ class UserServiceTest {
     given(userRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(false);
     given(userRepository.existsByDniAndIdNot(anyString(),anyLong())).willReturn(false);
     given(userRepository.save(any(User.class))).willReturn(user);
+    willDoNothing().given(currentUserService).verifyCorrectUser(any(User.class));
 
     //when
     User userUpdated=userService.update(1L,userUpdateDTO);
