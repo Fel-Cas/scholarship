@@ -362,6 +362,7 @@ class ScholarshipServiceTest {
     given(courseTypeService.findById(2L)).willReturn(courseTypeFound);
     scholarship.setCourseType(courseTypeFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeCourseType(1L,2L);
     //then
