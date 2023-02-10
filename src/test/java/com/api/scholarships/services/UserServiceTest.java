@@ -13,6 +13,7 @@ import com.api.scholarships.exceptions.NotFoundException;
 import com.api.scholarships.mappers.UserMapper;
 import com.api.scholarships.repositories.UserRepository;
 import com.api.scholarships.services.implementation.UserServiceImp;
+import com.api.scholarships.services.interfaces.CurrentUserService;
 import com.api.scholarships.services.interfaces.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +49,8 @@ class UserServiceTest {
   private RoleService roleService;
   @Mock
   private UserMapper userMapper;
+  @Mock
+  private CurrentUserService currentUserService;
   @InjectMocks
   private UserServiceImp userService;
   private User user;
@@ -188,6 +191,7 @@ class UserServiceTest {
   void testFindUserById() {
     //given
     given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+    willDoNothing().given(currentUserService).verifyCorrectUser(any(User.class));
     //when
     User userFound=userService.getById(1L);
     //then
@@ -213,6 +217,7 @@ class UserServiceTest {
   void testFindUserByDni() {
     //given
     given(userRepository.findByDni(anyString())).willReturn(Optional.of(user));
+    willDoNothing().given(currentUserService).verifyCorrectUser(any(User.class));
     //when
     User userFound=userService.getByDNI(user.getDni());
     //then
@@ -248,6 +253,7 @@ class UserServiceTest {
     given(userRepository.existsByEmailAndIdNot(anyString(),anyLong())).willReturn(false);
     given(userRepository.existsByDniAndIdNot(anyString(),anyLong())).willReturn(false);
     given(userRepository.save(any(User.class))).willReturn(user);
+    willDoNothing().given(currentUserService).verifyCorrectUser(any(User.class));
 
     //when
     User userUpdated=userService.update(1L,userUpdateDTO);
@@ -327,5 +333,35 @@ class UserServiceTest {
     BadRequestException exception = assertThrows(BadRequestException.class, () -> userService.delete(1L));
     //then
     assertEquals(Messages.MESSAGE_CANNOT_DELETE_USER, exception.getMessage());
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to get an user by email")
+  void testGetUserByEmail(){
+    //given
+    given(userRepository.findByEmail(anyString())).willReturn(Optional.of(user));
+    //when
+    User userFound=userService.getByEmail(user.getEmail());
+    //then
+    assertAll(
+        ()->assertNotNull(userFound),
+        ()-> assertEquals(userFound.getId(),user.getId()),
+        ()-> assertEquals(userFound.getName(),user.getName()),
+        ()-> assertEquals(userFound.getSurname(),user.getSurname()),
+        ()-> assertEquals(userFound.getDni(),user.getDni()),
+        ()-> assertEquals(userFound.getEmail(),user.getEmail()),
+        ()-> assertNotNull(userFound.getRole())
+    );
+  }
+
+  @Test
+  @DisplayName("Test UserService, test to verify an exception when trying to get an user by email that not exists")
+  void testGetUserByEmailAndVerifyException(){
+    //given
+    given(userRepository.findByEmail(anyString())).willReturn(Optional.empty());
+    //when
+    NotFoundException exception = assertThrows(NotFoundException.class, () -> userService.getByEmail(user.getEmail()));
+    //then
+    assertEquals(Messages.MESSAGE_USER_NOT_FOUND_BY_EMAIL, exception.getMessage());
   }
 }

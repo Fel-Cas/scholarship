@@ -70,6 +70,8 @@ class ScholarshipServiceTest {
   private ScholarshipContext scholarshipContext;
   @Mock
   private ScholarshipStrategy scholarshipStrategy;
+  @Mock
+  private CurrentUserService currentUserService;
   @InjectMocks
   private ScholarshipServiceImp scholarshipService;
   private CourseType courseType;
@@ -173,6 +175,8 @@ class ScholarshipServiceTest {
     given(languageService.findByName(anyString())).willReturn(language);
     given(imageService.save(any(MultipartFile.class))).willReturn(image);
     given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarship);
+    given(companyService.getOne(anyLong())).willReturn(company);
+    willDoNothing().given(currentUserService).verifyCorrectUserInCompany(company);
     //when
     Scholarship scholarshipSaved=scholarshipService.create(scholarshipDTO);
     //then
@@ -271,6 +275,7 @@ class ScholarshipServiceTest {
     scholarship.setStartDate(scholarshipUpdateDTO.getStartDate());
     scholarship.setFinishDate(scholarshipUpdateDTO.getFinishDate());
     given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.update(scholarshipUpdateDTO,1L);
     //then
@@ -299,6 +304,7 @@ class ScholarshipServiceTest {
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     willDoNothing().given(imageService).delete(1L);
     willDoNothing().given(scholarshipRepository).delete(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     scholarshipService.delete(1L);
     //then
@@ -356,6 +362,7 @@ class ScholarshipServiceTest {
     given(courseTypeService.findById(2L)).willReturn(courseTypeFound);
     scholarship.setCourseType(courseTypeFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeCourseType(1L,2L);
     //then
@@ -375,6 +382,7 @@ class ScholarshipServiceTest {
     given(countryService.findById(2L)).willReturn(countryFound);
     scholarship.setCountry(countryFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeCountry(1L,2L);
     //then
@@ -395,6 +403,7 @@ class ScholarshipServiceTest {
     given(statusService.findById(2L)).willReturn(statusFound);
     scholarship.setStatus(statusFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeStatus(1L,2L);
     //then
@@ -415,6 +424,7 @@ class ScholarshipServiceTest {
     given(languageService.findById(2L)).willReturn(languageFound);
     scholarship.setLanguage(languageFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeLanguage(1L,2L);
     //then
@@ -441,6 +451,7 @@ class ScholarshipServiceTest {
     given(imageService.save(any(MultipartFile.class))).willReturn(imageCreated);
     scholarship.setImage(imageCreated);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeImage(1L,new MockMultipartFile( "image", "image.jpeg", "image/jpeg","".getBytes()));
     //then
@@ -478,7 +489,7 @@ class ScholarshipServiceTest {
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     given(careerService.findById(2L)).willReturn(careerFound);
     given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarshipResponse);
-
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.addCareer(1L,2L);
     //then
@@ -493,6 +504,7 @@ class ScholarshipServiceTest {
     //given
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     given(careerService.findById(2L)).willReturn(career);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.addCareer(1L,2L));
     //then
@@ -523,6 +535,7 @@ class ScholarshipServiceTest {
         .careers(List.of(career))
         .build();
     given(scholarshipRepository.save(scholarshipResponse)).willReturn(scholarshipResponse);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.removeCareer(1L,2L);
     //then
@@ -550,6 +563,7 @@ class ScholarshipServiceTest {
     Career careerFound=new Career(3L,"LITERATURA");
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     given(careerService.findById(3L)).willReturn(careerFound);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     BadRequestException exception=assertThrows(BadRequestException.class,()->scholarshipService.removeCareer(1L,3L));
     //then

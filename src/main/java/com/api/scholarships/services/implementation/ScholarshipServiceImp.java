@@ -165,10 +165,10 @@ public class ScholarshipServiceImp implements ScholarshipService {
   @Override
   public Scholarship changeImage(Long scholarshipId, MultipartFile image) throws IOException {
     Scholarship scholarshipFound=getById(scholarshipId);
+    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     imageService.delete(scholarshipFound.getImage().getId());
     Image imageSaved=imageService.save(image);
     scholarshipFound.setImage(imageSaved);
-    currentUserService.verifyCorrectUserInScholarship(scholarshipFound);
     return scholarshipRepository.save(scholarshipFound);
   }
 
