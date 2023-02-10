@@ -304,6 +304,7 @@ class ScholarshipServiceTest {
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     willDoNothing().given(imageService).delete(1L);
     willDoNothing().given(scholarshipRepository).delete(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     scholarshipService.delete(1L);
     //then
