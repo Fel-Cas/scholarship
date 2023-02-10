@@ -451,6 +451,7 @@ class ScholarshipServiceTest {
     given(imageService.save(any(MultipartFile.class))).willReturn(imageCreated);
     scholarship.setImage(imageCreated);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeImage(1L,new MockMultipartFile( "image", "image.jpeg", "image/jpeg","".getBytes()));
     //then
