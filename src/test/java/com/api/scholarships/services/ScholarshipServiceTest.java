@@ -489,7 +489,7 @@ class ScholarshipServiceTest {
     given(scholarshipRepository.findById(1L)).willReturn(Optional.of(scholarship));
     given(careerService.findById(2L)).willReturn(careerFound);
     given(scholarshipRepository.save(any(Scholarship.class))).willReturn(scholarshipResponse);
-
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.addCareer(1L,2L);
     //then
