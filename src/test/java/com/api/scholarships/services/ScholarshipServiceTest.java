@@ -382,6 +382,7 @@ class ScholarshipServiceTest {
     given(countryService.findById(2L)).willReturn(countryFound);
     scholarship.setCountry(countryFound);
     given(scholarshipRepository.save(scholarship)).willReturn(scholarship);
+    willDoNothing().given(currentUserService).verifyCorrectUserInScholarship(any(Scholarship.class));
     //when
     Scholarship scholarshipUpdated=scholarshipService.changeCountry(1L,2L);
     //then
