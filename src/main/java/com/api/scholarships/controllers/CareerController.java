@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,6 +24,7 @@ public class CareerController {
   private CareerMapper careerMapper;
 
   @PostMapping()
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<CareerDTOResponse> create(@Valid @RequestBody CareerDTO careerDTO){
     Career careerSaved=careerService.create(careerDTO);
     return new ResponseEntity<>(careerMapper.careerToCareerDTOResponse(careerSaved), HttpStatus.CREATED);
@@ -45,6 +47,7 @@ public class CareerController {
   }
 
   @DeleteMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<Void> delete(@PathVariable("id") Long id){
     careerService.delete(id);
     return ResponseEntity.noContent().build();

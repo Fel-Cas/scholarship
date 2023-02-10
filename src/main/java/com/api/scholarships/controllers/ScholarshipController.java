@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,7 @@ public class ScholarshipController {
   private ScholarshipMapper scholarshipMapper;
 
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> create(@Valid @ModelAttribute ScholarshipDTO scholarshipDTO) throws IOException, ParseException {
     Scholarship scholarshipSaved=scholarshipService.create(scholarshipDTO);
     return new ResponseEntity<>(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipSaved), HttpStatus.CREATED);
@@ -48,42 +50,50 @@ public class ScholarshipController {
   }
 
   @DeleteMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> delete(@PathVariable("id") long id) throws IOException {
     scholarshipService.delete(id);
     return ResponseEntity.noContent().build();
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_COUNTRY)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
+
   public ResponseEntity<ScholarshipDTOResponse> updateCountry(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("countryId") Long countryId) {
     Scholarship scholarshipUpdated=scholarshipService.changeCountry(scholarshipId, countryId);
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_COURSE_TYPE)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> updateCourseType(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("courseTypeId") Long courseTypeId) {
     Scholarship scholarshipUpdated=scholarshipService.changeCourseType(scholarshipId, courseTypeId);
     return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_STATUS)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> updateStatus(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("statusId") Long statusId) {
      Scholarship scholarshipUpdated=scholarshipService.changeStatus(scholarshipId, statusId);
      return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_LANGUAGE)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> updateLanguage(@PathVariable("scholarshipId") Long scholarshipId, @PathVariable("languageId") Long languageId) {
      Scholarship scholarshipUpdated=scholarshipService.changeLanguage(scholarshipId, languageId);
      return ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_IMAGE)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> updateImage(@PathVariable("scholarshipId") Long scholarshipId, @RequestParam("image")MultipartFile image) throws IOException {
     Scholarship scholarshipUpdated=scholarshipService.changeImage(scholarshipId, image);
     return  ResponseEntity.ok(scholarshipMapper.scholarshipToScholarshipDTOResponse(scholarshipUpdated));
   }
 
   @PutMapping(Endpoints.SCHOLARSHIPS_CAREER)
+  @PreAuthorize("hasRole('ROLE_LEGAL_REPRESENTATIVE')")
   public ResponseEntity<ScholarshipDTOResponse> updateCareers(
       @PathVariable("scholarshipId") Long scholarshipId,
       @PathVariable("careerId") Long careerId,

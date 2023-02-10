@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -24,6 +25,7 @@ public class CountryController {
   private CountryMapper countryMapper;
 
   @PostMapping()
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<CountryDTOResponse> create(@Valid @RequestBody CountryDTO countryDTO){
     Country countrySaved=countryService.create(countryDTO);
     return new ResponseEntity(countryMapper.countryToCountryDTOResponse(countrySaved), HttpStatus.CREATED);
@@ -44,6 +46,7 @@ public class CountryController {
   }
 
   @DeleteMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> delete(@PathVariable Long id){
     countryService.delete(id);
     return ResponseEntity.noContent().build();

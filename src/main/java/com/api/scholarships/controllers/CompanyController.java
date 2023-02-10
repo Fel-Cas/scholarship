@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ public class CompanyController {
   private CompanyMapper companyMapper;
 
   @PostMapping
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<CompanyDTOResponse> create(@ModelAttribute @Valid CompanyDTO companyDTO) throws IOException {
     Company companySaved=companyService.create(companyDTO);
     return new ResponseEntity<>(companyMapper.companyToCompanyDTOResponse(companySaved), HttpStatus.CREATED);
@@ -50,18 +52,21 @@ public class CompanyController {
   }
 
   @PutMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('LEGAL_REPRESENTATIVE')")
   public ResponseEntity<CompanyDTOResponse> update(@PathVariable Long id, @RequestBody @Valid CompanyUpdateDTO companyDTO) throws IOException {
     Company companyUpdated=companyService.update(id, companyDTO);
     return ResponseEntity.ok(companyMapper.companyToCompanyDTOResponse(companyUpdated));
   }
 
   @DeleteMapping(Endpoints.ID)
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<?> delete(@PathVariable Long id) throws IOException {
     companyService.delete(id);
     return ResponseEntity.noContent().build();
   }
 
   @PutMapping(Endpoints.COMPANIES_USERS)
+  @PreAuthorize("hasRole('ROLE_ADMIN')")
   public ResponseEntity<CompanyDTOResponse> manageUsersCompany(
       @PathVariable("idCompany") Long idCompany,
       @PathVariable("idUser") Long idUser,
@@ -82,6 +87,7 @@ public class CompanyController {
   }
 
   @PutMapping(Endpoints.COMPANIES_IMAGES)
+  @PreAuthorize("hasRole('LEGAL_REPRESENTATIVE')")
   public ResponseEntity<?> changeImage(@PathVariable("idCompany") Long id, @RequestParam("image") MultipartFile image) throws IOException {
     companyService.changeImage(id, image);
     return ResponseEntity.noContent().build();
