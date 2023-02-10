@@ -37,7 +37,6 @@ public class User implements Serializable {
     @Column(name = "password", nullable = false)
     @JsonIgnore
     private String password;
-    //TODO: add created_at and updated_at correctly
     @CreationTimestamp
     private Instant createdAt;
     @UpdateTimestamp

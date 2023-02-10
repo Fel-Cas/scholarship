@@ -102,7 +102,6 @@ public class UserServiceImp implements UserService {
 
   @Override
   public User getByEmail(String email) {
-    //TODO: implement test of this method
     Optional<User> userFound = userRepository.findByEmail(email);
     if (userFound.isEmpty()) throw new NotFoundException(Messages.MESSAGE_USER_NOT_FOUND_BY_EMAIL);
     return userFound.get();
